@@ -1,50 +1,54 @@
-from random import randint
 import random
+import string
 
-file = input("What is the exact file name or path of file you want to obfuscate? (with file extension pls) -> ")
+
+def main() -> None:
+    path = input('{:<27}: '.format('File path (.bat)'))
+    level = int(input('{:<27}: '.format('Obfuscation level (1 or 2)')))
+
+    with open(path, 'r', encoding='utf-8') as f:
+        code = f.read()
+
+    if level == 1:
+        with open('out.bat', 'w') as f:
+            f.write(methods.one(code))
+
+    elif level == 2:
+        with open('out.bat', 'wb') as f:
+            f.write(methods.two(code))
 
 
-def obfuscate(file):
-    switch = False
-    with open(f'{file}', 'r+', encoding='utf-8') as original:
-        for lines in original:
+class methods:
+    def one(code: str) -> str:
+        out = ''
+        for lines in code:
             for char in lines:
-                if switch == False:
-                    if '\n' in char:
-                        with open(f'{file}obfuscated.bat', 'a+', encoding='utf-8') as f:
-                            f.write("\n")
-                    elif "%" in char:
-                        with open(f'{file}obfuscated.bat', 'a+', encoding='utf-8') as f:
-                            f.write("%")
-                            switch = True #thx baum for making this work :sob:
-                    else:
-                        random_num = randint(5, 15)
-                        random_string = ''.join(random.choice("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ☞☟☠☡☢☣☤☥☦☧☰☱☲☳☴☵☶☷☸♕☻♡☹♆♔♅♖♘♗♙♚♛♜♝♞♟♠♡♢♣♤♥♦♧♨♩♪♫♬♭♮♯♰♱♲♳♴♵♶♶♸♹♻♼♽♾⚀⚁⚂⚃⚄⚅⚆⚇⚈⚉⚊⚋⚌⚍⚎⚏⚐⚑⚒⚔⚕⚖⚗⚘⚙⚚⚛⚜⚝⚞⚟") for kdot in range(random_num))
-                        with open(f'{file}obfuscated.bat', 'a+', encoding='utf-8') as f:
-                            f.write(f"{char}%{random_string}%")
+                if char == '\n':
+                    out += char
+
+                elif char == '%':
+                    out += char
+                    while char != '%':
+                        char = next(lines)
+                        out += char
 
                 else:
-                    if "%" in char:
-                        with open(f'{file}obfuscated.bat', 'a+', encoding='utf-8') as f:
-                            f.write("%")
-                            switch = False
-                    elif '\n' in char:
-                        with open(f'{file}obfuscated.bat', 'a+', encoding='utf-8') as f:
-                            f.write("\n")
-                    else:
-                        with open(f'{file}obfuscated.bat', 'a+', encoding='utf-8') as f:
-                            f.write(char) # spent like 2 hours trying to fix this and found baums again :sob: https://github.com/baum1810/batchobfuscator
-    out_hex = []
+                    ran_str = ''.join(random.choice(string.ascii_letters)
+                                      for _ in range(random.randint(5, 15)))
+                    out += f'{char}%{ran_str}%'
 
-    out_hex.extend(["FF", "FE", "0A", "0D"])
-    with open(f'{file}obfuscated.bat','rb') as f:
-            penis = f.read()
+        return out
 
-    out_hex.extend(['{:02X}'.format(b) for b in penis])
+    def two(code: str) -> str:
+        code = bytes(methods.one(code), 'utf-8')
 
-    with open(f'{file}obfuscated.super.bat', 'wb') as f:
-        for i in out_hex:
-            f.write(bytes.fromhex(i))
+        out = []
+        out.extend(['FF', 'FE', '0A', '0D'])
+        out.extend(['{:02X}'.format(b) for b in code])
+        out = bytes.fromhex(''.join(out))
+
+        return out
+
 
 if __name__ == '__main__':
-    obfuscate(file)
+    main()
