@@ -17,6 +17,10 @@ def obfuscate(file):
     switch = False
     with open(f'{file}', 'r+', encoding='utf-8') as original:
         for lines in original:
+            lines.count(':')
+            if lines.count(':') == 1:
+                with open(f'{file}.obfuscated.bat', 'a+', encoding='utf-8') as f:
+                    f.write(lines) # TEMP FIX FOR NOT FINDING FUNCTIONS BATCH
             for char in lines:
                 if switch == False:
                     if '\n' in char:
@@ -39,8 +43,6 @@ def obfuscate(file):
                                     coded0 = codecs.encode(char, 'rot_13').upper()
                                     coded = coded0.replace(coded0, f'%{coded0}1%')
                                     f.write(f"{coded}%{random_string}%")
-                            elif char == ":":
-                                f.write(f"%lul%%{random_string}%")
                             else:
                                 f.write(f"{char}%{random_string}%")
 
