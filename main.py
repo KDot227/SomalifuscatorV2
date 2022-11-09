@@ -134,14 +134,26 @@ def obfuscate2(file):
         for i in out_hex:
             f.write(bytes.fromhex(i))
 
+def clean(file):
+    with open(file, 'r') as f:
+        contents = f.read()
+    with open(f'{file}.cleaned.bat') as f:
+        contents.replace("%~f0%", "%~f0")
+        contents.replace("%~dp0%", "%~dp0")
+        contents.replace("%~dpn0%", "%~dpn0")
+        contents.replace("")
+        f.write(contents)
+
 if __name__ == '__main__':
-    level = input("What obfuscation would you like to do? (1, 2, 3) ")
+    level = input("What obfuscation would you like to do? (1, 2, 3 or c for clean!) ")
     if level == "1":
         obfuscate1(file)
     elif level == "2":
         obfuscate2(file)
     elif level == "3":
         obf(file)
+    elif level == "c":
+        clean(file)
     else:
         print("That is not an option!")
     print(Colorate.Color(Colors.green, "Obfuscated file successfully", False))
