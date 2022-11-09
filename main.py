@@ -4,19 +4,19 @@ import random, codecs, string, os
 try:
     from pystyle import *
 except:
-    os.system("pip install pystyle")
+    os.system("python -m pip install pystyle")
     from pystyle import *
 
 try:
     from tqdm import tqdm
 except:
-    os.system("pip install tqdm")
+    os.system("python -m pip install tqdm")
     from tqdm import tqdm
 
 try:
     import colorama
 except ImportError:
-    os.system("pip install colorama")
+    os.system("python -m pip install colorama")
     import colorama
 colorama.deinit()
 
@@ -100,6 +100,26 @@ def obfuscate1(file):
                             else:
                                 with open(f'{file}.obfuscated.bat', 'a+', encoding='utf-8') as f:
                                     f.write(char) # spent like 2 hours trying to fix this and found baums again :sob: https://github.com/baum1810/batchobfuscator
+
+def obf(file):
+    characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
+    random_order = ''.join(random.sample(characters, len(characters)))
+    with open(f'{file}', 'r') as f:
+        code = f.readlines()
+    try:
+        os.remove(f'{file}2.bat')
+    except:
+        pass
+    with open(f'{file}2.bat', 'a') as f:
+        f.write(f'echo off\nset KDOT={random_order}\n')
+        for line in code:
+            for char in line:
+                if char in random_order:
+                    var = f"%KDOT:~{random_order.index(char)},1%"
+                    f.write(var)
+                else:
+                    var = char
+                    f.write(var)
                     
 def obfuscate2(file):
     out_hex = []
@@ -115,12 +135,13 @@ def obfuscate2(file):
             f.write(bytes.fromhex(i))
 
 if __name__ == '__main__':
-    level = input("What obfuscation would you like to do? (1 or 2) ")
-    grabber = input("Are you obfuscating K.Dot's Batch Token Grabber? (y or n) ")
+    level = input("What obfuscation would you like to do? (1, 2, 3) ")
     if level == "1":
         obfuscate1(file)
     elif level == "2":
         obfuscate2(file)
+    elif level == "3":
+        obf(file)
     else:
         print("That is not an option!")
     print(Colorate.Color(Colors.green, "Obfuscated file successfully", False))
