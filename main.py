@@ -55,16 +55,23 @@ def obfuscate1(file):
             if label == True:
                 with open(f'{file}.obfuscated.bat', 'a+', encoding='utf-8') as f:
                     f.write(lines) # TEMP FIX FOR NOT FINDING FUNCTIONS BATCH
-                pass
+                pass                
             else:
                 for char in lines:
                     if char == '>':
                         with open(f'{file}.obfuscated.bat', 'a+', encoding='utf-8') as f:
                             f.write(char)
-                    elif carrot == True:
-                        carrot = False
+                        pass   
+                    elif char.startswith('^'):
                         with open(f'{file}.obfuscated.bat', 'a+', encoding='utf-8') as f:
                             f.write(char)
+                            carrot = True
+                        pass
+                    elif carrot == True:
+                        with open(f'{file}.obfuscated.bat', 'a+', encoding='utf-8') as f:
+                            f.write(char)
+                            carrot = False
+                        pass
                     else:
                         if switch == False:
                             if '\n' in char:
@@ -104,22 +111,53 @@ def obfuscate1(file):
 def obf(file):
     characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
     random_order = ''.join(random.sample(characters, len(characters)))
-    with open(f'{file}', 'r') as f:
-        code = f.readlines()
-    try:
-        os.remove(f'{file}2.bat')
-    except:
-        pass
-    with open(f'{file}2.bat', 'a') as f:
-        f.write(f'echo off\nset KDOT={random_order}\n')
-        for line in code:
-            for char in line:
-                if char in random_order:
-                    var = f"%KDOT:~{random_order.index(char)},1%"
-                    f.write(var)
-                else:
-                    var = char
-                    f.write(var)
+    with open(f'{file}', 'r+', encoding='utf-8') as original:
+        ammount = len(original.readlines())
+    with open(f'{file}', 'r+', encoding='utf-8') as original:
+        with open(f'{file}.obfuscated.bat', 'a+', encoding='utf-8') as f:
+            f.write(code)
+        for lines in tqdm(original, total=int(ammount), desc="Obfuscating", unit=" lines"):
+            label = lines.startswith(':')
+            if label == True:
+                with open(f'{file}.obfuscated.bat', 'a+', encoding='utf-8') as f:
+                    f.write(lines) # TEMP FIX FOR NOT FINDING FUNCTIONS BATCH
+                pass
+            else:
+                for char in lines:
+                    if char == '>':
+                        with open(f'{file}.obfuscated.bat', 'a+', encoding='utf-8') as f:
+                            f.write(char)
+                    elif carrot == True:
+                        carrot = False
+                        with open(f'{file}.obfuscated.bat', 'a+', encoding='utf-8') as f:
+                            f.write(char)
+                    else:
+                        if switch == False:
+                            if '\n' in char:
+                                with open(f'{file}.obfuscated.bat', 'a+', encoding='utf-8') as f:
+                                    f.write("\n")
+                            elif "%" in char:
+                                with open(f'{file}.obfuscated.bat', 'a+', encoding='utf-8') as f:
+                                    f.write("%")
+                                    switch = True #thx baum for making this work :sob:
+                            else:
+                                with open(f'{file}.obfuscated.bat', 'a+', encoding='utf-8') as f:
+                                    if char in characters:
+                                        var = f"%KDOT:~{random_order.index(char)},1%"
+                                        f.write(var)
+                                    else:
+                                        f.write(char)
+                        else:
+                            if "%" in char:
+                                with open(f'{file}.obfuscated.bat', 'a+', encoding='utf-8') as f:
+                                    f.write("%")
+                                    switch = False
+                            elif '\n' in char:
+                                with open(f'{file}.obfuscated.bat', 'a+', encoding='utf-8') as f:
+                                    f.write("\n")
+                            else:
+                                with open(f'{file}.obfuscated.bat', 'a+', encoding='utf-8') as f:
+                                    f.write(char) # spent like 2 hours trying to fix this and found baums again :sob: https://github.com/baum1810/batchobfuscator
                     
 def obfuscate2(file):
     out_hex = []
