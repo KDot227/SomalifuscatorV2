@@ -22,7 +22,6 @@ colorama.deinit()
 
 __author__ = 'K.Dot#0001'
 
-#this is just the rot13 code and echo off. U can deobf if u want idc
 code = r"""
 @echo off
 set "n=a" && set "o=b" && set "p=c" && set "q=d" && set "r=e" && set "s=f" && set "t=g" && set "u=h" && set "v=i" && set "w=j" && set "x=k" && set "y=l" && set "z=m" && set "a=n" && set "b=o" && set "c=p" && set "d=q" && set "e=r" && set "f=s" && set "g=t" && set "h=u" && set "i=v" && set "j=w" && set "k=x" && set "l=y" && set "m=z" && set "N1=A" && set "O1=B" && set "P1=C" && set "Q1=D" && set "R1=E" && set "S1=F" && set "T1=G" && set "U1=H" && set "V1=I" && set "W1=J" && set "X1=K" && set "Y1=L" && set "Z1=M" && set "A1=N" && set "B1=O" && set "C1=P" && set "D1=Q" && set "E1=R" && set "F1=S" && set "G1=T" && set "H1=U" && set "I1=V" && set "J1=W" && set "K1=X" && set "L1=Y" && set "M1=Z"
@@ -94,7 +93,7 @@ class Main:
             data = f.readlines()
         with open(f"{self.file}.level1.bat", "a+", encoding="utf-8") as f:
             f.write(code)
-            for line in data:
+            for line in tqdm(data, desc="Obfuscating", unit=" lines", colour="green", ascii=True):
                 for char in line:
                     if char == ">":
                         f.write(char)
@@ -142,7 +141,7 @@ class Main:
             data = f.readlines()
         with open(f"{self.file}.level2.bat", "a+", encoding="utf-8") as f:
             f.write(f"set KDOT={random_order}\n")
-            for line in data:
+            for line in tqdm(data, desc="Obfuscating", unit=" lines", colour="green", ascii=True):
                 for char in line:
                     if char == ">":
                         f.write(char)
@@ -223,7 +222,7 @@ class Main:
             data = f.readlines()
         with open(f"{self.file}.fud.bat", "a+", encoding="utf-8") as f:
             f.write("::Made by K.Dot\n")
-            for line in data:
+            for line in tqdm(data, desc="Obfuscating", unit=" lines", colour="green", ascii=True):
                 for char in line:
                     if char == ">":
                         f.write(char)
@@ -246,7 +245,9 @@ class Main:
                             
                         else:
                             random = self.make_random_string()
-                            f.write(f"{char}%{random}%")                        
-
+                            f.write(f"{char}%{random}%")
+                            
+            
 if __name__ == "__main__":
     Main()
+    print("Done!")
