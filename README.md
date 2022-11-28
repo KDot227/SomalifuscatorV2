@@ -1,6 +1,6 @@
 # Batch-Somali-Obfuscator
 
-Note
+# READ
 
 BUILT IN VARIABLES HAVE A FIX!!!
 
