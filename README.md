@@ -20,7 +20,7 @@ Fud mode.) (undetected from virus total)
 ![fud mode (undetected from virus total)](https://i.imgur.com/0gy7szh.png)
 
 All levels.) (looks the same as level 3 but has levels 2 and 1 also applied)
-![all levels (looks the same as level 3 but has levels 2 and 1 also applied)](https://imgur.com/TbBwH65)
+![all levels (looks the same as level 3 but has levels 2 and 1 also applied)](https://i.imgur.com/g2vvIwo.jpeg)
 
 Level 4.) (sneak peak)
 ![level 4 sneak peak (coming soon)](https://i.imgur.com/PzmHc35.png)
