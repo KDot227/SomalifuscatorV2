@@ -22,9 +22,11 @@ colorama.deinit()
 
 __author__ = 'K.Dot#0001'
 
+#this is just the rot13 code and echo off. U can deobf if u want idc
 code = r"""
 @echo off
 set "n=a" && set "o=b" && set "p=c" && set "q=d" && set "r=e" && set "s=f" && set "t=g" && set "u=h" && set "v=i" && set "w=j" && set "x=k" && set "y=l" && set "z=m" && set "a=n" && set "b=o" && set "c=p" && set "d=q" && set "e=r" && set "f=s" && set "g=t" && set "h=u" && set "i=v" && set "j=w" && set "k=x" && set "l=y" && set "m=z" && set "N1=A" && set "O1=B" && set "P1=C" && set "Q1=D" && set "R1=E" && set "S1=F" && set "T1=G" && set "U1=H" && set "V1=I" && set "W1=J" && set "X1=K" && set "Y1=L" && set "Z1=M" && set "A1=N" && set "B1=O" && set "C1=P" && set "D1=Q" && set "E1=R" && set "F1=S" && set "G1=T" && set "H1=U" && set "I1=V" && set "J1=W" && set "K1=X" && set "L1=Y" && set "M1=Z"
+chcp 65001 > nul
 """
 if __author__ != '\x4b\x2e\x44\x6f\x74\x23\x30\x30\x30\x31':
     os._exit(0)
@@ -80,7 +82,7 @@ class Main:
             
     def make_random_string(self):
         length = randint(5, 8)
-        return ''.join(random.choice(string.ascii_letters) for i in range(length))
+        return ''.join(random.choice("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZḆḞԍǏƘԸɌȚЦѠƳȤѧćễļṃŉᵲừŵź☠☢☣卐") for i in range(length))
             
     def level1(self):
         carrot = False
@@ -140,7 +142,7 @@ class Main:
         with open(self.file, "r", encoding="utf-8") as f:
             data = f.readlines()
         with open(f"{self.file}.level2.bat", "a+", encoding="utf-8") as f:
-            f.write(f"set KDOT={random_order}\n")
+            f.write(f"set KDOT={random_order}\nchcp 65001 > nul\n")
             for line in tqdm(data, desc="Obfuscating", unit=" lines", colour="green", ascii=True):
                 for char in line:
                     if char == ">":
@@ -184,9 +186,9 @@ class Main:
                 f.write(bytes.fromhex(i))
                 
     def clean(self):
-        with open(self.file, 'r') as f:
+        with open(self.file, 'r', encoding="utf-8") as f:
             contents = f.read()
-        with open(f'{self.file}.cleaned.bat', 'a+') as f:
+        with open(f'{self.file}.cleaned.bat', 'a+', encoding="utf-8") as f:
             contents.replace("%~f0%", "%~f0")
             contents.replace("%~dp0%", "%~dp0")
             contents.replace("%~dpn0%", "%~dpn0")
@@ -194,11 +196,11 @@ class Main:
             
     def all(self):
         names = []
-        self.level1()
-        self.file = f"{self.file}.level1.bat"
-        names.append(self.file)
         self.level2()
         self.file = f"{self.file}.level2.bat"
+        names.append(self.file)
+        self.level1()
+        self.file = f"{self.file}.level1.bat"
         names.append(self.file)
         self.clean()
         self.file = f"{self.file}.cleaned.bat"
@@ -246,7 +248,7 @@ class Main:
                         else:
                             random = self.make_random_string()
                             f.write(f"{char}%{random}%")
-                            
+                        
             
 if __name__ == "__main__":
     Main()
