@@ -192,6 +192,7 @@ class Main:
             contents.replace("%~f0%", "%~f0")
             contents.replace("%~dp0%", "%~dp0")
             contents.replace("%~dpn0%", "%~dpn0")
+            contents.replace("%~dpnx0", "%~dpnx0")
             f.write(contents)
             
     def all(self):
