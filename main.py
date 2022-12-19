@@ -96,6 +96,9 @@ class Main:
         with open(f"{self.file}.level1.bat", "a+", encoding="utf-8") as f:
             f.write(code)
             for line in tqdm(data, desc="Obfuscating", unit=" lines", colour="green", ascii=True):
+                if line.startswith(":") and not line.startswith("::"):
+                    f.write(line)
+                    continue
                 for char in line:
                     if char == ">":
                         f.write(char)
@@ -144,6 +147,9 @@ class Main:
         with open(f"{self.file}.level2.bat", "a+", encoding="utf-8") as f:
             f.write(f"set KDOT={random_order}\nchcp 65001 > nul\n")
             for line in tqdm(data, desc="Obfuscating", unit=" lines", colour="green", ascii=True):
+                if line.startswith(":") and not line.startswith("::"):
+                    f.write(line)
+                    continue
                 for char in line:
                     if char == ">":
                         f.write(char)
@@ -226,6 +232,9 @@ class Main:
         with open(f"{self.file}.fud.bat", "a+", encoding="utf-8") as f:
             f.write("::Made by K.Dot\n")
             for line in tqdm(data, desc="Obfuscating", unit=" lines", colour="green", ascii=True):
+                if line.startswith(":") and not line.startswith("::"):
+                    f.write(line)
+                    continue
                 for char in line:
                     if char == ">":
                         f.write(char)
