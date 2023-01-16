@@ -59,22 +59,24 @@ class Main:
         if os.path.exists(self.file):
             print(options)
             self.level = input("What level of obfuscation do you want? -> ")
-            if self.level == "1":
-                self.level1()
-            elif self.level == "2":
-                self.level2()
-            elif self.level == "3":
-                self.level3()
-            elif self.level == "clean":
-                self.clean()
-            elif self.level == "all":
-                self.all()
-            elif self.level == "fud":
-                self.fud()
+            self.level_dict = {
+                "1": self.level1,
+                "2": self.level2,
+                "3": self.level3,
+                "clean": self.clean,
+                "all": self.all,
+                "fud": self.fud
+            }
+
+            function = self.level_dict.get(self.level)
+            if function is not None:
+                function()
+            
             else:
                 print("Invalid option")
                 time.sleep(3)
                 Main()
+
         else:
             print("That file does not exist!")
             time.sleep(3)
