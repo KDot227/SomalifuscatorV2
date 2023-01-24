@@ -4,8 +4,7 @@
 
 BUILT IN VARIABLES HAVE A FIX!!!
 
-instead of using %~dp0 use %~dp0% and make it an entire variable.
-after this use the cleaner and it will self correct evrything!
+Using the bypass method if there is something that you don't want obfuscated (such as %1, %~dpn0, etc) surround it in braces {}. For example {%1} wouldn't be obfuscated
 
 ## Level 1.)
 ![level 1](https://i.imgur.com/g6XpRIj.png)
