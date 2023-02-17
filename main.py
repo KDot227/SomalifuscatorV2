@@ -46,12 +46,15 @@ options = """
 [clean] cleans the code to try and fix any common errors
 [all] does 1, 2, 3 and clean
 [fud] makes it undetectable by everything on virustotal
-[ultimate] The Ultimate batch obfuscation (nowhere near done... but beta out now.)\n
+[ultimate] The Ultimate batch obfuscation (nowhere near done... but beta out now.)
+[embed] Embeds powershell code in a batch file. (they run bat file but it reruns as ps1/powershell)\n
 """
 
 
 class Main:
     def __init__(self):
+        # if u on linux kys
+        os.system("cls")
         print(Colorate.Vertical(Colors.yellow_to_red, banner, 2))
         self.carrot = False
         self.label = False
@@ -59,20 +62,20 @@ class Main:
         if os.path.exists(self.file):
             print(Colorate.Vertical(Colors.yellow_to_red, options, 2))
             self.level = Write.Input("What level of Obfuscation do you want? -> ", Colors.rainbow, interval=0.05)
-            if self.level == "1":
-                self.level1()
-            elif self.level == "2":
-                self.level2()
-            elif self.level == "3":
-                self.level3()
-            elif self.level == "clean":
-                self.clean()
-            elif self.level == "all":
-                self.all()
-            elif self.level == "fud":
-                self.fud()
-            elif self.level == "ultimate":
-                self.ultimate()
+            self.level_dict = {
+                "1": self.level1,
+                "2": self.level2,
+                "3": self.level3,
+                "clean": self.clean,
+                "all": self.all,
+                "fud": self.fud,
+                "ultimate": self.ultimate,
+                "embed": self.embed
+            }
+            
+            pick = self.level_dict.get(self.level)
+            if pick is not None:
+                pick()
             else:
                 print("Invalid option")
                 time.sleep(3)
@@ -340,7 +343,9 @@ class Main:
                                     f.write(' ')
                                     continue
                                 else:
-                                    random_obf = [self.ran1(char), self.ran2(char, random_order), self.ran3(char), self.ran4(char)]
+                                    #random_obf = [self.ran1(char), self.ran2(char, random_order), self.ran3(char), self.ran4(char)]
+                                    #I'll fix this someday
+                                    random_obf = [self.ran1(char), self.ran2(char, random_order), self.ran4(char)]
                                     f.write(f"{random.choice(random_obf)}")
                             f.write(' ')
                     f.write('\n')
@@ -393,6 +398,59 @@ class Main:
         #I ain't nowhere near done with this yet :skull:
         #(it does work tho stg | and its op asf)
         pass
+    
+    def embed(self):
+        starting_code_normal = """<# :validbatch
+@echo off
+setlocal
+cd /d "{%~dp0}"
+
+echo K.Dot up
+
+powershell.exe -ep Bypass -Command "IEX $([System.IO.File]::ReadAllText('{%~f0}'))"
+goto :eof
+#>"""
+        starting_code_to_obf = """@echo off
+setlocal
+cd /d "%~dp0"
+
+echo K.Dot up
+
+powershell -ep Bypass -Command "IEX $([System.IO.File]::ReadAllText('%~f0'))"
+goto :eof
+"""
+        ps1_file_location = input("Enter the location of the ps1 file: ")
+        try:
+            with open(ps1_file_location, "r", encoding="utf-8") as f:
+                data = f.readlines()
+        except FileNotFoundError:
+            print("File not found!")
+            time.sleep(3)
+            Main()
+        obfuscate = input("Would you like to obfuscate the batch code? (y/n): ")
+        if obfuscate.lower() == "y":
+            with open("place_holder.bat", "w", encoding="utf-8") as f:
+                f.write(starting_code_to_obf)
+                self.file = "place_holder.bat"
+            self.ultimate()
+            os.remove("place_holder.bat")
+            os.rename("place_holder.bat.ultimate.bat", "embed.bat")
+            with open("embed.bat", "r+", encoding="utf-8") as f:
+                data2 = f.readlines()
+                data2_size = len(data2)
+                data2.insert(0, '<# :validkdot\n'); data2.insert(data2_size + 1, '#>\n'); data2 += data
+            with open("embed.bat", "w+", encoding="utf-8") as f:
+                f.writelines(data2)
+        else:
+            #I can FASHO make this a lot cleaner and better but im too lazy rn (split string into list instead of reading it from file :skull:)
+            with open("embed.bat", "w", encoding="utf-8") as f:
+                f.write(starting_code_normal)
+            with open("embed.bat", "r+", encoding="utf-8") as f:
+                data2 = f.readlines()
+            with open("embed.bat", "w", encoding="utf-8") as f:
+                data2_size = len(data2)
+                data2.insert(data2_size, '\n'); data2 += data
+                f.writelines(data2)
 
 if __name__ == "__main__":
     Main()
@@ -402,5 +460,5 @@ if __name__ == "__main__":
         os.system("cls")
         Main()
     else:
-        time.sleep(3)
+        time.sleep(1)
         os._exit(0)
