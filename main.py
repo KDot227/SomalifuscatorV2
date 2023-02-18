@@ -1,23 +1,10 @@
 from random import randint
 import random, codecs, string, os, time
-
-try:
-    from pystyle import *
-except:
-    os.system("python -m pip install pystyle")
-    from pystyle import *
-
-try:
-    from tqdm import tqdm
-except:
-    os.system("python -m pip install tqdm")
-    from tqdm import tqdm
-
-try:
-    import colorama
-except ImportError:
-    os.system("python -m pip install colorama")
-    import colorama
+from pystyle import *
+import requests
+import tqdm
+import colorama
+    
 colorama.deinit()
 
 __author__ = 'K.Dot#0001'
@@ -49,6 +36,24 @@ options = """
 [ultimate] The Ultimate batch obfuscation (nowhere near done... but beta out now.)
 [embed] Embeds powershell code in a batch file. (they run bat file but it reruns as ps1/powershell)\n
 """
+
+class AutoUpdate:
+    def __init__(self):
+        self.code = "https://raw.githubusercontent.com/KDot227/Somalifuscator/main/main.py"
+        self.bypass = False
+        self.update()
+    def update(self):
+        if not self.bypass:
+            print("Checking for updates...")
+            code = requests.get(self.code, timeout=10).text
+            with open(__file__, 'r', encoding='utf-8') as f:
+                main_code = f.read()
+            if code != main_code:
+                print("Updating...")
+                with open(__file__, 'w', encoding='utf-8') as f:
+                    f.write(code)
+            else:
+                print("No updates found!")
 
 
 class Main:
@@ -518,6 +523,7 @@ goto :eof
         return main_list
 
 if __name__ == "__main__":
+    AutoUpdate()
     Main()
     print("Done!")
     more = Write.Input("Do you want to obfuscate another file? (y/n): ", Colors.rainbow, interval=0.05)
