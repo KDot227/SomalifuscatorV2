@@ -1,0 +1,4 @@
+pystyle
+requests
+tqdm
+colorama
