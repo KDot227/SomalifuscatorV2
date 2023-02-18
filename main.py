@@ -2,7 +2,7 @@ from random import randint
 import random, codecs, string, os, time
 from pystyle import *
 import requests
-import tqdm
+from tqdm import tqdm
 import colorama
     
 colorama.deinit()
