@@ -426,7 +426,7 @@ echo K.Dot up
 powershell -ep Bypass -Command "IEX $([System.IO.File]::ReadAllText('%~f0'))"
 goto :eof
 """
-        ps1_file_location = input("Enter the location of the ps1 file: ")
+        ps1_file_location = Write.Input("Enter the location of the ps1 file: ", Colors.rainbow, interval=0.05)
         try:
             with open(ps1_file_location, "r", encoding="utf-8") as f:
                 data = f.readlines()
@@ -434,7 +434,7 @@ goto :eof
             print("File not found!")
             time.sleep(3)
             Main()
-        obfuscate = input("Would you like to obfuscate the batch code? (y/n): ")
+        obfuscate = Write.Input("Would you like to obfuscate the batch code? (y/n): ", Colors.rainbow, interval=0.05)
         if obfuscate.lower() == "y":
             with open("place_holder.bat", "w", encoding="utf-8") as f:
                 f.write(starting_code_to_obf)
@@ -460,6 +460,12 @@ goto :eof
                 f.writelines(data2)
                 
     def scrambler(self, codeed):
+        #lowkey broken rn
+        dead_code = Write.Input("Would you like to add dead code? (y/n): ", Colors.rainbow, interval=0.05)
+        if dead_code.lower() == "y":
+            dead_code = True
+        else:
+            dead_code = False
         original_lines = codeed
 
         dict_thing = {}
@@ -483,6 +489,31 @@ goto :eof
 
         random.shuffle(main_list)
         main_list.insert(0, remem)
+        
+        if dead_code == True:
+            low = random.randint(1, 3)
+            medium = random.randint(4, 6)
+            high = random.randint(7, 9)
+            extreme = random.randint(10, 12)
+            dead_code_examples = ["if not 0 == 0 ( goto :EOF )\n", "if not exist C:\Windows\System32 ( goto :EOF )\n", "if %penis% == 'yes' goto nah\n"]
+            
+            type = Write.Input("What type of dead code do you want? (low/medium/high/extreme): ", Colors.rainbow, interval=0.05)
+            if type.lower() == "low":
+                for i in range(low):
+                    main_list.insert(random.randint(0, len(main_list)), dead_code_examples)
+            elif type.lower() == "medium":
+                for i in range(medium):
+                    main_list.insert(random.randint(0, len(main_list)), dead_code_examples)
+            elif type.lower() == "high":
+                for i in range(high):
+                    main_list.insert(random.randint(0, len(main_list)), dead_code_examples)
+            elif type.lower() == "extreme":
+                for i in range(extreme):
+                    main_list.insert(random.randint(0, len(main_list)), dead_code_examples)
+            else:
+                print("Invalid option!")
+                time.sleep(3)
+                Main()
 
         return main_list
 
