@@ -349,6 +349,13 @@ class Main:
                                     f.write(f"{random.choice(random_obf)}")
                             f.write(' ')
                     f.write('\n')
+        with open(f"{self.file}.ultimate.bat", "r", encoding="utf-8") as f:
+            data = f.readlines()
+        messed_up = self.scrambler(data)
+        with open(f"{self.file}.ultimate.bat", "w", encoding="utf-8") as f:
+            for array in messed_up:
+                for thing in array:
+                    f.write(thing.strip() + "\n")
 
     def ran1(self, char):
         random = self.make_random_string()
@@ -451,6 +458,33 @@ goto :eof
                 data2_size = len(data2)
                 data2.insert(data2_size, '\n'); data2 += data
                 f.writelines(data2)
+                
+    def scrambler(self, codeed):
+        original_lines = codeed
+
+        dict_thing = {}
+
+        main_list = []
+
+        for index, item in enumerate(original_lines):
+            dict_thing[item] = [''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(10)), index]
+
+        for index, (key, value) in enumerate(dict_thing.items()):
+            if index == 0:
+                remem = [f"goto {value[0]}\n"]
+            part_1 = f":{value[0]}\n"
+            part_2 = f"{key}\n"
+            try:
+                part_3 = f"goto {list(dict_thing.values())[value[1]+1][0]}\n"
+            except IndexError:
+                part_3 = f"goto :EOF\n"
+
+            main_list.append([part_1, part_2, part_3])
+
+        random.shuffle(main_list)
+        main_list.insert(0, remem)
+
+        return main_list
 
 if __name__ == "__main__":
     Main()
