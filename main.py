@@ -58,6 +58,8 @@ class AutoUpdate:
                 print("Updating...")
                 with open(__file__, 'w', encoding='utf-8') as f:
                     f.write(code)
+                os.startfile(__file__)
+                os._exit(0)
             else:
                 print("No updates found!")
 
