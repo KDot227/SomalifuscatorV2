@@ -8,16 +8,17 @@ from zipfile import ZipFile
 
 colorama.deinit()
 
-__author__ = 'K.Dot#0001'
+__author__ = "K.Dot#0001"
 
 code = r"""
 @echo off
 set "n=a" && set "o=b" && set "p=c" && set "q=d" && set "r=e" && set "s=f" && set "t=g" && set "u=h" && set "v=i" && set "w=j" && set "x=k" && set "y=l" && set "z=m" && set "a=n" && set "b=o" && set "c=p" && set "d=q" && set "e=r" && set "f=s" && set "g=t" && set "h=u" && set "i=v" && set "j=w" && set "k=x" && set "l=y" && set "m=z" && set "N1=A" && set "O1=B" && set "P1=C" && set "Q1=D" && set "R1=E" && set "S1=F" && set "T1=G" && set "U1=H" && set "V1=I" && set "W1=J" && set "X1=K" && set "Y1=L" && set "Z1=M" && set "A1=N" && set "B1=O" && set "C1=P" && set "D1=Q" && set "E1=R" && set "F1=S" && set "G1=T" && set "H1=U" && set "I1=V" && set "J1=W" && set "K1=X" && set "L1=Y" && set "M1=Z"
 chcp 65001 > nul
 """
-if __author__ != '\x4b\x2e\x44\x6f\x74\x23\x30\x30\x30\x31':
+if __author__ != "\x4b\x2e\x44\x6f\x74\x23\x30\x30\x30\x31":
     os._exit(0)
-banner = Center.XCenter("""
+banner = Center.XCenter(
+    """
  ██████╗  ██████╗ ██████╗ ███████╗ █████╗ ████████╗██╗  ██╗███████╗██████╗ 
 ██╔════╝ ██╔═══██╗██╔══██╗██╔════╝██╔══██╗╚══██╔══╝██║  ██║██╔════╝██╔══██╗
 ██║  ███╗██║   ██║██║  ██║█████╗  ███████║   ██║   ███████║█████╗  ██████╔╝
@@ -25,9 +26,11 @@ banner = Center.XCenter("""
 ╚██████╔╝╚██████╔╝██████╔╝██║     ██║  ██║   ██║   ██║  ██║███████╗██║  ██║
  ╚═════╝  ╚═════╝ ╚═════╝ ╚═╝     ╚═╝  ╚═╝   ╚═╝   ╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝
  Made by Godfather and K.Dot#4044\n\n
-""")
+"""
+)
 
-options = r"""
+options = (
+    r"""
 [1] Level 1 (Recommended to use AFTER 2)
 [2] Level 2
 [3] Level 3
@@ -41,25 +44,31 @@ options = r"""
 [exe] Simple Bat2Exe with self extracting zip (usually low detections too)
 [exe2] Second method for Bat2Exe (usually low detections but may increase over time)
 [COMING SOON] [exe3] Third method for Bat2Exe (100% fud)
-""" + "\n\n"
+"""
+    + "\n\n"
+)
+
 
 class AutoUpdate:
     def __init__(self):
-        self.code = "https://raw.githubusercontent.com/KDot227/Somalifuscator/main/main.py"
+        self.code = (
+            "https://raw.githubusercontent.com/KDot227/Somalifuscator/main/main.py"
+        )
         self.bypass = False
         username = os.getlogin()
         if username == "this1":
             self.bypass = True
         self.update()
+
     def update(self):
         if not self.bypass:
             print("Checking for updates...")
             code = requests.get(self.code, timeout=10).text
-            with open(__file__, 'r', encoding='utf-8') as f:
+            with open(__file__, "r", encoding="utf-8") as f:
                 main_code = f.read()
             if code != main_code:
                 print("Updating...")
-                with open(__file__, 'w', encoding='utf-8') as f:
+                with open(__file__, "w", encoding="utf-8") as f:
                     f.write(code)
                 os.startfile(__file__)
                 os._exit(0)
@@ -77,7 +86,11 @@ class Main:
         self.file = Write.Input("File to obfuscate -> ", Colors.rainbow, interval=0.05)
         if os.path.exists(self.file):
             print(Colorate.Vertical(Colors.yellow_to_red, options, 2))
-            self.level = Write.Input("What level of Obfuscation do you want? -> ", Colors.rainbow, interval=0.05)
+            self.level = Write.Input(
+                "What level of Obfuscation do you want? -> ",
+                Colors.rainbow,
+                interval=0.05,
+            )
             self.level_dict = {
                 "1": self.level1,
                 "2": self.level2,
@@ -90,9 +103,9 @@ class Main:
                 "ultimate": self.ultimate,
                 "embed": self.embed,
                 "exe": self.bat2exe,
-                "exe2": self.bat2exe2
+                "exe2": self.bat2exe2,
             }
-            
+
             pick = self.level_dict.get(self.level)
             if pick is not None:
                 pick()
@@ -104,11 +117,16 @@ class Main:
             print(Colors.red + "That file does not exist!" + Colors.reset)
             time.sleep(3)
             Main()
-            
+
     def make_random_string(self):
         length = randint(5, 8)
-        return ''.join(random.choice("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZḆḞԍǏƘԸɌȚЦѠƳȤѧćễļṃŉᵲừŵź☠☢☣卐") for i in range(length))
-            
+        return "".join(
+            random.choice(
+                "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZḆḞԍǏƘԸɌȚЦѠƳȤѧćễļṃŉᵲừŵź☠☢☣卐"
+            )
+            for i in range(length)
+        )
+
     def level1(self):
         carrot = False
         var = False
@@ -121,7 +139,9 @@ class Main:
             data = f.readlines()
         with open(f"{self.file}.level1.bat", "a+", encoding="utf-8") as f:
             f.write(code)
-            for line in tqdm(data, desc="Obfuscating", unit=" lines", colour="green", ascii=True):
+            for line in tqdm(
+                data, desc="Obfuscating", unit=" lines", colour="green", ascii=True
+            ):
                 if line.startswith(":") and not line.startswith("::"):
                     f.write(line)
                     continue
@@ -159,19 +179,19 @@ class Main:
                                 random = self.make_random_string()
                                 if char in string.ascii_letters:
                                     if char.islower():
-                                        coded0 = codecs.encode(char, 'rot_13')
+                                        coded0 = codecs.encode(char, "rot_13")
                                         coded = coded0.replace(coded0, f"%{coded0}%")
                                         f.write(f"{coded}%{random}%")
                                     else:
-                                        coded0 = codecs.encode(char, 'rot_13').upper()
-                                        coded = coded0.replace(coded0, f'%{coded0}1%')
+                                        coded0 = codecs.encode(char, "rot_13").upper()
+                                        coded = coded0.replace(coded0, f"%{coded0}1%")
                                         f.write(f"{coded}%{random}%")
                                 else:
                                     f.write(f"{char}%{random}%")
-                                
+
     def level2(self):
-        characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
-        random_order = ''.join(random.sample(characters, len(characters)))
+        characters = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+        random_order = "".join(random.sample(characters, len(characters)))
         carrot = False
         var = False
         BYPASS = False
@@ -183,7 +203,9 @@ class Main:
             data = f.readlines()
         with open(f"{self.file}.level2.bat", "a+", encoding="utf-8") as f:
             f.write(f"set KDOT={random_order}\nchcp 65001 > nul\n")
-            for line in tqdm(data, desc="Obfuscating", unit=" lines", colour="green", ascii=True):
+            for line in tqdm(
+                data, desc="Obfuscating", unit=" lines", colour="green", ascii=True
+            ):
                 if line.startswith(":") and not line.startswith("::"):
                     f.write(line)
                     continue
@@ -223,31 +245,33 @@ class Main:
                                     f.write(var)
                                 else:
                                     f.write(char)
-                                
+
     def level3(self):
         out_hex = []
 
-        #lowkey overkill lmao
-        out_hex.extend(["FF", "FE", "26", "63", "6C", "73", "0D", "0A", "FF", "FE", "0A", "0D"])
-        with open(f'{self.file}','rb') as f:
-                penis = f.read()
+        # lowkey overkill lmao
+        out_hex.extend(
+            ["FF", "FE", "26", "63", "6C", "73", "0D", "0A", "FF", "FE", "0A", "0D"]
+        )
+        with open(f"{self.file}", "rb") as f:
+            penis = f.read()
 
-        out_hex.extend(['{:02X}'.format(b) for b in penis])
+        out_hex.extend(["{:02X}".format(b) for b in penis])
 
-        with open(f'{self.file}.level3.bat', 'wb') as f:
+        with open(f"{self.file}.level3.bat", "wb") as f:
             for i in out_hex:
                 f.write(bytes.fromhex(i))
-                
+
     def clean(self):
-        with open(self.file, 'r', encoding="utf-8") as f:
+        with open(self.file, "r", encoding="utf-8") as f:
             contents = f.read()
-        with open(f'{self.file}.cleaned.bat', 'a+', encoding="utf-8") as f:
+        with open(f"{self.file}.cleaned.bat", "a+", encoding="utf-8") as f:
             contents.replace("%~f0%", "%~f0")
             contents.replace("%~dp0%", "%~dp0")
             contents.replace("%~dpn0%", "%~dpn0")
             contents.replace("%~dpnx0", "%~dpnx0")
             f.write(contents)
-            
+
     def all(self):
         names = []
         self.level2()
@@ -266,7 +290,7 @@ class Main:
         print("FINAL.bat is the finished product!")
         time.sleep(5)
         os._exit(0)
-        
+
     def fud(self):
         carrot = False
         var = False
@@ -279,7 +303,9 @@ class Main:
             data = f.readlines()
         with open(f"{self.file}.fud.bat", "a+", encoding="utf-8") as f:
             f.write("::Made by K.Dot\n")
-            for line in tqdm(data, desc="Obfuscating", unit=" lines", colour="green", ascii=True):
+            for line in tqdm(
+                data, desc="Obfuscating", unit=" lines", colour="green", ascii=True
+            ):
                 if line.startswith(":") and not line.startswith("::"):
                     f.write(line)
                     continue
@@ -316,19 +342,23 @@ class Main:
                             else:
                                 random = self.make_random_string()
                                 f.write(f"{char}%{random}%")
-                            
+
     def ultimate(self) -> None:
-        #ultimate mode
+        # ultimate mode
         BYPASS = False
         with open(self.file, "r", encoding="utf-8") as f:
             data = f.readlines()
         with open(f"{self.file}.ultimate.bat", "a+", encoding="utf-8") as f:
             f.write("::Made by K.Dot\n")
             f.write(code)
-            characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
-            random_order = ''.join(random.sample(characters, len(characters)))
+            characters = (
+                "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+            )
+            random_order = "".join(random.sample(characters, len(characters)))
             f.write(f"set KDOT={random_order}\n")
-            for line in tqdm(data, desc="Obfuscating", unit=" lines", colour="green", ascii=True):
+            for line in tqdm(
+                data, desc="Obfuscating", unit=" lines", colour="green", ascii=True
+            ):
                 random_bool = random.choice([True, False])
                 if line.startswith("{"):
                     BYPASS = True
@@ -356,19 +386,23 @@ class Main:
                             continue
                         else:
                             for char in word:
-                                if char == '\n':
-                                    f.write('\n')
+                                if char == "\n":
+                                    f.write("\n")
                                     continue
-                                elif char == ' ':
-                                    f.write(' ')
+                                elif char == " ":
+                                    f.write(" ")
                                     continue
                                 else:
-                                    #random_obf = [self.ran1(char), self.ran2(char, random_order), self.ran3(char), self.ran4(char)]
-                                    #I'll fix this someday
-                                    random_obf = [self.ran1(char), self.ran2(char, random_order), self.ran4(char)]
+                                    # random_obf = [self.ran1(char), self.ran2(char, random_order), self.ran3(char), self.ran4(char)]
+                                    # I'll fix this someday
+                                    random_obf = [
+                                        self.ran1(char),
+                                        self.ran2(char, random_order),
+                                        self.ran4(char),
+                                    ]
                                     f.write(f"{random.choice(random_obf)}")
-                            f.write(' ')
-                    f.write('\n')
+                            f.write(" ")
+                    f.write("\n")
         with open(f"{self.file}.ultimate.bat", "r", encoding="utf-8") as f:
             data = f.readlines()
         messed_up = self.scrambler(data)
@@ -381,16 +415,16 @@ class Main:
         random = self.make_random_string()
         if char in string.ascii_letters:
             if char.islower():
-                coded0 = codecs.encode(char, 'rot_13')
+                coded0 = codecs.encode(char, "rot_13")
                 coded = coded0.replace(coded0, f"%{coded0}%")
                 return f"{coded}%{random}%"
             else:
-                coded0 = codecs.encode(char, 'rot_13').upper()
-                coded = coded0.replace(coded0, f'%{coded0}1%')
+                coded0 = codecs.encode(char, "rot_13").upper()
+                coded = coded0.replace(coded0, f"%{coded0}1%")
                 return f"{coded}%{random}%"
         else:
             return f"{char}%{random}%"
-        
+
     def ran2(self, char, random_order):
         public = r"C:\Users\Public"
         weird = r"C:\Program Files (x86)\Common Files"
@@ -404,28 +438,31 @@ class Main:
                 return var
             else:
                 return char
-    
+
     def ran3(self, char):
         if char in string.ascii_letters:
-            escape = '^'
+            escape = "^"
             return f"{escape}{char}"
         else:
             return char
-        
+
     def ran4(self, char):
         return char
-    
+
     def true_statement(self, line):
-        true_statements = ["if exist C:\Windows\System32 ( {} )", "if not 0 neq 0 ( {} )"]
+        true_statements = [
+            "if exist C:\Windows\System32 ( {} )",
+            "if not 0 neq 0 ( {} )",
+        ]
         random_statement = random.choice(true_statements)
         return random_statement.format(line)
-    
+
     def obliterate(self):
-        #The best obfuscation method involving encoding
-        #I ain't nowhere near done with this yet :skull:
-        #(it does work tho stg | and its op asf)
+        # The best obfuscation method involving encoding
+        # I ain't nowhere near done with this yet :skull:
+        # (it does work tho stg | and its op asf)
         pass
-    
+
     def embed(self):
         starting_code_normal = """<# :validbatch
 @echo off
@@ -446,7 +483,9 @@ echo K.Dot up
 powershell -ep Bypass -Command "IEX $([System.IO.File]::ReadAllText('%~f0'))"
 goto :eof
 """
-        ps1_file_location = Write.Input("Enter the location of the ps1 file: ", Colors.rainbow, interval=0.05)
+        ps1_file_location = Write.Input(
+            "Enter the location of the ps1 file: ", Colors.rainbow, interval=0.05
+        )
         try:
             with open(ps1_file_location, "r", encoding="utf-8") as f:
                 data = f.readlines()
@@ -454,7 +493,11 @@ goto :eof
             print("File not found!")
             time.sleep(3)
             Main()
-        obfuscate = Write.Input("Would you like to obfuscate the batch code? (y/n): ", Colors.rainbow, interval=0.05)
+        obfuscate = Write.Input(
+            "Would you like to obfuscate the batch code? (y/n): ",
+            Colors.rainbow,
+            interval=0.05,
+        )
         if obfuscate.lower() == "y":
             with open("place_holder.bat", "w", encoding="utf-8") as f:
                 f.write(starting_code_to_obf)
@@ -465,23 +508,28 @@ goto :eof
             with open("embed.bat", "r+", encoding="utf-8") as f:
                 data2 = f.readlines()
                 data2_size = len(data2)
-                data2.insert(0, '<# :validkdot\n'); data2.insert(data2_size + 1, '#>\n'); data2 += data
+                data2.insert(0, "<# :validkdot\n")
+                data2.insert(data2_size + 1, "#>\n")
+                data2 += data
             with open("embed.bat", "w+", encoding="utf-8") as f:
                 f.writelines(data2)
         else:
-            #I can FASHO make this a lot cleaner and better but im too lazy rn (split string into list instead of reading it from file :skull:)
+            # I can FASHO make this a lot cleaner and better but im too lazy rn (split string into list instead of reading it from file :skull:)
             with open("embed.bat", "w", encoding="utf-8") as f:
                 f.write(starting_code_normal)
             with open("embed.bat", "r+", encoding="utf-8") as f:
                 data2 = f.readlines()
             with open("embed.bat", "w", encoding="utf-8") as f:
                 data2_size = len(data2)
-                data2.insert(data2_size, '\n'); data2 += data
+                data2.insert(data2_size, "\n")
+                data2 += data
                 f.writelines(data2)
-                
+
     def scrambler(self, codeed):
-        #lowkey broken rn
-        dead_code = Write.Input("Would you like to add dead code? (y/n): ", Colors.rainbow, interval=0.05)
+        # lowkey broken rn
+        dead_code = Write.Input(
+            "Would you like to add dead code? (y/n): ", Colors.rainbow, interval=0.05
+        )
         if dead_code.lower() == "y":
             dead_code = True
         else:
@@ -493,7 +541,13 @@ goto :eof
         main_list = []
 
         for index, item in enumerate(original_lines):
-            dict_thing[item] = [''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(10)), index]
+            dict_thing[item] = [
+                "".join(
+                    random.choice(string.ascii_uppercase + string.digits)
+                    for _ in range(10)
+                ),
+                index,
+            ]
 
         for index, (key, value) in enumerate(dict_thing.items()):
             if index == 0:
@@ -509,37 +563,53 @@ goto :eof
 
         random.shuffle(main_list)
         main_list.insert(0, remem)
-        
+
         if dead_code == True:
             low = random.randint(1, 3)
             medium = random.randint(4, 6)
             high = random.randint(7, 9)
             extreme = random.randint(10, 12)
-            dead_code_examples = ["if not 0 == 0 goto :EOF\n", "if not exist C:\Windows\System32 goto :EOF\n", "if %penis% == 'yes' goto nah\n"]
-            
-            type = Write.Input("What type of dead code do you want? (low/medium/high/extreme): ", Colors.rainbow, interval=0.05)
+            dead_code_examples = [
+                "if not 0 == 0 goto :EOF\n",
+                "if not exist C:\Windows\System32 goto :EOF\n",
+                "if %penis% == 'yes' goto nah\n",
+            ]
+
+            type = Write.Input(
+                "What type of dead code do you want? (low/medium/high/extreme): ",
+                Colors.rainbow,
+                interval=0.05,
+            )
             if type.lower() == "low":
                 for i in range(low):
-                    main_list.insert(random.randint(0, len(main_list)), dead_code_examples)
+                    main_list.insert(
+                        random.randint(0, len(main_list)), dead_code_examples
+                    )
             elif type.lower() == "medium":
                 for i in range(medium):
-                    main_list.insert(random.randint(0, len(main_list)), dead_code_examples)
+                    main_list.insert(
+                        random.randint(0, len(main_list)), dead_code_examples
+                    )
             elif type.lower() == "high":
                 for i in range(high):
-                    main_list.insert(random.randint(0, len(main_list)), dead_code_examples)
+                    main_list.insert(
+                        random.randint(0, len(main_list)), dead_code_examples
+                    )
             elif type.lower() == "extreme":
                 for i in range(extreme):
-                    main_list.insert(random.randint(0, len(main_list)), dead_code_examples)
+                    main_list.insert(
+                        random.randint(0, len(main_list)), dead_code_examples
+                    )
             else:
                 print("Invalid option!")
                 time.sleep(3)
                 Main()
 
         return main_list
-    
+
     def level4(self):
-        #Level 4 as promised. (I lowkey skidded it from someone else but i cant remember who :skull:) W mans tho ong
-        #Also I can remake this instead of using JScript, etc
+        # Level 4 as promised. (I lowkey skidded it from someone else but i cant remember who :skull:) W mans tho ong
+        # Also I can remake this instead of using JScript, etc
         batch_code = """@if (@CodeSection == @Batch) @then
 
 
@@ -655,7 +725,9 @@ jrepl "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"^
 exit /b """
         with open("level5.bat", "w") as f:
             f.write(batch_code)
-        r = requests.get('https://www.dostips.com/forum/download/file.php?id=605', timeout=10)
+        r = requests.get(
+            "https://www.dostips.com/forum/download/file.php?id=605", timeout=10
+        )
         with open("jrepl.zip", "wb") as f:
             f.write(r.content)
         with ZipFile("jrepl.zip", "r") as zipObj:
@@ -666,7 +738,7 @@ exit /b """
         os.remove("JREPL.bat")
         file = self.file.replace(".bat", "_obfuscated.bat")
         os.rename(f"{file}", f"{self.file}.level5.bat")
-        
+
     def bat2exe(self):
         code = """[Version]
 Class=IEXPRESS
@@ -702,13 +774,13 @@ AdminQuietInstCmd=
         current_dir = os.getcwd()
         bat_file_name = os.path.basename(self.file)
         exe_name = bat_file_name[:-4] + ".exe"
-        
-        app_launched = "AppLaunched=cmd /c " + "\"" + bat_file_name + "\""
+
+        app_launched = "AppLaunched=cmd /c " + '"' + bat_file_name + '"'
         target = f"TargetName={exe_name}"
         file_0 = f"FILE0={bat_file_name}"
         source_files = f"[SourceFiles]\nSourceFiles0={current_dir}"
         extra = f"[SourceFiles0]\n%FILE0%="
-        
+
         to_write = [app_launched, target, file_0, source_files, extra]
         with open("setup.sed", "a+") as f:
             f.write(code)
@@ -717,25 +789,33 @@ AdminQuietInstCmd=
         os.system("iexpress /n /q /m setup.sed")
         os.remove("setup.sed")
         print(f"Exe file saved as {exe_name}")
-        
+
     def bat2exe2(self):
-        warning = Write.Input("WARNING: This method requires you to download a exe file from the github repo and run it. Are you ok with this? (y/n): ", Colors.rainbow, interval=0.05)
-        if warning.lower() == 'n':
+        warning = Write.Input(
+            "WARNING: This method requires you to download a exe file from the github repo and run it. Are you ok with this? (y/n): ",
+            Colors.rainbow,
+            interval=0.05,
+        )
+        if warning.lower() == "n":
             time.sleep(3)
             Main()
         else:
-            r = requests.get('https://github.com/KDot227/Somalifuscator/releases/download/Bat2Exe_Method1/Bat2Exe.exe')
+            r = requests.get(
+                "https://github.com/KDot227/Somalifuscator/releases/download/Bat2Exe_Method1/Bat2Exe.exe"
+            )
             with open("Bat2Exe.exe", "wb") as f:
                 f.write(r.content)
             os.system("start Bat2Exe.exe")
             time.sleep(3)
-            
-            
+
+
 if __name__ == "__main__":
     AutoUpdate()
     Main()
     print("Done!")
-    more = Write.Input("Do you want to obfuscate another file? (y/n): ", Colors.rainbow, interval=0.05)
+    more = Write.Input(
+        "Do you want to obfuscate another file? (y/n): ", Colors.rainbow, interval=0.05
+    )
     if more.lower() == "y":
         os.system("cls")
         Main()
