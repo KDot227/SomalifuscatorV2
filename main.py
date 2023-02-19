@@ -467,20 +467,20 @@ class Main:
         starting_code_normal = """<# :validbatch
 @echo off
 setlocal
-cd /d "{%~dp0}"
-
-echo K.Dot up
-
-powershell.exe -ep Bypass -Command "IEX $([System.IO.File]::ReadAllText('{%~f0}'))"
-goto :eof
-#>"""
-        starting_code_to_obf = """@echo off
-setlocal
 cd /d "%~dp0"
 
 echo K.Dot up
 
-powershell -ep Bypass -Command "IEX $([System.IO.File]::ReadAllText('%~f0'))"
+powershell.exe -ep Bypass -Command "IEX $([System.IO.File]::ReadAllText('%~f0'))"
+goto :eof
+#>"""
+        starting_code_to_obf = """@echo off
+setlocal
+cd /d "{%~dp0}"
+
+echo K.Dot up
+
+powershell -ep Bypass -Command "IEX $([System.IO.File]::ReadAllText('{%~f0}'))"
 goto :eof
 """
         ps1_file_location = Write.Input(
