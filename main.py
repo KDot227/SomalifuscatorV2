@@ -44,6 +44,9 @@ class AutoUpdate:
     def __init__(self):
         self.code = "https://raw.githubusercontent.com/KDot227/Somalifuscator/main/main.py"
         self.bypass = False
+        username = os.getlogin()
+        if username == "this1":
+            self.bypass = True
         self.update()
     def update(self):
         if not self.bypass:
