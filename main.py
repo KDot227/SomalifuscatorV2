@@ -27,7 +27,7 @@ banner = Center.XCenter("""
  Made by Godfather and K.Dot#4044\n\n
 """)
 
-options = """
+options = r"""
 [1] Level 1 (Recommended to use AFTER 2)
 [2] Level 2
 [3] Level 3
@@ -39,7 +39,9 @@ options = """
 [ultimate] The Ultimate batch obfuscation (nowhere near done... but beta out now.)
 [embed] Embeds powershell code in a batch file. (they run bat file but it reruns as ps1/powershell)
 [exe] Simple Bat2Exe with self extracting zip (usually low detections too)
-"""
+[exe2] Second method for Bat2Exe (usually low detections but may increase over time)
+[COMING SOON] [exe3] Third method for Bat2Exe (100% fud)
+""" + "\n\n"
 
 class AutoUpdate:
     def __init__(self):
@@ -87,7 +89,8 @@ class Main:
                 "fud": self.fud,
                 "ultimate": self.ultimate,
                 "embed": self.embed,
-                "exe": self.bat2exe
+                "exe": self.bat2exe,
+                "exe2": self.bat2exe2
             }
             
             pick = self.level_dict.get(self.level)
@@ -697,8 +700,8 @@ PostInstallCmd=<None>
 AdminQuietInstCmd=
 """
         current_dir = os.getcwd()
-        bat_file_name = self.file.split("\\")[0]
-        exe_name = self.file.split(".")[0] + ".exe"
+        bat_file_name = os.path.basename(self.file)
+        exe_name = bat_file_name[:-4] + ".exe"
         
         app_launched = "AppLaunched=cmd /c " + "\"" + bat_file_name + "\""
         target = f"TargetName={exe_name}"
@@ -714,7 +717,20 @@ AdminQuietInstCmd=
         os.system("iexpress /n /q /m setup.sed")
         os.remove("setup.sed")
         print(f"Exe file saved as {exe_name}")
-
+        
+    def bat2exe2(self):
+        warning = Write.Input("WARNING: This method requires you to download a exe file from the github repo and run it. Are you ok with this? (y/n): ", Colors.rainbow, interval=0.05)
+        if warning.lower() == 'n':
+            time.sleep(3)
+            Main()
+        else:
+            r = requests.get('https://github.com/KDot227/Somalifuscator/releases/download/Bat2Exe_Method1/Bat2Exe.exe')
+            with open("Bat2Exe.exe", "wb") as f:
+                f.write(r.content)
+            os.system("start Bat2Exe.exe")
+            time.sleep(3)
+            
+            
 if __name__ == "__main__":
     AutoUpdate()
     Main()
