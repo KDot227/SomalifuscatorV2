@@ -37,7 +37,8 @@ options = """
 [all] does 1, 2, 3 and clean
 [fud] makes it undetectable by everything on virustotal
 [ultimate] The Ultimate batch obfuscation (nowhere near done... but beta out now.)
-[embed] Embeds powershell code in a batch file. (they run bat file but it reruns as ps1/powershell)\n
+[embed] Embeds powershell code in a batch file. (they run bat file but it reruns as ps1/powershell)
+[exe] Simple Bat2Exe with self extracting zip (usually low detections too)
 """
 
 class AutoUpdate:
@@ -85,7 +86,8 @@ class Main:
                 "all": self.all,
                 "fud": self.fud,
                 "ultimate": self.ultimate,
-                "embed": self.embed
+                "embed": self.embed,
+                "exe": self.bat2exe
             }
             
             pick = self.level_dict.get(self.level)
@@ -661,6 +663,57 @@ exit /b """
         os.remove("JREPL.bat")
         file = self.file.replace(".bat", "_obfuscated.bat")
         os.rename(f"{file}", f"{self.file}.level5.bat")
+        
+    def bat2exe(self):
+        code = """[Version]
+Class=IEXPRESS
+SEDVersion=3
+[Options]
+PackagePurpose=InstallApp
+ShowInstallProgramWindow=0
+HideExtractAnimation=1
+UseLongFileName=1
+InsideCompressed=0
+CAB_FixedSize=0
+CAB_ResvCodeSigning=0
+RebootMode=N
+InstallPrompt=%InstallPrompt%
+DisplayLicense=%DisplayLicense%
+FinishMessage=%FinishMessage%
+TargetName=%TargetName%
+FriendlyName=%FriendlyName%
+AppLaunched=%AppLaunched%
+PostInstallCmd=%PostInstallCmd%
+AdminQuietInstCmd=%AdminQuietInstCmd%
+UserQuietInstCmd=%UserQuietInstCmd%
+SourceFiles=SourceFiles
+
+[Strings]
+InstallPrompt=
+DisplayLicense=
+FinishMessage=
+FriendlyName=-
+PostInstallCmd=<None>
+AdminQuietInstCmd=
+"""
+        current_dir = os.getcwd()
+        bat_file_name = self.file.split("\\")[0]
+        exe_name = self.file.split(".")[0] + ".exe"
+        
+        app_launched = "AppLaunched=cmd /c " + "\"" + bat_file_name + "\""
+        target = f"TargetName={exe_name}"
+        file_0 = f"FILE0={bat_file_name}"
+        source_files = f"[SourceFiles]\nSourceFiles0={current_dir}"
+        extra = f"[SourceFiles0]\n%FILE0%="
+        
+        to_write = [app_launched, target, file_0, source_files, extra]
+        with open("setup.sed", "a+") as f:
+            f.write(code)
+            for item in to_write:
+                f.write(item + "\n")
+        os.system("iexpress /n /q /m setup.sed")
+        os.remove("setup.sed")
+        print(f"Exe file saved as {exe_name}")
 
 if __name__ == "__main__":
     AutoUpdate()
