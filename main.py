@@ -510,7 +510,7 @@ goto :eof
             medium = random.randint(4, 6)
             high = random.randint(7, 9)
             extreme = random.randint(10, 12)
-            dead_code_examples = ["if not 0 == 0 ( goto :EOF )\n", "if not exist C:\Windows\System32 ( goto :EOF )\n", "if %penis% == 'yes' goto nah\n"]
+            dead_code_examples = ["if not 0 == 0 goto :EOF\n", "if not exist C:\Windows\System32 goto :EOF\n", "if %penis% == 'yes' goto nah\n"]
             
             type = Write.Input("What type of dead code do you want? (low/medium/high/extreme): ", Colors.rainbow, interval=0.05)
             if type.lower() == "low":
