@@ -310,38 +310,25 @@ class Main:
                     f.write(line)
                     continue
                 for char in line:
-                    if BYPASS == True:
-                        if char == "}":
-                            BYPASS = False
-                            pass
-                        else:
-                            f.write(char)
+                    if char == ">":
+                        f.write(char)
+                    elif char == "^":
+                        f.write(char)
+                        carrot = True
+                    elif carrot == True:
+                        f.write(char)
+                        carrot = False
                     else:
-                        if char == "{":
-                            BYPASS = True
-                            pass
-                        elif char == ">":
+                        if char == "%":
+                            var = not var
                             f.write(char)
-                        elif char == "^":
+                        elif var == True:
                             f.write(char)
-                            carrot = True
-                        elif carrot == True:
+                        elif "\n" in char:
                             f.write(char)
-                            carrot = False
                         else:
-                            if char == "%":
-                                var = not var
-                                f.write(char)
-
-                            elif var == True:
-                                f.write(char)
-
-                            elif "\n" in char:
-                                f.write(char)
-
-                            else:
-                                random = self.make_random_string()
-                                f.write(f"{char}%{random}%")
+                            random = self.make_random_string()
+                            f.write(f"{char}%{random}%")
 
     def ultimate(self) -> None:
         # ultimate mode
