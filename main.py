@@ -360,18 +360,7 @@ class Main:
                 data, desc="Obfuscating", unit=" lines", colour="green", ascii=True
             ):
                 random_bool = random.choice([True, False])
-                if line.startswith("{"):
-                    BYPASS = True
-                    for char in line:
-                        if char == "}":
-                            BYPASS = False
-                            pass
-                        else:
-                            if len(char) == 1:
-                                pass
-                            else:
-                                f.write(char)
-                elif line.startswith("::"):
+                if line.startswith("::"):
                     f.write(line)
                     continue
                 elif line.startswith(":"):
@@ -386,21 +375,31 @@ class Main:
                             continue
                         else:
                             for char in word:
-                                if char == "\n":
-                                    f.write("\n")
-                                    continue
-                                elif char == " ":
-                                    f.write(" ")
-                                    continue
+                                if BYPASS == True:
+                                    if char == "}":
+                                        BYPASS = False
+                                        pass
+                                    else:
+                                        f.write(char)
                                 else:
-                                    # random_obf = [self.ran1(char), self.ran2(char, random_order), self.ran3(char), self.ran4(char)]
-                                    # I'll fix this someday
-                                    random_obf = [
-                                        self.ran1(char),
-                                        self.ran2(char, random_order),
-                                        self.ran4(char),
-                                    ]
-                                    f.write(f"{random.choice(random_obf)}")
+                                    if char == "{":
+                                        BYPASS = True
+                                        pass
+                                    elif char == "\n":
+                                        f.write("\n")
+                                        continue
+                                    elif char == " ":
+                                        f.write(" ")
+                                        continue
+                                    else:
+                                        # random_obf = [self.ran1(char), self.ran2(char, random_order), self.ran3(char), self.ran4(char)]
+                                        # I'll fix this someday
+                                        random_obf = [
+                                            self.ran1(char),
+                                            self.ran2(char, random_order),
+                                            self.ran4(char),
+                                        ]
+                                        f.write(f"{random.choice(random_obf)}")
                             f.write(" ")
                     f.write("\n")
         with open(f"{self.file}.ultimate.bat", "r", encoding="utf-8") as f:
