@@ -1,14 +1,19 @@
-from rich.progress import track
-from zipfile import ZipFile
-from random import randint
-from pystyle import *
-import colorama
-import requests
-import random
-import codecs
-import string
-import time
-import os
+try:
+    from rich.progress import track
+    from zipfile import ZipFile
+    from random import randint
+    from pystyle import *
+    import colorama
+    import requests
+    import random
+    import codecs
+    import string
+    import time
+    import os
+except:
+    print(
+        "You don't have the required modules installed. Please run the setup.bat file to fix this."
+    )
 
 colorama.deinit()
 
