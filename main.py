@@ -50,6 +50,10 @@ def caesar_cipher_rotations_upper(rotation):
 together = caesar_cipher_rotations(cesar_val) + caesar_cipher_rotations_upper(cesar_val)
 together = together[:-4]
 
+beat_function = r"""
+for /f "usebackq delims=" %%a in ("%filename%") do (echo %%a | find /i "echo" >nul && exit /b)
+"""
+
 
 code = f"""@echo off
 {together}
@@ -193,6 +197,7 @@ class Main:
         original_file = self.file
         with open("mixer.bat", "w") as f:
             f.write(code)
+            # f.write(beat_function)
         self.file = "mixer.bat"
         self.fud()
         with open("mixer.bat.fud.bat", "r", encoding="utf-8") as f:
@@ -454,11 +459,11 @@ class Main:
         random = self.make_random_string()
         if char in string.ascii_letters:
             if char.islower():
-                coded0 = codecs.encode(char, "rot_13")
+                coded0 = self.caesar_cipher_rotation(char)
                 coded = coded0.replace(coded0, f"%{coded0}%")
                 return f"{coded}%{random}%"
             else:
-                coded0 = codecs.encode(char, "rot_13").upper()
+                coded0 = self.caesar_cipher_rotation_UPPER(char)
                 coded = coded0.replace(coded0, f"%{coded0}1%")
                 return f"{coded}%{random}%"
         else:
