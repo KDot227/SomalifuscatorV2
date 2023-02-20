@@ -1,10 +1,14 @@
-from random import randint
-import random, codecs, string, os, time
-from pystyle import *
-import requests
-from tqdm import tqdm
-import colorama
 from zipfile import ZipFile
+from random import randint
+from tqdm import tqdm
+from pystyle import *
+import colorama
+import requests
+import random
+import codecs
+import string
+import time
+import os
 
 colorama.deinit()
 
