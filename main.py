@@ -10,9 +10,37 @@ colorama.deinit()
 
 __author__ = "K.Dot#0001"
 
-code = r"""
-@echo off
-set "n=a" && set "o=b" && set "p=c" && set "q=d" && set "r=e" && set "s=f" && set "t=g" && set "u=h" && set "v=i" && set "w=j" && set "x=k" && set "y=l" && set "z=m" && set "a=n" && set "b=o" && set "c=p" && set "d=q" && set "e=r" && set "f=s" && set "g=t" && set "h=u" && set "i=v" && set "j=w" && set "k=x" && set "l=y" && set "m=z" && set "N1=A" && set "O1=B" && set "P1=C" && set "Q1=D" && set "R1=E" && set "S1=F" && set "T1=G" && set "U1=H" && set "V1=I" && set "W1=J" && set "X1=K" && set "Y1=L" && set "Z1=M" && set "A1=N" && set "B1=O" && set "C1=P" && set "D1=Q" && set "E1=R" && set "F1=S" && set "G1=T" && set "H1=U" && set "I1=V" && set "J1=W" && set "K1=X" && set "L1=Y" && set "M1=Z"
+cesar_val = randint(1, 13)
+
+
+def caesar_cipher_rotations(rotation):
+    """Generates the Caesar cipher for a given rotation value."""
+    alphabet = list("abcdefghijklmnopqrstuvwxyz")
+    rotated_alphabet = alphabet[rotation:] + alphabet[:rotation]
+    cipher_pairs = [
+        f'set "{rotated_alphabet[i]}={c}" && ' for i, c in enumerate(alphabet)
+    ]
+
+    return "".join(cipher_pairs)
+
+
+def caesar_cipher_rotations_upper(rotation):
+    """Generates the Caesar cipher for a given rotation value."""
+    alphabet = list("ABCDEFGHIJKLMNOPQRSTUVWXYZ")
+    rotated_alphabet = alphabet[rotation:] + alphabet[:rotation]
+    cipher_pairs = [
+        f'set "{rotated_alphabet[i]}1={c}" && ' for i, c in enumerate(alphabet)
+    ]
+
+    return "".join(cipher_pairs)
+
+
+together = caesar_cipher_rotations(cesar_val) + caesar_cipher_rotations_upper(cesar_val)
+together = together[:-4]
+
+
+code = f"""@echo off
+{together}
 chcp 65001 > nul
 """
 if __author__ != "\x4b\x2e\x44\x6f\x74\x23\x30\x30\x30\x31":
@@ -108,6 +136,7 @@ class Main:
 
             pick = self.level_dict.get(self.level)
             if pick is not None:
+                self.mixer()
                 pick()
             else:
                 print("Invalid option")
@@ -127,6 +156,36 @@ class Main:
             for i in range(length)
         )
 
+    def caesar_cipher_rotation(self, letter):
+        """Returns the Caesar cipher rotation for a given letter and rotation value."""
+        alphabet = list("abcdefghijklmnopqrstuvwxyz")
+        letter_index = alphabet.index(letter.lower())
+        rotated_alphabet = alphabet[cesar_val:] + alphabet[:cesar_val]
+        rotated_letter = rotated_alphabet[letter_index]
+
+        return rotated_letter
+
+    def caesar_cipher_rotation_UPPER(self, letter):
+        """Returns the Caesar cipher rotation for a given letter and rotation value."""
+        alphabet = list("ABCDEFGHIJKLMNOPQRSTUVWXYZ")
+        letter_index = alphabet.index(letter.upper())
+        rotated_alphabet = alphabet[cesar_val:] + alphabet[:cesar_val]
+        rotated_letter = rotated_alphabet[letter_index]
+
+        return rotated_letter
+
+    def mixer(self):
+        original_file = self.file
+        with open("mixer.bat", "w") as f:
+            f.write(code)
+        self.file = "mixer.bat"
+        self.fud()
+        with open("mixer.bat.fud.bat", "r", encoding="utf-8") as f:
+            self.code_new = f.read()
+        os.remove("mixer.bat")
+        os.remove("mixer.bat.fud.bat")
+        self.file = original_file
+
     def level1(self):
         carrot = False
         var = False
@@ -138,7 +197,7 @@ class Main:
         with open(self.file, "r", encoding="utf-8") as f:
             data = f.readlines()
         with open(f"{self.file}.level1.bat", "a+", encoding="utf-8") as f:
-            f.write(code)
+            f.write(self.code_new)
             for line in tqdm(
                 data, desc="Obfuscating", unit=" lines", colour="green", ascii=True
             ):
@@ -179,11 +238,11 @@ class Main:
                                 random = self.make_random_string()
                                 if char in string.ascii_letters:
                                     if char.islower():
-                                        coded0 = codecs.encode(char, "rot_13")
+                                        coded0 = self.caesar_cipher_rotation(char)
                                         coded = coded0.replace(coded0, f"%{coded0}%")
                                         f.write(f"{coded}%{random}%")
                                     else:
-                                        coded0 = codecs.encode(char, "rot_13").upper()
+                                        coded0 = self.caesar_cipher_rotation_UPPER(char)
                                         coded = coded0.replace(coded0, f"%{coded0}1%")
                                         f.write(f"{coded}%{random}%")
                                 else:
@@ -337,7 +396,7 @@ class Main:
             data = f.readlines()
         with open(f"{self.file}.ultimate.bat", "a+", encoding="utf-8") as f:
             f.write("::Made by K.Dot\n")
-            f.write(code)
+            f.write(self.code_new)
             characters = (
                 "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
             )
@@ -769,7 +828,7 @@ AdminQuietInstCmd=
 
         to_write = [app_launched, target, file_0, source_files, extra]
         with open("setup.sed", "a+") as f:
-            f.write(code)
+            f.write(self.code_new)
             for item in to_write:
                 f.write(item + "\n")
         os.system("iexpress /n /q /m setup.sed")
