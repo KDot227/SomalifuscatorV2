@@ -1,6 +1,6 @@
+from rich.progress import track
 from zipfile import ZipFile
 from random import randint
-from tqdm import tqdm
 from pystyle import *
 import colorama
 import requests
@@ -76,6 +76,8 @@ options = (
 [exe] Simple Bat2Exe with self extracting zip (usually low detections too)
 [exe2] Second method for Bat2Exe (usually low detections but may increase over time)
 [COMING SOON] [exe3] Third method for Bat2Exe (100% fud)
+
+[?] (If you want to use built in variables such as %~dp0 etc wrap them in percent signes then run the clean mode afterwards.)
 """
     + "\n\n"
 )
@@ -155,7 +157,8 @@ class Main:
         length = randint(5, 8)
         return "".join(
             random.choice(
-                "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZḆḞԍǏƘԸɌȚЦѠƳȤѧćễļṃŉᵲừŵź☠☢☣卐"
+                # "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZḆḞԍǏƘԸɌȚЦѠƳȤѧćễļṃŉᵲừŵź☠☢☣卐"
+                "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
             )
             for i in range(length)
         )
@@ -193,7 +196,6 @@ class Main:
     def level1(self):
         carrot = False
         var = False
-        BYPASS = False
         try:
             os.remove(f"{self.file}.level1.bat")
         except:
@@ -202,62 +204,51 @@ class Main:
             data = f.readlines()
         with open(f"{self.file}.level1.bat", "a+", encoding="utf-8") as f:
             f.write(self.code_new)
-            for line in tqdm(
-                data, desc="Obfuscating", unit=" lines", colour="green", ascii=True
+            for line in track(
+                data, description="[bold green]Obfuscating", total=len(data)
             ):
                 if line.startswith(":") and not line.startswith("::"):
                     f.write(line)
                     continue
                 for char in line:
-                    if BYPASS == True:
-                        if char == "}":
-                            BYPASS = False
-                            pass
-                        else:
-                            f.write(char)
+                    if char == ">":
+                        f.write(char)
+                    elif char == "^":
+                        f.write(char)
+                        carrot = True
+                    elif carrot == True:
+                        f.write(char)
+                        carrot = False
                     else:
-                        if char == "{":
-                            BYPASS = True
-                            pass
-                        elif char == ">":
+                        if char == "%":
+                            var = not var
                             f.write(char)
-                        elif char == "^":
+
+                        elif var == True:
                             f.write(char)
-                            carrot = True
-                        elif carrot == True:
+
+                        elif "\n" in char:
                             f.write(char)
-                            carrot = False
+
                         else:
-                            if char == "%":
-                                var = not var
-                                f.write(char)
-
-                            elif var == True:
-                                f.write(char)
-
-                            elif "\n" in char:
-                                f.write(char)
-
-                            else:
-                                random = self.make_random_string()
-                                if char in string.ascii_letters:
-                                    if char.islower():
-                                        coded0 = self.caesar_cipher_rotation(char)
-                                        coded = coded0.replace(coded0, f"%{coded0}%")
-                                        f.write(f"{coded}%{random}%")
-                                    else:
-                                        coded0 = self.caesar_cipher_rotation_UPPER(char)
-                                        coded = coded0.replace(coded0, f"%{coded0}1%")
-                                        f.write(f"{coded}%{random}%")
+                            random = self.make_random_string()
+                            if char in string.ascii_letters:
+                                if char.islower():
+                                    coded0 = self.caesar_cipher_rotation(char)
+                                    coded = coded0.replace(coded0, f"%{coded0}%")
+                                    f.write(f"{coded}%{random}%")
                                 else:
-                                    f.write(f"{char}%{random}%")
+                                    coded0 = self.caesar_cipher_rotation_UPPER(char)
+                                    coded = coded0.replace(coded0, f"%{coded0}1%")
+                                    f.write(f"{coded}%{random}%")
+                            else:
+                                f.write(f"{char}%{random}%")
 
     def level2(self):
         characters = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
         random_order = "".join(random.sample(characters, len(characters)))
         carrot = False
         var = False
-        BYPASS = False
         try:
             os.remove(f"{self.file}.level2.bat")
         except:
@@ -266,48 +257,38 @@ class Main:
             data = f.readlines()
         with open(f"{self.file}.level2.bat", "a+", encoding="utf-8") as f:
             f.write(f"set KDOT={random_order}\nchcp 65001 > nul\n")
-            for line in tqdm(
-                data, desc="Obfuscating", unit=" lines", colour="green", ascii=True
+            for line in track(
+                data, description="[bold green]Obfuscating", total=len(data)
             ):
                 if line.startswith(":") and not line.startswith("::"):
                     f.write(line)
                     continue
                 for char in line:
-                    if BYPASS == True:
-                        if char == "}":
-                            BYPASS = False
-                            pass
-                        else:
-                            f.write(char)
+                    if char == ">":
+                        f.write(char)
+                    elif char == "^":
+                        f.write(char)
+                        carrot = True
+                    elif carrot == True:
+                        f.write(char)
+                        carrot = False
                     else:
-                        if char == "{":
-                            BYPASS = True
-                            pass
-                        elif char == ">":
+                        if char == "%":
+                            var = not var
                             f.write(char)
-                        elif char == "^":
+
+                        elif var == True:
                             f.write(char)
-                            carrot = True
-                        elif carrot == True:
+
+                        elif "\n" in char:
                             f.write(char)
-                            carrot = False
+
                         else:
-                            if char == "%":
-                                var = not var
-                                f.write(char)
-
-                            elif var == True:
-                                f.write(char)
-
-                            elif "\n" in char:
-                                f.write(char)
-
+                            if char in string.ascii_letters:
+                                vard = f"%KDOT:~{random_order.index(char)},1%"
+                                f.write(vard)
                             else:
-                                if char in string.ascii_letters:
-                                    var = f"%KDOT:~{random_order.index(char)},1%"
-                                    f.write(var)
-                                else:
-                                    f.write(char)
+                                f.write(char)
 
     def level3(self):
         out_hex = []
@@ -329,10 +310,23 @@ class Main:
         with open(self.file, "r", encoding="utf-8") as f:
             contents = f.read()
         with open(f"{self.file}.cleaned.bat", "a+", encoding="utf-8") as f:
-            contents.replace("%~f0%", "%~f0")
-            contents.replace("%~dp0%", "%~dp0")
-            contents.replace("%~dpn0%", "%~dpn0")
-            contents.replace("%~dpnx0", "%~dpnx0")
+            # if there are any others that people use please make a pr and add them.
+            batch_vars = [
+                "%~dp0",
+                "%~f0",
+                "%~n0",
+                "%~x0",
+                "%~dpnx0",
+            ]
+            batch_vars_to_replace = [
+                r"%~dp0%",
+                r"%~f0%",
+                r"%~n0%",
+                r"%~x0%",
+                r"%~dpnx0%",
+            ]
+            for i in range(len(batch_vars)):
+                contents = contents.replace(batch_vars_to_replace[i], batch_vars[i])
             f.write(contents)
 
     def all(self):
@@ -357,7 +351,6 @@ class Main:
     def fud(self):
         carrot = False
         var = False
-        BYPASS = False
         try:
             os.remove(f"{self.file}.fud.bat")
         except:
@@ -366,8 +359,8 @@ class Main:
             data = f.readlines()
         with open(f"{self.file}.fud.bat", "a+", encoding="utf-8") as f:
             f.write("::Made by K.Dot\n")
-            for line in tqdm(
-                data, desc="Obfuscating", unit=" lines", colour="green", ascii=True
+            for line in track(
+                data, description="[bold green]Obfuscating", total=len(data)
             ):
                 if line.startswith(":") and not line.startswith("::"):
                     f.write(line)
@@ -395,7 +388,6 @@ class Main:
 
     def ultimate(self) -> None:
         # ultimate mode
-        BYPASS = False
         with open(self.file, "r", encoding="utf-8") as f:
             data = f.readlines()
         with open(f"{self.file}.ultimate.bat", "a+", encoding="utf-8") as f:
@@ -406,8 +398,8 @@ class Main:
             )
             random_order = "".join(random.sample(characters, len(characters)))
             f.write(f"set KDOT={random_order}\n")
-            for line in tqdm(
-                data, desc="Obfuscating", unit=" lines", colour="green", ascii=True
+            for line in track(
+                data, description="[bold green]Obfuscating", total=len(data)
             ):
                 random_bool = random.choice([True, False])
                 if line.startswith("::"):
@@ -425,31 +417,21 @@ class Main:
                             continue
                         else:
                             for char in word:
-                                if BYPASS == True:
-                                    if char == "}":
-                                        BYPASS = False
-                                        pass
-                                    else:
-                                        f.write(char)
+                                if char == "\n":
+                                    f.write("\n")
+                                    continue
+                                elif char == " ":
+                                    f.write(" ")
+                                    continue
                                 else:
-                                    if char == "{":
-                                        BYPASS = True
-                                        pass
-                                    elif char == "\n":
-                                        f.write("\n")
-                                        continue
-                                    elif char == " ":
-                                        f.write(" ")
-                                        continue
-                                    else:
-                                        # random_obf = [self.ran1(char), self.ran2(char, random_order), self.ran3(char), self.ran4(char)]
-                                        # I'll fix this someday
-                                        random_obf = [
-                                            self.ran1(char),
-                                            self.ran2(char, random_order),
-                                            self.ran4(char),
-                                        ]
-                                        f.write(f"{random.choice(random_obf)}")
+                                    # random_obf = [self.ran1(char), self.ran2(char, random_order), self.ran3(char), self.ran4(char)]
+                                    # I'll fix this someday
+                                    random_obf = [
+                                        self.ran1(char),
+                                        self.ran2(char, random_order),
+                                        self.ran4(char),
+                                    ]
+                                    f.write(f"{random.choice(random_obf)}")
                             f.write(" ")
                     f.write("\n")
         with open(f"{self.file}.ultimate.bat", "r", encoding="utf-8") as f:
