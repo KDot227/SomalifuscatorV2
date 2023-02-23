@@ -75,15 +75,15 @@ banner = Center.XCenter(
 
 options = (
     r"""
-[1] Level 1 (Recommended to use AFTER 2)
-[2] Level 2
-[3] Level 3
+[1] Level 1 (Recommended to use AFTER 2) (Rot-x method)
+[2] Level 2 (More Variable replacement)
+[3] Level 3 (Encoding trick by changing first 2 bytes)
 [4] Level 4 (NOTE: Don't end your files with exit when its done with this command or it might break. (same with pause))
-[5] Level 5 (NOTE: THIS WAS NOT MADE BY ME IT WAS MADE BY https://www.dostips.com/forum/memberlist.php?mode=viewprofile&u=2258 W mans btw)
-[clean] cleans the code to try and fix any common errors
+[5] Level 5 (NOTE: THIS WAS NOT MADE BY ME IT WAS MADE BY https://www.dostips.com/forum/memberlist.php?mode=viewprofile&u=2258 W mans btw) (If u really wanna be mean use Ultimate first lmao)
+[clean] cleans the code to try and fix any common errors (FIXES BUILT IN VARIABLES)
 [all] does 1, 2, 3 and clean
 [fud] makes it undetectable by everything on virustotal
-[ultimate] The Ultimate batch obfuscation (nowhere near done... but beta out now.)
+[ultimate] The Ultimate batch obfuscation (ultimate obf for someone who want's to make the person deobfuscating wanna off themselves)
 [embed] Embeds powershell code in a batch file. (they run bat file but it reruns as ps1/powershell)
 [exe] Simple Bat2Exe with self extracting zip (usually low detections too)
 [exe2] Second method for Bat2Exe (usually low detections but may increase over time)
@@ -757,7 +757,7 @@ exit /b """
         os.rename(f"{file}", f"{self.file}.level5.bat")
 
     def bat2exe(self):
-        code = """[Version]
+        code = r"""[Version]
 Class=IEXPRESS
 SEDVersion=3
 [Options]
@@ -800,7 +800,7 @@ AdminQuietInstCmd=
 
         to_write = [app_launched, target, file_0, source_files, extra]
         with open("setup.sed", "a+") as f:
-            f.write(self.code_new)
+            f.write(code)
             for item in to_write:
                 f.write(item + "\n")
         os.system("iexpress /n /q /m setup.sed")
