@@ -9,8 +9,8 @@ try:
     import colorama
     import requests
     import random
-    import codecs
     import string
+    import subprocess
 except:
     print(
         "You don't have the required modules installed. Please run the setup.bat file to fix this."
@@ -88,6 +88,7 @@ options = (
 [exe] Simple Bat2Exe with self extracting zip (usually low detections too)
 [exe2] Second method for Bat2Exe (usually low detections but may increase over time)
 [COMING SOON] [exe3] Third method for Bat2Exe (100% fud)
+[ONELINE] COMING SOON CURRENTLY BROKEN (stack overflow type shi sucks 2 suck ong)
 
 [?] (If you want to use built in variables such as %~dp0 etc wrap them in percent signes then run the clean mode afterwards.)
 """
@@ -150,6 +151,7 @@ class Main:
                 "embed": self.embed,
                 "exe": self.bat2exe,
                 "exe2": self.bat2exe2,
+                # "oneline": self.oneline,
             }
 
             pick = self.level_dict.get(self.level)
@@ -570,14 +572,6 @@ goto :eof
                 f.writelines(data2)
 
     def scrambler(self, codeed):
-        # lowkey broken rn
-        dead_code = Write.Input(
-            "Would you like to add dead code? (y/n): ", Colors.rainbow, interval=0.05
-        )
-        if dead_code.lower() == "y":
-            dead_code = True
-        else:
-            dead_code = False
         original_lines = codeed
 
         dict_thing = {}
@@ -599,7 +593,13 @@ goto :eof
             part_1 = f":{value[0]}\n"
             part_2 = f"{key}\n"
             try:
-                part_3 = f"goto {list(dict_thing.values())[value[1]+1][0]}\n"
+                random_t_f = random.choice([True, False])
+                if random_t_f:
+                    dead = list(dict_thing.values())[value[1]][0]
+                    run = self.deadcodes(str(dead))
+                    part_3 = f"{run}\n"
+                else:
+                    part_3 = f"goto {list(dict_thing.values())[value[1]][0]}\n"
             except IndexError:
                 part_3 = f"goto :EOF\n"
 
@@ -608,48 +608,21 @@ goto :eof
         random.shuffle(main_list)
         main_list.insert(0, remem)
 
-        if dead_code == True:
-            low = random.randint(1, 3)
-            medium = random.randint(4, 6)
-            high = random.randint(7, 9)
-            extreme = random.randint(10, 12)
-            dead_code_examples = [
-                "if not 0 == 0 goto :EOF\n",
-                "if not exist C:\Windows\System32 goto :EOF\n",
-                "if %penis% == 'yes' goto nah\n",
-            ]
-
-            type = Write.Input(
-                "What type of dead code do you want? (low/medium/high/extreme): ",
-                Colors.rainbow,
-                interval=0.05,
-            )
-            if type.lower() == "low":
-                for i in range(low):
-                    main_list.insert(
-                        random.randint(0, len(main_list)), dead_code_examples
-                    )
-            elif type.lower() == "medium":
-                for i in range(medium):
-                    main_list.insert(
-                        random.randint(0, len(main_list)), dead_code_examples
-                    )
-            elif type.lower() == "high":
-                for i in range(high):
-                    main_list.insert(
-                        random.randint(0, len(main_list)), dead_code_examples
-                    )
-            elif type.lower() == "extreme":
-                for i in range(extreme):
-                    main_list.insert(
-                        random.randint(0, len(main_list)), dead_code_examples
-                    )
-            else:
-                print("Invalid option!")
-                time.sleep(3)
-                Main()
-
         return main_list
+
+    def deadcodes(self, labeled):
+        RANNUM = randint(32768, 99999)
+        label123 = "".join(
+            random.choice(string.ascii_uppercase + string.digits) for _ in range(11)
+        )
+        examples = [
+            f"if %random% equ {RANNUM} ( goto :{label123} ) else ( goto :{labeled} )",
+            f"if not 0 neq 0 ( goto :{labeled} ) else ( goto {label123} )",
+            f"if exist C:\Windows\System32 ( goto :{labeled} ) else ( goto :{label123} )",
+            f"if not %cd% == %cd% ( goto :{label123} ) else ( goto :{labeled} )",
+        ]
+        randomed = random.choice(examples)
+        return randomed
 
     def level4(self):
         # Level 4 as promised. (I lowkey skidded it from someone else but i cant remember who :skull:) W mans tho ong
@@ -851,6 +824,28 @@ AdminQuietInstCmd=
                 f.write(r.content)
             os.system("start Bat2Exe.exe")
             time.sleep(3)
+
+    def oneline(self):
+        return
+        result = subprocess.run(
+            ["certutil", "-encodehex", self.file, "temp.bin"], stdout=subprocess.PIPE
+        )
+
+        with open("temp.bin", "r") as f:
+            data = f.readlines()
+
+        big_string = ""
+        for line in data:
+            smd = line[5:-19]
+            new_line = smd.replace("  ", " ")
+            big_string += new_line
+
+        decrypt_function = f"""
+echo {big_string} > temp.txt & certutil -f -decodehex temp.txt random.bat & del temp.txt & call random.bat
+        """
+
+        with open("output.bat", "w") as f:
+            f.write(decrypt_function)
 
 
 if __name__ == "__main__":
