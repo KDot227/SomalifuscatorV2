@@ -373,7 +373,7 @@ class Main:
         with open(self.file, "r", encoding="utf-8") as f:
             data = f.readlines()
         with open(f"{self.file}.fud.bat", "a+", encoding="utf-8") as f:
-            f.write("::Made by K.Dot\n")
+            f.write("::Made by K.Dot and Godfather\n")
             for line in track(
                 data, description="[bold green]Obfuscating", total=len(data)
             ):
@@ -406,7 +406,7 @@ class Main:
         with open(self.file, "r", encoding="utf-8") as f:
             data = f.readlines()
         with open(f"{self.file}.ultimate.bat", "a+", encoding="utf-8") as f:
-            f.write("::Made by K.Dot\n")
+            f.write("::Made by K.Dot and Godfather\n")
             f.write(self.code_new)
             characters = (
                 "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
@@ -450,12 +450,24 @@ class Main:
                             f.write(" ")
                     f.write("\n")
         with open(f"{self.file}.ultimate.bat", "r", encoding="utf-8") as f:
-            data = f.readlines()
-        messed_up = self.scrambler(data)
+            news = f.readlines()
+        news.insert(2, self.first_line_echo_check())
+        messed_up = self.scrambler(news)
         with open(f"{self.file}.ultimate.bat", "w", encoding="utf-8") as f:
             for array in messed_up:
                 for thing in array:
                     f.write(thing.strip() + "\n")
+        with open(f"{self.file}.ultimate.bat", "r", encoding="utf-8") as f:
+            data = f.readlines()
+            for i in range(len(data)):
+                if "echo" in data[i]:
+                    data[i] = data[i].replace(
+                        "echo", r"%GODFATHER%e%GODFATHER%c%GODFATHER%h%GODFATHER%o"
+                    )
+        out_hex = self.anti_check_error(code=data)
+        with open(f"{self.file}.ultimate.bat", "wb") as f:
+            for i in out_hex:
+                f.write(bytes.fromhex(i))
 
     def ran1(self, char):
         random = self.make_random_string()
@@ -623,6 +635,38 @@ goto :eof
         ]
         randomed = random.choice(examples)
         return randomed
+
+    def first_line_echo_check(self):
+        # I hate people who echo :angryface:
+        command = (
+            r'echo @echo off > close.bat && echo findstr /i "echo" "%~f0" >> close.bat && echo if %%errorlevel%% == 0 ( taskkill /f /im cmd.exe ) >> close.bat && start /b close.bat'
+            + "\n"
+        )
+        return command
+
+    def anti_check_error(self, code):
+        strung = "\nif %errorlevel% neq 9009 exit\n"
+        code.insert(0, strung)
+
+        # There is a 99% chance I could have just used .encode() but im just lazy like that if u gotta problem wit it make a pr
+
+        with open("placeholder.bat", "w", encoding="utf-8") as f:
+            f.writelines(code)
+        with open("placeholder.bat", "rb") as f:
+            code = f.read()
+
+        os.remove("placeholder.bat")
+
+        out_hex = []
+
+        # lowkey overkill lmao
+        out_hex.extend(
+            ["FF", "FE", "26", "63", "6C", "73", "0D", "0A", "FF", "FE", "0A", "0D"]
+        )
+
+        out_hex.extend(["{:02X}".format(b) for b in code])
+
+        return out_hex
 
     def level4(self):
         # Level 4 as promised. (I lowkey skidded it from someone else but i cant remember who :skull:) W mans tho ong
