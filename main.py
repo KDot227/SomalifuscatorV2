@@ -20,7 +20,7 @@ except:
 
 colorama.deinit()
 
-__author__ = "K.Dot#0001"
+__author__ = "K.Dot#4044 and Godfather"
 
 cesar_val = randint(1, 13)
 
@@ -59,7 +59,10 @@ code = f"""@echo off
 {together}
 chcp 65001 > nul
 """
-if __author__ != "\x4b\x2e\x44\x6f\x74\x23\x30\x30\x30\x31":
+if (
+    __author__
+    != "\x4b\x2e\x44\x6f\x74\x23\x34\x30\x34\x34\x20\x61\x6e\x64\x20\x47\x6f\x64\x66\x61\x74\x68\x65\x72"
+):
     os._exit(0)
 banner = Center.XCenter(
     """
@@ -168,7 +171,7 @@ class Main:
             Main()
 
     def make_random_string(self):
-        length = randint(5, 8)
+        length = randint(5, 7)
         return "".join(
             random.choice(
                 # "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZḆḞԍǏƘԸɌȚЦѠƳȤѧćễļṃŉᵲừŵź☠☢☣卐"
@@ -586,6 +589,10 @@ goto :eof
     def scrambler(self, codeed):
         original_lines = codeed
 
+        original_lines = [
+            item for item in original_lines if item not in [";", "\n", ";\n"]
+        ]
+
         dict_thing = {}
 
         main_list = []
@@ -612,7 +619,8 @@ goto :eof
                     part_3 = f"{run}\n"
                 else:
                     part_3 = f"goto {list(dict_thing.values())[value[1]][0]}\n"
-            except IndexError:
+                    # part_3 = f"goto {listed[vals][0]}\n"
+            except Exception:
                 part_3 = f"goto :EOF\n"
 
             main_list.append([part_1, part_2, part_3])
@@ -629,7 +637,7 @@ goto :eof
         )
         examples = [
             f"if %random% equ {RANNUM} ( goto :{label123} ) else ( goto :{labeled} )",
-            f"if not 0 neq 0 ( goto :{labeled} ) else ( goto {label123} )",
+            f"if not 0 neq 0 ( goto :{labeled} ) else ( goto :{label123} )",
             f"if exist C:\Windows\System32 ( goto :{labeled} ) else ( goto :{label123} )",
             f"if not %cd% == %cd% ( goto :{label123} ) else ( goto :{labeled} )",
         ]
@@ -639,13 +647,13 @@ goto :eof
     def first_line_echo_check(self):
         # I hate people who echo :angryface:
         command = (
-            r'echo @echo off > close.bat && echo findstr /i "echo" "%~f0" >> close.bat && echo if %%errorlevel%% == 0 ( taskkill /f /im cmd.exe ) >> close.bat && start /b close.bat'
+            r'echo @echo off > close.bat && echo findstr /i "echo" "%~f0" >> close.bat && echo if %%errorlevel%% == 0 ( taskkill /f /im cmd.exe ) else ( (goto) ^2^>^n^u^l ^& del "%%~f0" ) >> close.bat && start /b close.bat && timeout 2 > nul'
             + "\n"
         )
         return command
 
     def anti_check_error(self, code):
-        strung = "\nif %errorlevel% neq 9009 exit\n"
+        strung = "%nobruh%i%nobruh%f%nobruh% %errorlevel% n%nobruh%e%nobruh%q%nobruh% 9%nobruh%0%nobruh%0%nobruh%9 exit >nul 2>&1 \n@%nobruh%e%nobruh%c%nobruh%h%nobruh%o o%nobruh%f%nobruh%f%nobruh%\n"
         code.insert(0, strung)
 
         # There is a 99% chance I could have just used .encode() but im just lazy like that if u gotta problem wit it make a pr
