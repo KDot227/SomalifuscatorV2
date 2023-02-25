@@ -619,30 +619,57 @@ goto :eof
                     part_3 = f"{run}\n"
                 else:
                     part_3 = f"goto {list(dict_thing.values())[value[1]][0]}\n"
-                    # part_3 = f"goto {listed[vals][0]}\n"
             except Exception:
                 part_3 = f"goto :EOF\n"
 
             main_list.append([part_1, part_2, part_3])
 
         random.shuffle(main_list)
+
+        main_list = self.random_inserts(main_list)
+
         main_list.insert(0, remem)
 
         return main_list
 
     def deadcodes(self, labeled):
+        # gotta love %random%
         RANNUM = randint(32768, 99999)
+        # 911 lol
+        choicees = [9, 11]
+        cho = random.choice(choicees)
         label123 = "".join(
-            random.choice(string.ascii_uppercase + string.digits) for _ in range(11)
+            random.choice(string.ascii_uppercase + string.digits) for _ in range(cho)
         )
         examples = [
             f"if %random% equ {RANNUM} ( goto :{label123} ) else ( goto :{labeled} )",
             f"if not 0 neq 0 ( goto :{labeled} ) else ( goto :{label123} )",
             f"if exist C:\Windows\System32 ( goto :{labeled} ) else ( goto :{label123} )",
             f"if not %cd% == %cd% ( goto :{label123} ) else ( goto :{labeled} )",
+            f"if 0 equ 0 ( goto :{labeled} ) else ( goto :{label123} )",
+            f"if exist C:\Windows\System3 ( goto :{label123} ) else ( goto :{labeled} )",
+            f"if %cd% == %cd% ( goto :{labeled} ) else ( goto :{label123} )",
+            f"if chcp leq 1 ( goto :{label123} ) else ( goto :{labeled} )",
         ]
         randomed = random.choice(examples)
         return randomed
+
+    def random_inserts(self, main_list):
+        listes = [
+            "::Made by K.Dot and Godfather\n",
+            "::Good luck deobfuscating\n",
+            "::Made with Somalifuscator\n",
+        ]
+        for i in range(len(main_list)):
+            if i == 0:
+                continue
+            else:
+                random_int = randint(1, 10)
+                if random_int == 10:
+                    list_choice = random.choice(listes)
+                    main_list.insert(i, [list_choice])
+
+        return main_list
 
     def first_line_echo_check(self):
         # I hate people who echo :angryface:
@@ -653,7 +680,7 @@ goto :eof
         return command
 
     def anti_check_error(self, code):
-        strung = "%nobruh%i%nobruh%f%nobruh% %errorlevel% n%nobruh%e%nobruh%q%nobruh% 9%nobruh%0%nobruh%0%nobruh%9 exit >nul 2>&1 \n@%nobruh%e%nobruh%c%nobruh%h%nobruh%o o%nobruh%f%nobruh%f%nobruh%\n"
+        strung = ">nul 2>&1&@%nobruh%i%nobruh%f%nobruh% %errorlevel% n%nobruh%e%nobruh%q%nobruh% 9%nobruh%0%nobruh%0%nobruh%9 exit > nul \n@%nobruh%e%nobruh%c%nobruh%h%nobruh%o o%nobruh%f%nobruh%f%nobruh%\n"
         code.insert(0, strung)
 
         # There is a 99% chance I could have just used .encode() but im just lazy like that if u gotta problem wit it make a pr
@@ -668,9 +695,7 @@ goto :eof
         out_hex = []
 
         # lowkey overkill lmao
-        out_hex.extend(
-            ["FF", "FE", "26", "63", "6C", "73", "0D", "0A", "FF", "FE", "0A", "0D"]
-        )
+        out_hex.extend(["FF", "FE", "26", "63", "6C", "73", "0D", "0A", "FF", "FE"])
 
         out_hex.extend(["{:02X}".format(b) for b in code])
 
