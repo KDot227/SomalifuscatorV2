@@ -176,6 +176,7 @@ class Main:
         length = randint(5, 7)
         return "".join(
             random.choice(
+                # Batch has a specific issue with characters that aren't in the normal ASCII table cause if u got them in a variable it will make the variable explode. I fixed this before by changing the chcp to 65001 but sometimes that wouldn't fix things
                 # "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZḆḞԍǏƘԸɌȚЦѠƳȤѧćễļṃŉᵲừŵź☠☢☣卐"
                 "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
             )
@@ -379,9 +380,7 @@ class Main:
             data = f.readlines()
         with open(f"{self.file}.fud.bat", "a+", encoding="utf-8") as f:
             f.write("::Made by K.Dot and Godfather\n")
-            for line in track(
-                data, description="[bold green]Obfuscating", total=len(data)
-            ):
+            for line in data:
                 if line.startswith(":") and not line.startswith("::"):
                     f.write(line)
                     continue
@@ -436,7 +435,7 @@ class Main:
                     if random_bool == True:
                         f.write(";")
                     for word in line.split():
-                        if word.startswith("%"):
+                        if word.startswith("%") or word.startswith("!"):
                             f.write(word + " ")
                             continue
                         else:
@@ -621,7 +620,10 @@ goto :eof
                 random_t_f = random.choice([True, False])
                 if random_t_f:
                     dead = list(dict_thing.values())[value[1]][0]
-                    run = self.deadcodes(str(dead))
+                    random_working_value = random.choice(list(dict_thing.values()))
+                    while random_working_value[0] == dead:
+                        random_working_value = random.choice(list(dict_thing.values()))
+                    run = self.deadcodes(str(dead), random_working_value)
                     part_3 = f"{run}\n"
                 else:
                     part_3 = f"goto {list(dict_thing.values())[value[1]][0]}\n"
@@ -638,15 +640,17 @@ goto :eof
 
         return main_list
 
-    def deadcodes(self, labeled):
+    def deadcodes(self, labeled, working_val):
         # gotta love %random%
         RANNUM = randint(32768, 99999)
         # 911 lol
-        choicees = [9, 11]
-        cho = random.choice(choicees)
-        label123 = "".join(
-            random.choice(string.ascii_uppercase + string.digits) for _ in range(cho)
-        )
+        # choicees = [9, 11]
+        # cho = random.choice(choicees)
+        # label123 = "".join(
+        #    random.choice(string.ascii_uppercase + string.digits) for _ in range(cho)
+        # )
+        # This is absolute hell for anyone trying to deobfuscate this
+        label123 = working_val[0]
         examples = [
             f"if %random% equ {RANNUM} ( goto :{label123} ) else ( goto :{labeled} )",
             f"if not 0 neq 0 ( goto :{labeled} ) else ( goto :{label123} )",
