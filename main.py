@@ -86,7 +86,9 @@ options = (
 [clean] cleans the code to try and fix any common errors (FIXES BUILT IN VARIABLES)
 [all] does 1, 2, 3 and clean
 [fud] makes it undetectable by everything on virustotal
+
 [ultimate] The Ultimate batch obfuscation (ultimate obf for someone who want's to make the person deobfuscating wanna off themselves)
+
 [embed] Embeds powershell code in a batch file. (they run bat file but it reruns as ps1/powershell)
 [exe] Simple Bat2Exe with self extracting zip (usually low detections too)
 [exe2] Second method for Bat2Exe (usually low detections but may increase over time)
@@ -130,15 +132,15 @@ class Main:
     def __init__(self):
         # if u on linux kys
         os.system("cls")
-        print(Colorate.Vertical(Colors.yellow_to_red, banner, 2))
+        print(Colorate.Vertical(Colors.purple_to_blue, banner, 2))
         self.carrot = False
         self.label = False
-        self.file = Write.Input("File to obfuscate -> ", Colors.rainbow, interval=0.05)
+        self.file = Write.Input("File to obfuscate -> ", Colors.green, interval=0.05)
         if os.path.exists(self.file):
-            print(Colorate.Vertical(Colors.yellow_to_red, options, 2))
+            print(Colorate.Vertical(Colors.purple_to_blue, options, 2))
             self.level = Write.Input(
                 "What level of Obfuscation do you want? -> ",
-                Colors.rainbow,
+                Colors.green,
                 interval=0.05,
             )
             self.level_dict = {
@@ -405,6 +407,10 @@ class Main:
                             f.write(f"{char}%{random}%")
 
     def ultimate(self) -> None:
+        try:
+            os.remove(f"{self.file}.ultimate.bat")
+        except:
+            pass
         # ultimate mode
         with open(self.file, "r", encoding="utf-8") as f:
             data = f.readlines()
@@ -545,7 +551,7 @@ powershell -ep Bypass -Command "IEX $([System.IO.File]::ReadAllText('{%~f0}'))"
 goto :eof
 """
         ps1_file_location = Write.Input(
-            "Enter the location of the ps1 file: ", Colors.rainbow, interval=0.05
+            "Enter the location of the ps1 file: ", Colors.green, interval=0.05
         )
         try:
             with open(ps1_file_location, "r", encoding="utf-8") as f:
@@ -556,7 +562,7 @@ goto :eof
             Main()
         obfuscate = Write.Input(
             "Would you like to obfuscate the batch code? (y/n): ",
-            Colors.rainbow,
+            Colors.green,
             interval=0.05,
         )
         if obfuscate.lower() == "y":
@@ -887,7 +893,7 @@ AdminQuietInstCmd=
     def bat2exe2(self):
         warning = Write.Input(
             "WARNING: This method requires you to download a exe file from the github repo and run it. Are you ok with this? (y/n): ",
-            Colors.rainbow,
+            Colors.green,
             interval=0.05,
         )
         if warning.lower() == "n":
@@ -930,7 +936,9 @@ if __name__ == "__main__":
     Main()
     print("Done!")
     more = Write.Input(
-        "Do you want to obfuscate another file? (y/n): ", Colors.rainbow, interval=0.05
+        "Do you want to obfuscate another file? (y/n): ",
+        Colors.green,
+        interval=0.05,
     )
     if more.lower() == "y":
         os.system("cls")
