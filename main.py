@@ -135,6 +135,8 @@ class Main:
         print(Colorate.Vertical(Colors.purple_to_blue, banner, 2))
         self.carrot = False
         self.label = False
+        # This is so the fud mode doesn't show the first time it's ran
+        self.down = False
         self.file = Write.Input("File to obfuscate -> ", Colors.green, interval=0.05)
         if os.path.exists(self.file):
             print(Colorate.Vertical(Colors.purple_to_blue, options, 2))
@@ -172,7 +174,8 @@ class Main:
             time.sleep(3)
             Main()
 
-    def make_random_string(self):
+    @staticmethod
+    def make_random_string():
         length = randint(5, 7)
         return "".join(
             random.choice(
@@ -182,6 +185,23 @@ class Main:
             )
             for i in range(length)
         )
+
+    def obf_oneline(self, line):
+        final_string = ""
+        for word in line.split(" "):
+            if word.startswith("%"):
+                final_string += word + " "
+            elif word.startswith(":"):
+                final_string += word + " "
+            else:
+                for char in word:
+                    # only this for now
+                    choices = [self.simple(char)]
+                    final_string += random.choice(choices)
+        return final_string + " "
+
+    def simple(self, char):
+        return f"%{self.make_random_string()}%{char}%{self.make_random_string()}%"
 
     def caesar_cipher_rotation(self, letter):
         """Returns the Caesar cipher rotation for a given letter and rotation value."""
@@ -380,30 +400,59 @@ class Main:
             data = f.readlines()
         with open(f"{self.file}.fud.bat", "a+", encoding="utf-8") as f:
             f.write("::Made by K.Dot and Godfather\n")
-            for line in data:
-                if line.startswith(":") and not line.startswith("::"):
-                    f.write(line)
-                    continue
-                for char in line:
-                    if char == ">":
-                        f.write(char)
-                    elif char == "^":
-                        f.write(char)
-                        carrot = True
-                    elif carrot == True:
-                        f.write(char)
-                        carrot = False
-                    else:
-                        if char == "%":
-                            var = not var
+            if self.down == False:
+                for line in data:
+                    if line.startswith(":") and not line.startswith("::"):
+                        f.write(line)
+                        continue
+                    for char in line:
+                        if char == ">":
                             f.write(char)
-                        elif var == True:
+                        elif char == "^":
                             f.write(char)
-                        elif "\n" in char:
+                            carrot = True
+                        elif carrot == True:
                             f.write(char)
+                            carrot = False
                         else:
-                            random = self.make_random_string()
-                            f.write(f"{char}%{random}%")
+                            if char == "%":
+                                var = not var
+                                f.write(char)
+                            elif var == True:
+                                f.write(char)
+                            elif "\n" in char:
+                                f.write(char)
+                            else:
+                                random = self.make_random_string()
+                                f.write(f"{char}%{random}%")
+            else:
+                for line in track(
+                    data, description="[bold green]Obfuscating", total=len(data)
+                ):
+                    if line.startswith(":") and not line.startswith("::"):
+                        f.write(line)
+                        continue
+                    for char in line:
+                        if char == ">":
+                            f.write(char)
+                        elif char == "^":
+                            f.write(char)
+                            carrot = True
+                        elif carrot == True:
+                            f.write(char)
+                            carrot = False
+                        else:
+                            if char == "%":
+                                var = not var
+                                f.write(char)
+                            elif var == True:
+                                f.write(char)
+                            elif "\n" in char:
+                                f.write(char)
+                            else:
+                                random = self.make_random_string()
+                                f.write(f"{char}%{random}%")
+        self.down = not self.down
 
     def ultimate(self) -> None:
         try:
@@ -515,82 +564,6 @@ class Main:
     def ran4(self, char):
         return char
 
-    def true_statement(self, line):
-        true_statements = [
-            "if exist C:\Windows\System32 ( {} )",
-            "if not 0 neq 0 ( {} )",
-        ]
-        random_statement = random.choice(true_statements)
-        return random_statement.format(line)
-
-    def obliterate(self):
-        # The best obfuscation method involving encoding
-        # I ain't nowhere near done with this yet :skull:
-        # (it does work tho stg | and its op asf)
-        pass
-
-    def embed(self):
-        starting_code_normal = """<# :validbatch
-@echo off
-setlocal
-cd /d "%~dp0"
-
-echo K.Dot up
-
-powershell.exe -ep Bypass -Command "IEX $([System.IO.File]::ReadAllText('%~f0'))"
-goto :eof
-#>"""
-        starting_code_to_obf = """@echo off
-setlocal
-cd /d "{%~dp0}"
-
-echo K.Dot up
-
-powershell -ep Bypass -Command "IEX $([System.IO.File]::ReadAllText('{%~f0}'))"
-goto :eof
-"""
-        ps1_file_location = Write.Input(
-            "Enter the location of the ps1 file: ", Colors.green, interval=0.05
-        )
-        try:
-            with open(ps1_file_location, "r", encoding="utf-8") as f:
-                data = f.readlines()
-        except FileNotFoundError:
-            print("File not found!")
-            time.sleep(3)
-            Main()
-        obfuscate = Write.Input(
-            "Would you like to obfuscate the batch code? (y/n): ",
-            Colors.green,
-            interval=0.05,
-        )
-        if obfuscate.lower() == "y":
-            with open("place_holder.bat", "w", encoding="utf-8") as f:
-                f.write(starting_code_to_obf)
-                self.file = "place_holder.bat"
-            self.ultimate()
-            os.remove("place_holder.bat")
-            os.rename("place_holder.bat.ultimate.bat", "embed.bat")
-            with open("embed.bat", "r+", encoding="utf-8") as f:
-                data2 = f.readlines()
-                data2_size = len(data2)
-                data2.insert(0, "<# :validkdot\n")
-                data2.insert(data2_size + 1, "#>\n")
-                data2 += data
-            with open("embed.bat", "w+", encoding="utf-8") as f:
-                f.writelines(data2)
-        else:
-            # I can FASHO make this a lot cleaner and better but im too lazy rn (split string into list instead of reading it from file :skull:)
-            with open("embed.bat", "w", encoding="utf-8") as f:
-                f.write(starting_code_normal)
-            with open("embed.bat", "r+", encoding="utf-8") as f:
-                data2 = f.readlines()
-            with open("embed.bat", "w", encoding="utf-8") as f:
-                data2_size = len(data2)
-                data2.insert(data2_size, "\n")
-                data2 += data
-                f.writelines(data2)
-
     def scrambler(self, codeed):
         original_lines = codeed
 
@@ -613,7 +586,7 @@ goto :eof
 
         for index, (key, value) in enumerate(dict_thing.items()):
             if index == 0:
-                remem = [f"goto {value[0]}\n"]
+                remem = [f"{self.obf_oneline('goto')} :{value[0]}\n"]
             part_1 = f":{value[0]}\n"
             part_2 = f"{key}\n"
             try:
@@ -626,9 +599,9 @@ goto :eof
                     run = self.deadcodes(str(dead), random_working_value)
                     part_3 = f"{run}\n"
                 else:
-                    part_3 = f"goto {list(dict_thing.values())[value[1]][0]}\n"
+                    part_3 = f"{self.obf_oneline('goto')} :{list(dict_thing.values())[value[1]][0]}\n"
             except Exception:
-                part_3 = f"goto :EOF\n"
+                part_3 = f"{self.obf_oneline('goto')} :EOF\n"
 
             main_list.append([part_1, part_2, part_3])
 
@@ -710,6 +683,68 @@ goto :eof
         out_hex.extend(["{:02X}".format(b) for b in code])
 
         return out_hex
+
+    def embed(self):
+        starting_code_normal = """<# :validbatch
+@echo off
+setlocal
+cd /d "%~dp0"
+
+echo K.Dot up
+
+powershell.exe -ep Bypass -Command "IEX $([System.IO.File]::ReadAllText('%~f0'))"
+goto :eof
+#>"""
+        starting_code_to_obf = """@echo off
+setlocal
+cd /d "{%~dp0}"
+
+echo K.Dot up
+
+powershell -ep Bypass -Command "IEX $([System.IO.File]::ReadAllText('{%~f0}'))"
+goto :eof
+"""
+        ps1_file_location = Write.Input(
+            "Enter the location of the ps1 file: ", Colors.green, interval=0.05
+        )
+        try:
+            with open(ps1_file_location, "r", encoding="utf-8") as f:
+                data = f.readlines()
+        except FileNotFoundError:
+            print("File not found!")
+            time.sleep(3)
+            Main()
+        obfuscate = Write.Input(
+            "Would you like to obfuscate the batch code? (y/n): ",
+            Colors.green,
+            interval=0.05,
+        )
+        if obfuscate.lower() == "y":
+            with open("place_holder.bat", "w", encoding="utf-8") as f:
+                f.write(starting_code_to_obf)
+                self.file = "place_holder.bat"
+            self.ultimate()
+            os.remove("place_holder.bat")
+            os.rename("place_holder.bat.ultimate.bat", "embed.bat")
+            with open("embed.bat", "r+", encoding="utf-8") as f:
+                data2 = f.readlines()
+                data2_size = len(data2)
+                data2.insert(0, "<# :validkdot\n")
+                data2.insert(data2_size + 1, "#>\n")
+                data2 += data
+            with open("embed.bat", "w+", encoding="utf-8") as f:
+                f.writelines(data2)
+        else:
+            # I can FASHO make this a lot cleaner and better but im too lazy rn (split string into list instead of reading it from file :skull:)
+            with open("embed.bat", "w", encoding="utf-8") as f:
+                f.write(starting_code_normal)
+            with open("embed.bat", "r+", encoding="utf-8") as f:
+                data2 = f.readlines()
+            with open("embed.bat", "w", encoding="utf-8") as f:
+                data2_size = len(data2)
+                data2.insert(data2_size, "\n")
+                data2 += data
+                f.writelines(data2)
 
     def level4(self):
         # Level 4 as promised. (I lowkey skidded it from someone else but i cant remember who :skull:) W mans tho ong
