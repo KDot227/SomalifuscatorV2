@@ -186,6 +186,12 @@ class Main:
             for i in range(length)
         )
 
+    @staticmethod
+    def make_left_to_right_string():
+        # Change if u want
+        length = 1
+        return "".join("‮" for i in range(length))
+
     def obf_oneline(self, line):
         final_string = ""
         for word in line.split(" "):
@@ -201,7 +207,8 @@ class Main:
         return final_string + " "
 
     def simple(self, char):
-        return f"%{self.make_random_string()}%{char}%{self.make_random_string()}%"
+        choices = [self.make_random_string(), self.make_left_to_right_string()]
+        return f"%{random.choice(choices)}%{char}%{random.choice(choices)}%"
 
     def caesar_cipher_rotation(self, letter):
         """Returns the Caesar cipher rotation for a given letter and rotation value."""
@@ -527,18 +534,19 @@ class Main:
                 f.write(bytes.fromhex(i))
 
     def ran1(self, char):
-        random = self.make_random_string()
+        choices = [self.make_random_string(), self.make_random_string()]
+        randomed = random.choice(choices)
         if char in string.ascii_letters:
             if char.islower():
                 coded0 = self.caesar_cipher_rotation(char)
                 coded = coded0.replace(coded0, f"%{coded0}%")
-                return f"{coded}%{random}%"
+                return f"{coded}%{randomed}%"
             else:
                 coded0 = self.caesar_cipher_rotation_UPPER(char)
                 coded = coded0.replace(coded0, f"%{coded0}1%")
-                return f"{coded}%{random}%"
+                return f"{coded}%{randomed}%"
         else:
-            return f"{char}%{random}%"
+            return f"{char}%{randomed}%"
 
     def ran2(self, char, random_order):
         public = r"C:\Users\Public"
