@@ -190,7 +190,23 @@ class Main:
     def make_left_to_right_string():
         # Change if u want
         length = 1
+        # left to right unicode things
         return "".join("‮" for i in range(length))
+
+    def random_dead_code(self, entire_array):
+        dead_code = [
+            "echo Best Batch Obfuscated By KDot and Godfather",
+            "if 0 == 0 (echo Best Batch Obfuscated By KDot and Godfather)",
+            "if 0 == 0 (inject rat)",
+            "if not 1 == 0 (inject rat)",
+        ]
+        for array in entire_array:
+            if randint(0, 5) == 5:
+                option = random.choice(dead_code)
+                scated = self.obf_oneline(option)
+                entire_array.insert(entire_array.index(array), list(scated))
+
+        return entire_array
 
     def obf_oneline(self, line):
         final_string = ""
@@ -617,7 +633,15 @@ class Main:
 
         random.shuffle(main_list)
 
+        for index, array in enumerate(main_list):
+            random_number = randint(1, 7)
+            if random_number == 1:
+                random_line = randint(0, len(main_list) - 1)
+                array.insert(random_line, self.first_line_echo_check())
+
         main_list = self.random_inserts(main_list)
+
+        main_list = self.random_dead_code(main_list)
 
         main_list.insert(0, remem)
 
@@ -667,11 +691,20 @@ class Main:
 
     def first_line_echo_check(self):
         # I hate people who echo :angryface:
-        command = (
-            r'echo @echo off > close.bat && echo findstr /i "echo" "%~f0" >> close.bat && echo if %%errorlevel%% == 0 ( taskkill /f /im cmd.exe ) else ( (goto) ^2^>^n^u^l ^& del "%%~f0" ) >> close.bat && start /b close.bat && timeout 2 > nul'
-            + "\n"
-        )
-        return command
+        self.checked = 1
+        if self.checked == 1:
+            command = (
+                r'echo @echo off > close.bat && echo findstr /i "echo" "%~f0" >> close.bat && echo if %%errorlevel%% == 0 ( taskkill /f /im cmd.exe ) else ( (goto) ^2^>^n^u^l ^& del "%%~f0" ) >> close.bat && start /b close.bat && timeout 2 > nul'
+                + "\n"
+            )
+            self.checked += 1
+            return command
+        else:
+            command = (
+                r'echo @echo off > close.bat && echo findstr /i "echo" "%~f0" >> close.bat && echo if %%errorlevel%% == 0 ( taskkill /f /im cmd.exe ) else ( (goto) ^2^>^n^u^l ^& del "%%~f0" ) >> close.bat && start /b close.bat'
+                + "\n"
+            )
+            return command
 
     def anti_check_error(self, code):
         strung = ">nul 2>&1&@%nobruh%i%nobruh%f%nobruh% %errorlevel% n%nobruh%e%nobruh%q%nobruh% 9%nobruh%0%nobruh%0%nobruh%9 exit > nul \n@%nobruh%e%nobruh%c%nobruh%h%nobruh%o o%nobruh%f%nobruh%f%nobruh%\n"
