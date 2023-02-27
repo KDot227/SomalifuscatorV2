@@ -1,6 +1,10 @@
 # Batch-Somali-Obfuscator
 
-PLEASE STAR ![this](https://github.blog/wp-content/uploads/2020/09/github-stars-logo_Color.png?fit=1200%2C120) REPO IF YOU LIKE IT
+<p align="center">
+Please Star Repo
+  <img src="https://github.blog/wp-content/uploads/2020/09/github-stars-logo_Color.png?fit=1200%2C120" />
+If you like it!
+</p>
 
 # READ
 
