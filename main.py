@@ -204,7 +204,9 @@ class Main:
                     # only this for now
                     choices = [self.simple(char)]
                     final_string += random.choice(choices)
-        return final_string + " "
+                final_string += " "
+
+        return final_string
 
     def simple(self, char):
         choices = [self.make_random_string(), self.make_left_to_right_string()]
@@ -643,7 +645,8 @@ class Main:
             f"if chcp leq 1 ( goto :{label123} ) else ( goto :{labeled} )",
         ]
         randomed = random.choice(examples)
-        return randomed
+        obfuscated = self.obf_oneline(randomed)
+        return obfuscated
 
     def random_inserts(self, main_list):
         listes = [
