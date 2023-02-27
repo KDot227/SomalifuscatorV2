@@ -187,6 +187,16 @@ class Main:
         )
 
     @staticmethod
+    def make_random_label_no_working():
+        length = random.choice([9, 11])
+        return "".join(
+            random.choice(
+                "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+            )
+            for i in range(length)
+        )
+
+    @staticmethod
     def make_left_to_right_string():
         # Change if u want
         length = 1
@@ -592,6 +602,13 @@ class Main:
 
     def scrambler(self, codeed):
         original_lines = codeed
+
+        for index, line in enumerate(original_lines):
+            random_number = random.randint(1, 4)
+            if random_number == 1:
+                # add a label that doesn't do anything
+                label = f":{self.make_random_label_no_working()}\n"
+                original_lines.insert(index, label)
 
         original_lines = [
             item for item in original_lines if item not in [";", "\n", ";\n"]
