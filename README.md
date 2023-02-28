@@ -8,13 +8,19 @@ If you like it!
 
 # READ
 
-BUILT IN VARIABLES HAVE A FIX!!!
+### BUILT IN VARIABLES HAVE A FIX!!!
 
 The only obfuscation mode that supports built in variables is level 3, 4, 5, ultimate, embed and exe. idk why you would use mode 1 over ultimate but it's up to u.
 
 # Why make this?
 
 Long story short baum made [this](https://github.com/baum1810/batchobfuscator) and I thought that it was cool and thought that I could also make something better and so I did. I left it alone after making the first 3 modes but then picked it up again after some kid said that his was better.
+
+### Cool Things
+
+Not only is the Obfuscator very fast but it's also very customizable. If you know python code well enough nothing is stopping you from going into the code and changing some of the randint values to occur more frequently making your code more obfuscated and harder to read.
+
+Another thing is that after using modes such as ultimate, you can then use other modes such as level 5 or level 4 to make your code more secure/obfuscated
 
 ## Level 1.)
 ![level 1](https://i.imgur.com/g6XpRIj.png)
