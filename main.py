@@ -214,7 +214,10 @@ class Main:
             if randint(0, 5) == 5:
                 option = random.choice(dead_code)
                 scated = self.obf_oneline(option)
-                entire_array.insert(entire_array.index(array), list(scated))
+                print(scated)
+                new_string = ''.join(scated)
+                new_string = [new_string]
+                entire_array.insert(entire_array.index(array), new_string)
 
         return entire_array
 
