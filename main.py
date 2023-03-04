@@ -204,22 +204,41 @@ class Main:
         return "".join("‮" for i in range(length))
 
     def random_dead_code(self, entire_array):
+
         dead_code = [
-            "echo Best Batch Obfuscated By KDot and Godfather",
-            "if 0 == 0 (echo Best Batch Obfuscated By KDot and Godfather)",
-            "if 0 == 0 (inject rat)",
-            "if not 1 == 0 (inject rat)",
+            "echo Best Batch Obfuscated By KDot and Godfather\n",
+            "if 0 == 0 (echo Best Batch Obfuscated By KDot and Godfather)\n",
+            f"set KDOT={self.fake_KDOT()}\n",
+            f"{self.fake_ceaser_cipher()}\n",
+            f"{self.fake_ceaser_cipher_obfuscated()}\n",
         ]
         for array in entire_array:
-            if randint(0, 5) == 5:
+            if randint(0, 3) == 3:
                 option = random.choice(dead_code)
                 scated = self.obf_oneline(option)
-                print(scated)
-                new_string = ''.join(scated)
+                new_string = "".join(scated)
                 new_string = [new_string]
                 entire_array.insert(entire_array.index(array), new_string)
 
         return entire_array
+
+    @staticmethod
+    def fake_ceaser_cipher():
+        together = caesar_cipher_rotations(cesar_val) + caesar_cipher_rotations_upper(
+            cesar_val
+        )
+        together = together[:-4]
+        return together
+
+    def fake_ceaser_cipher_obfuscated(self):
+        cipher = self.fake_ceaser_cipher()
+        obfuscated = self.obf_oneline(cipher)
+        return obfuscated
+
+    def fake_KDOT(self):
+        characters = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+        random_order = "".join(random.sample(characters, len(characters)))
+        return random_order
 
     def obf_oneline(self, line):
         final_string = ""
@@ -238,7 +257,11 @@ class Main:
         return final_string
 
     def simple(self, char):
-        choices = [self.make_random_string(), self.make_left_to_right_string()]
+        unicode = True
+        if unicode:
+            choices = [self.make_random_string(), self.make_left_to_right_string()]
+        else:
+            choices = [self.make_random_string()]
         return f"%{random.choice(choices)}%{char}%{random.choice(choices)}%"
 
     def caesar_cipher_rotation(self, letter):
@@ -582,7 +605,18 @@ class Main:
     def ran2(self, char, random_order):
         public = r"C:\Users\Public"
         weird = r"C:\Program Files (x86)\Common Files"
-        if char in public:
+        program_1 = r"C:\Program Files"
+        program_2 = r"C:\Program Files (x86)"
+        # who_even_knows = r"C:\Windows\apppatch\Custom\Custom64"
+        if char in program_1:
+            return f"%programfiles:~{program_1.index(char)},1%"
+        elif char in program_2:
+            return f"%programfiles(x86):~{program_2.index(char)},1%"
+        # elif char in who_even_knows:
+        #    return (
+        #        f"%windir%\\apppatch\\Custom\\Custom64:~{who_even_knows.index(char)},1%"
+        #    )
+        elif char in public:
             return f"%public:~{public.index(char)},1%"
         elif char in weird:
             return f"%CommonProgramFiles(x86):~{weird.index(char)},1%"
@@ -727,7 +761,7 @@ class Main:
             return command
 
     def anti_check_error(self, code):
-        strung = ">nul 2>&1&@%nobruh%i%nobruh%f%nobruh% %errorlevel% n%nobruh%e%nobruh%q%nobruh% 9%nobruh%0%nobruh%0%nobruh%9 exit > nul \n@%nobruh%e%nobruh%c%nobruh%h%nobruh%o o%nobruh%f%nobruh%f%nobruh%\n"
+        strung = ">nul 2>&1 && exit > nul \n@%nobruh%e%nobruh%c%nobruh%h%nobruh%o o%nobruh%f%nobruh%f%nobruh%\n"
         code.insert(0, strung)
 
         # There is a 99% chance I could have just used .encode() but im just lazy like that if u gotta problem wit it make a pr
