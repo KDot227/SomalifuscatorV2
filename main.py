@@ -198,14 +198,9 @@ class Main:
 
     @staticmethod
     def make_random_label_no_working():
-        #911 lol
+        # 911 lol
         length = random.choice([9, 11])
-        return "".join(
-            random.choice(
-                chinese_characters
-            )
-            for i in range(length)
-        )
+        return "".join(random.choice(chinese_characters) for i in range(length))
 
     @staticmethod
     def make_left_to_right_string():
@@ -572,9 +567,9 @@ class Main:
                                     # I'll fix this someday
                                     random_obf = [
                                         self.ran1(char),
-                                        #ran 2 is the only thing stopping most deobfuscators since it uses environment variables that nobody knows about
+                                        # ran 2 is the only thing stopping most deobfuscators since it uses environment variables that nobody knows about
                                         self.ran2(char, random_order),
-                                        #self.ran4(char),
+                                        # self.ran4(char),
                                     ]
                                     f.write(f"{random.choice(random_obf)}")
                             f.write(" ")
@@ -653,7 +648,7 @@ class Main:
 
     def ran4(self, char):
         return char
-    
+
     @staticmethod
     def generate_math_problem(answer: int):
         # no division since we don't want floats BUT we can use division in the answer since its how you undo multiplication
@@ -683,9 +678,9 @@ class Main:
         ans2 = eval(problem2)
 
         batch_version = f"set /a ans={problem2}"
-        
+
         while ans < 0:
-            
+
             operators = ["+", "-"]
             opp1 = random.choice(operators)
             opp2 = random.choice(operators)
@@ -1131,10 +1126,10 @@ setlocal DisableDelayedExpansion
 if "%~1" equ "" echo Usage: Obfuscate filename.bat & goto :EOF
 if not exist "%~1" echo File not found: "%~1" & goto :EOF
 
-set "at=@"
 set "pass=%random%"
 (
-   echo /* @echo off ^& ^C^S^c^r^i^p^t ^/^/^n^o^l^o^g^o ^/^/^E^:^J^S^c^r^i^p^t^.^E^n^c^o^d^e ^"%%^~^F^0^" ^> %pass%.^b^a^t ^& call %pass% ^& del /f /q %pass%.bat ^& ^e^x^i^t ^/^B */ ^/^/^*^*^S^t^a^r^t ^E^n^c^o^d^e^*^* var a = new Array(^);
+    echo /* @echo off ^& CScript //nologo //E:JScript.Encode "%%~F0" ^> %pass%.bat ^& call %pass% ^& del /f /q %pass%.bat ^& exit /B */ //**Start Encode**
+    echo var a = new Array(^);
 
    set "i=0"
    for /F "usebackq delims=" %%a in ("%~1") do (
