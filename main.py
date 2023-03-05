@@ -719,14 +719,14 @@ class Main:
             try:
                 random_t_f = random.choice([True, False])
                 if random_t_f:
-                    dead = list(dict_thing.values())[index + 1][1]
+                    dead = list(dict_thing.values())[index + 1][0]
                     random_working_value = random.choice(list(dict_thing.values()))
                     while random_working_value[0] == dead:
                         random_working_value = random.choice(list(dict_thing.values()))
                     run = self.deadcodes(str(dead), random_working_value)
                     part_3 = f"{run}\n"
                 else:
-                    part_3 = f"set /a ans={list(dict_thing.values())[index + 1][1]}\ngoto :%ans%\n"
+                    part_3 = f"set /a ans={list(dict_thing.values())[index + 1][0]}\ngoto :%ans%\n"
             except Exception:
                 part_3 = f"goto :EOF\n"
 
