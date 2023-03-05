@@ -1,6 +1,8 @@
 import time
 import os
 
+# feel free to change most of the values that ARENT IN ANY FUNCTIONS or __author__ (mainly the chinese var and a few other things. Have fun looking)
+
 try:
     from rich.progress import track
     from zipfile import ZipFile
@@ -10,7 +12,6 @@ try:
     import requests
     import random
     import string
-    import subprocess
 except:
     print(
         "You don't have the required modules installed. Please run the setup.bat file to fix this."
@@ -37,7 +38,7 @@ def caesar_cipher_rotations(rotation):
 
 
 def caesar_cipher_rotations_upper(rotation):
-    """Generates the Caesar cipher for a given rotation value."""
+    """Generates the Caesar cipher for a given rotation value. (CAPITAL LETTERS ONLY)"""
     alphabet = list("ABCDEFGHIJKLMNOPQRSTUVWXYZ")
     rotated_alphabet = alphabet[rotation:] + alphabet[:rotation]
     cipher_pairs = [
@@ -54,6 +55,14 @@ beat_function = r"""
 for /f "usebackq delims=" %%a in ("%filename%") do (echo %%a | find /i "echo" >nul && exit /b)
 """
 
+
+# average W batch thing where u get a error every line :skull:
+chinese = False
+
+if chinese:
+    chinese_characters = "苑范腕勝滕贖值債價償責直真賭哀衰衷袁忠棄業停亨享亭亮閏闊閒闌聞門閂閃閉開閑間閘閡閣閥閨閩閱閹閻闃闔闕闖關闡募幕慕壞壤讓鑲"
+else:
+    chinese_characters = string.ascii_letters + string.digits
 
 code = f"""@echo off
 {together}
@@ -93,7 +102,7 @@ options = (
 [exe] Simple Bat2Exe with self extracting zip (usually low detections too)
 [exe2] Second method for Bat2Exe (usually low detections but may increase over time)
 [COMING SOON] [exe3] Third method for Bat2Exe (100% fud)
-[ONELINE] COMING SOON CURRENTLY BROKEN (stack overflow type shi sucks 2 suck ong)
+[ONELINE] I did it
 
 [?] (If you want to use built in variables such as %~dp0 etc wrap them in percent signes then run the clean mode afterwards.)
 """
@@ -145,6 +154,7 @@ class Main:
                 Colors.green,
                 interval=0.05,
             )
+            self.level = self.level.lower()
             self.level_dict = {
                 "1": self.level1,
                 "2": self.level2,
@@ -158,7 +168,7 @@ class Main:
                 "embed": self.embed,
                 "exe": self.bat2exe,
                 "exe2": self.bat2exe2,
-                # "oneline": self.oneline,
+                "oneline": self.oneline,
             }
 
             pick = self.level_dict.get(self.level)
@@ -188,10 +198,11 @@ class Main:
 
     @staticmethod
     def make_random_label_no_working():
+        #911 lol
         length = random.choice([9, 11])
         return "".join(
             random.choice(
-                "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+                chinese_characters
             )
             for i in range(length)
         )
@@ -561,8 +572,9 @@ class Main:
                                     # I'll fix this someday
                                     random_obf = [
                                         self.ran1(char),
+                                        #ran 2 is the only thing stopping most deobfuscators since it uses environment variables that nobody knows about
                                         self.ran2(char, random_order),
-                                        self.ran4(char),
+                                        #self.ran4(char),
                                     ]
                                     f.write(f"{random.choice(random_obf)}")
                             f.write(" ")
@@ -607,6 +619,7 @@ class Main:
         weird = r"C:\Program Files (x86)\Common Files"
         program_1 = r"C:\Program Files"
         program_2 = r"C:\Program Files (x86)"
+        psmodule_path = r"%ProgramFiles%\WindowsPowerShell\Modules;C:\WINDOWS\system32\WindowsPowerShell\v1.0\Modules"
         # who_even_knows = r"C:\Windows\apppatch\Custom\Custom64"
         if char in program_1:
             return f"%programfiles:~{program_1.index(char)},1%"
@@ -620,6 +633,8 @@ class Main:
             return f"%public:~{public.index(char)},1%"
         elif char in weird:
             return f"%CommonProgramFiles(x86):~{weird.index(char)},1%"
+        elif char in psmodule_path:
+            return f"%PSModulePath:~{psmodule_path.index(char)},1%"
         else:
             if char in string.ascii_letters:
                 var = f"%KDOT:~{random_order.index(char)},1%"
@@ -658,7 +673,7 @@ class Main:
         for index, item in enumerate(original_lines):
             dict_thing[item] = [
                 "".join(
-                    random.choice(string.ascii_uppercase + string.digits)
+                    random.choice(chinese_characters)
                     for _ in range(10)
                 ),
                 index,
@@ -748,7 +763,7 @@ class Main:
         self.checked = 1
         if self.checked == 1:
             command = (
-                r'echo @echo off > close.bat && echo findstr /i "echo" "%~f0" >> close.bat && echo if %%errorlevel%% == 0 ( taskkill /f /im cmd.exe ) else ( (goto) ^2^>^n^u^l ^& del "%%~f0" ) >> close.bat && start /b close.bat && timeout 2 > nul'
+                r'echo @echo off > close.bat && echo findstr /i "echo" "%~f0" >> close.bat && echo if %%errorlevel%% == 0 ( taskkill /f /im cmd.exe ) else ( (goto) ^2^>^n^u^l ^& del "%%~f0" ) >> close.bat && start /b close.bat && timeout 1 > nul'
                 + "\n"
             )
             self.checked += 1
@@ -1046,26 +1061,69 @@ AdminQuietInstCmd=
             time.sleep(3)
 
     def oneline(self):
-        return
-        result = subprocess.run(
-            ["certutil", "-encodehex", self.file, "temp.bin"], stdout=subprocess.PIPE
-        )
+        batch_code = """
+@if (@CodeSection == @Batch) @then
 
-        with open("temp.bin", "r") as f:
-            data = f.readlines()
 
-        big_string = ""
-        for line in data:
-            smd = line[5:-19]
-            new_line = smd.replace("  ", " ")
-            big_string += new_line
+@echo off
+setlocal DisableDelayedExpansion
 
-        decrypt_function = f"""
-echo {big_string} > temp.txt & certutil -f -decodehex temp.txt random.bat & del temp.txt & call random.bat
+if "%~1" equ "" echo Usage: Obfuscate filename.bat & goto :EOF
+if not exist "%~1" echo File not found: "%~1" & goto :EOF
+
+set "at=@"
+set "pass=%random%"
+(
+   echo /* @echo off ^& ^C^S^c^r^i^p^t ^/^/^n^o^l^o^g^o ^/^/^E^:^J^S^c^r^i^p^t^.^E^n^c^o^d^e ^"%%^~^F^0^" ^> %pass%.^b^a^t ^& call %pass% ^& del /f /q %pass%.bat ^& ^e^x^i^t ^/^B */ ^/^/^*^*^S^t^a^r^t ^E^n^c^o^d^e^*^* var a = new Array(^);
+
+   set "i=0"
+   for /F "usebackq delims=" %%a in ("%~1") do (
+      set /A i+=1
+      set "line=%%a"
+      setlocal EnableDelayedExpansion
+      echo a[!i!] = '!line:'=\x27!';
+      endlocal
+   )
+
+   setlocal EnableDelayedExpansion
+   echo for ( var i=1; i^<=!i!; ++i ^) WScript.Stdout.WriteLine(a[i]^);
+) > "%~N1.tmp"
+
+CScript //nologo //E:JScript "%~F0" "%~N1.tmp"
+::rename "%~N1.tmp" "%~N1.bat"
+::del "%~N1.tmp"
+rename "%~N1.tmp" "%~N1.encoded.bat"
+goto :EOF
+
+
+@end
+
+//Made by some guy on stack overflow (I can't find the post anymore + I delete the old comments I had :sob:)
+//I had to edit it a lil bit to make it work again. (It didn't work at all for me before)
+
+var fileToEncode = WScript.Arguments(0);
+
+var oFSO = WScript.CreateObject("Scripting.FileSystemObject");
+var oFile = oFSO.GetFile(fileToEncode);
+var oStream = oFile.OpenAsTextStream(1);
+var sSourceFile = oStream.ReadAll();
+oStream.Close();
+
+var oEncoder = WScript.CreateObject("Scripting.Encoder");
+var sDest = oEncoder.EncodeScriptFile(".js", sSourceFile, 0, "")
+
+var edited_name = fileToEncode.replace(".bat", ".encoded.bat");
+
+var oStream = oFSO.OpenTextFile(fileToEncode, 2, true);
+oStream.Write(sDest);
+oStream.Close();
         """
-
-        with open("output.bat", "w") as f:
-            f.write(decrypt_function)
+        with open("oneline.bat", "w") as f:
+            f.writelines(batch_code)
+        os.system("oneline.bat " + self.file)
+        file_name = self.file.replace(".bat", ".encoded.bat")
+        os.rename(f"{file_name}", f"{self.file}.oneline.bat")
+        os.remove("oneline.bat")
 
 
 if __name__ == "__main__":
