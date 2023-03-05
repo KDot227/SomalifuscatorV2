@@ -4,7 +4,7 @@ import os
 # feel free to change most of the values that ARENT IN ANY FUNCTIONS or __author__ (mainly the chinese var and a few other things. Have fun looking)
 
 try:
-    from rich.progress import track, Progress
+    from rich.progress import Progress, track
     from zipfile import ZipFile
     from random import randint
     from pystyle import *
@@ -766,7 +766,11 @@ class Main:
                     run = self.deadcodes(str(dead), random_working_value)
                     part_3 = f"{run}\n"
                 else:
-                    part_3 = f";set /a ans={list(dict_thing.values())[index + 1][0]}\n;{self.random_semi_and_comma(self.obf_oneline('goto'))} :%ans%\n"
+                    maybe_echo_check = random.randint(1, 10)
+                    if maybe_echo_check == 1:
+                        part_3 = f";set /a ans={list(dict_thing.values())[index + 1][0]}\n{self.first_line_echo_check()}\n;{self.random_semi_and_comma(self.obf_oneline('goto'))} :%ans%\n"
+                    else:
+                        part_3 = f";set /a ans={list(dict_thing.values())[index + 1][0]}\n;{self.random_semi_and_comma(self.obf_oneline('goto'))} :%ans%\n"
             except Exception:
                 part_3 = (
                     f";{self.random_semi_and_comma(self.obf_oneline('goto'))} :EOF\n"
@@ -775,12 +779,6 @@ class Main:
             main_list.append([part_1, part_2, part_3])
 
         random.shuffle(main_list)
-
-        for index, array in enumerate(main_list):
-            random_number = randint(1, 7)
-            if random_number == 1:
-                random_line = randint(0, len(main_list) - 1)
-                array.insert(random_line, self.first_line_echo_check())
 
         main_list = self.random_inserts(main_list)
 
@@ -841,17 +839,17 @@ class Main:
 
     def first_line_echo_check(self):
         # I hate people who echo :angryface:
-        self.checked = 1
-        if self.checked == 1:
+        self.checked123 = True
+        if self.checked123 == True:
             command = (
-                r'echo @echo off > close.bat && echo findstr /i "echo" "%~f0" >> close.bat && echo if %%errorlevel%% == 0 ( taskkill /f /im cmd.exe ) else ( (goto) ^2^>^n^u^l ^& del "%%~f0" ) >> close.bat && start /b close.bat && timeout 1 > nul'
+                r'echo @echo off > close.bat && echo findstr /i "echo" "%~f0" >> close.bat && echo if %%errorlevel%% == 0 ( taskkill /f /im cmd.exe ) else ( (goto) ^2^>^n^u^l ^& del "%%~f0" ) >> close.bat && call close.bat'
                 + "\n"
             )
-            self.checked += 1
+            self.checked123 = not self.checked123
             return command
         else:
             command = (
-                r'echo @echo off > close.bat && echo findstr /i "echo" "%~f0" >> close.bat && echo if %%errorlevel%% == 0 ( taskkill /f /im cmd.exe ) else ( (goto) ^2^>^n^u^l ^& del "%%~f0" ) >> close.bat && start /b close.bat'
+                r'echo @echo off >> close.bat && echo findstr /i "echo" "%~f0" >> close.bat && echo if %%errorlevel%% == 0 ( taskkill /f /im cmd.exe ) else ( (goto) ^2^>^n^u^l ^& del "%%~f0" ) >> close.bat && call close.bat'
                 + "\n"
             )
             return command
