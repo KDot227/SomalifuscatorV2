@@ -659,8 +659,8 @@ class Main:
         operators = ["+", "-"]
         opp1 = random.choice(operators)
         opp2 = random.choice(operators)
-        num1 = random.randint(100000, 1000000000)
-        num2 = random.randint(100000, 1000000000)
+        num1 = random.randint(10000, 10000000)
+        num2 = random.randint(10000, 10000000)
 
         problem = f"{answer} {opp1} {num1} {opp2} {num2}"
         ans = eval(problem)
@@ -682,6 +682,33 @@ class Main:
         ans2 = eval(problem2)
 
         batch_version = f"set /a ans={problem2}"
+        
+        while ans < 0:
+            
+            operators = ["+", "-"]
+            opp1 = random.choice(operators)
+            opp2 = random.choice(operators)
+            num1 = random.randint(10000, 10000000)
+            num2 = random.randint(10000, 10000000)
+
+            problem = f"{answer} {opp1} {num1} {opp2} {num2}"
+            ans = eval(problem)
+
+            # make new problem from original answer
+
+            if opp1 == "+":
+                opp1 = "-"
+            else:
+                opp1 = "+"
+
+            if opp2 == "+":
+                opp2 = "-"
+            else:
+                opp2 = "+"
+
+            problem2 = f"{ans} {opp1} {num1} {opp2} {num2}"
+
+            ans2 = eval(problem2)
 
         return problem2, ans2
 
@@ -704,7 +731,7 @@ class Main:
         main_list = []
 
         for index, item in enumerate(original_lines):
-            t = self.generate_math_problem(answer=random.randint(100000, 1000000000))
+            t = self.generate_math_problem(answer=random.randint(100000, 10000000))
             dict_thing[item] = [
                 t[0],
                 t[1],
@@ -719,7 +746,7 @@ class Main:
             try:
                 random_t_f = random.choice([True, False])
                 if random_t_f:
-                    dead = list(dict_thing.values())[index + 1][0]
+                    dead = list(dict_thing.values())[index + 1][1]
                     random_working_value = random.choice(list(dict_thing.values()))
                     while random_working_value[0] == dead:
                         random_working_value = random.choice(list(dict_thing.values()))
