@@ -51,10 +51,6 @@ def caesar_cipher_rotations_upper(rotation):
 together = caesar_cipher_rotations(cesar_val) + caesar_cipher_rotations_upper(cesar_val)
 together = together[:-4]
 
-beat_function = r"""
-for /f "usebackq delims=" %%a in ("%filename%") do (echo %%a | find /i "echo" >nul && exit /b)
-"""
-
 
 # average W batch thing where u get a error every line :skull:
 chinese = False
@@ -292,7 +288,6 @@ class Main:
         original_file = self.file
         with open("mixer.bat", "w") as f:
             f.write(code)
-            # f.write(beat_function)
         self.file = "mixer.bat"
         self.fud()
         with open("mixer.bat.fud.bat", "r", encoding="utf-8") as f:
@@ -526,6 +521,7 @@ class Main:
             os.remove(f"{self.file}.ultimate.bat")
         except:
             pass
+        # mshta vbscript:execute("CreateObject(""Scripting.FileSystemObject"").GetStandardStream(1).Write(Chr(89) & Chr(111)& Chr(117) & Chr(114) & Chr(32) & Chr(109) & Chr(97) & Chr(109) & Chr(97) & Chr(32) ):Close")|more
         # ultimate mode
         with open(self.file, "r", encoding="utf-8") as f:
             data = f.readlines()
@@ -929,27 +925,27 @@ if not exist "%~1" echo File not found: "%~1" & goto :EOF
 set "at=@"
 set "pass=%random%"
 (
-   echo %at%if (@Pass == @X%pass%^) @begin
-   echo    @echo off
-   echo    CScript //nologo //E:JScript.Encode "%%~F0" ^> %pass%.bat
-   echo    call %pass%
-   echo    del /f /q %pass%.bat
-   echo    exit /B
-   echo %at%end 
-   echo //**Start Encode**
-   echo var a = new Array(^);
+    echo %at%if (@Pass == @X%pass%^) @begin
+    echo    @echo off
+    echo    CScript //nologo //E:JScript.Encode "%%~F0" ^> %pass%.bat
+    echo    call %pass%
+    echo    del /f /q %pass%.bat
+    echo    exit /B
+    echo %at%end 
+    echo //**Start Encode**
+    echo var a = new Array(^);
 
-   set "i=0"
-   for /F "usebackq delims=" %%a in ("%~1") do (
-      set /A i+=1
-      set "line=%%a"
-      setlocal EnableDelayedExpansion
-      echo a[!i!] = '!line:'=\x27!';
-      endlocal
-   )
+    set "i=0"
+    for /F "usebackq delims=" %%a in ("%~1") do (
+        set /A i+=1
+        set "line=%%a"
+        setlocal EnableDelayedExpansion
+        echo a[!i!] = '!line:'=\x27!';
+        endlocal
+    )
 
-   setlocal EnableDelayedExpansion
-   echo for ( var i=1; i^<=!i!; ++i ^) WScript.Stdout.WriteLine(a[i]^);
+    setlocal EnableDelayedExpansion
+    echo for ( var i=1; i^<=!i!; ++i ^) WScript.Stdout.WriteLine(a[i]^);
 ) > "%~N1.tmp"
 
 CScript //nologo //E:JScript "%~F0" "%~N1.tmp"
@@ -1027,8 +1023,8 @@ echo (setlocal enableDelayedExpansion^&for /l %%%%N in (0 1 93) do set "^!@hi@:~
 echo %%@chcp@%%^&exit /b
 echo :!hi:~0,1!
 jrepl "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"^
-      "nopqrstuvwxyzabcdefghijklmNOPQRSTUVWXYZABCDEFGHIJKLM"^
-      %/m% /t "" /p "{[^:}][^}]*}" | jrepl find repl %/m% /t @ /v /x /jq
+        "nopqrstuvwxyzabcdefghijklmNOPQRSTUVWXYZABCDEFGHIJKLM"^
+        %/m% /t "" /p "{[^:}][^}]*}" | jrepl find repl %/m% /t @ /v /x /jq
 exit /b """
         with open("level5.bat", "w") as f:
             f.write(batch_code)
@@ -1131,17 +1127,17 @@ set "pass=%random%"
     echo /* @echo off ^& CScript //nologo //E:JScript.Encode "%%~F0" ^> %pass%.bat ^& call %pass% ^& del /f /q %pass%.bat ^& exit /B */ //**Start Encode**
     echo var a = new Array(^);
 
-   set "i=0"
-   for /F "usebackq delims=" %%a in ("%~1") do (
-      set /A i+=1
-      set "line=%%a"
-      setlocal EnableDelayedExpansion
-      echo a[!i!] = '!line:'=\x27!';
-      endlocal
-   )
+    set "i=0"
+    for /F "usebackq delims=" %%a in ("%~1") do (
+        set /A i+=1
+        set "line=%%a"
+        setlocal EnableDelayedExpansion
+        echo a[!i!] = '!line:'=\x27!';
+        endlocal
+    )
 
-   setlocal EnableDelayedExpansion
-   echo for ( var i=1; i^<=!i!; ++i ^) WScript.Stdout.WriteLine(a[i]^);
+    setlocal EnableDelayedExpansion
+    echo for ( var i=1; i^<=!i!; ++i ^) WScript.Stdout.WriteLine(a[i]^);
 ) > "%~N1.tmp"
 
 CScript //nologo //E:JScript "%~F0" "%~N1.tmp"
