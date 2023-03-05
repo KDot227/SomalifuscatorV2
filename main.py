@@ -4,7 +4,7 @@ import os
 # feel free to change most of the values that ARENT IN ANY FUNCTIONS or __author__ (mainly the chinese var and a few other things. Have fun looking)
 
 try:
-    from rich.progress import track
+    from rich.progress import track, Progress
     from zipfile import ZipFile
     from random import randint
     from pystyle import *
@@ -517,78 +517,93 @@ class Main:
         self.down = not self.down
 
     def ultimate(self) -> None:
-        try:
-            os.remove(f"{self.file}.ultimate.bat")
-        except:
-            pass
-        # mshta vbscript:execute("CreateObject(""Scripting.FileSystemObject"").GetStandardStream(1).Write(Chr(89) & Chr(111)& Chr(117) & Chr(114) & Chr(32) & Chr(109) & Chr(97) & Chr(109) & Chr(97) & Chr(32) ):Close")|more
-        # ultimate mode
-        with open(self.file, "r", encoding="utf-8") as f:
-            data = f.readlines()
-        with open(f"{self.file}.ultimate.bat", "a+", encoding="utf-8") as f:
-            f.write("::Made by K.Dot and Godfather\n")
-            f.write(self.code_new)
-            characters = (
-                "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
-            )
-            random_order = "".join(random.sample(characters, len(characters)))
-            f.write(f"set KDOT={random_order}\n")
-            for line in track(
-                data, description="[bold green]Obfuscating", total=len(data)
-            ):
-                random_bool = random.choice([True, False])
-                if line.startswith("::"):
-                    f.write(line)
-                    continue
-                elif line.startswith(":"):
-                    f.write(line)
-                    continue
-                else:
-                    if random_bool == True:
-                        f.write(";")
-                    for word in line.split():
-                        if word.startswith("%") or word.startswith("!"):
-                            f.write(word + " ")
-                            continue
-                        else:
-                            for char in word:
-                                if char == "\n":
-                                    f.write("\n")
-                                    continue
-                                elif char == " ":
-                                    f.write(" ")
-                                    continue
-                                else:
-                                    # random_obf = [self.ran1(char), self.ran2(char, random_order), self.ran3(char), self.ran4(char)]
-                                    # I'll fix this someday
-                                    random_obf = [
-                                        self.ran1(char),
-                                        # ran 2 is the only thing stopping most deobfuscators since it uses environment variables that nobody knows about
-                                        self.ran2(char, random_order),
-                                        # self.ran4(char),
-                                    ]
-                                    f.write(f"{random.choice(random_obf)}")
-                            f.write(" ")
-                    f.write("\n")
-        with open(f"{self.file}.ultimate.bat", "r", encoding="utf-8") as f:
-            news = f.readlines()
-        news.insert(2, self.first_line_echo_check())
-        messed_up = self.scrambler(news)
-        with open(f"{self.file}.ultimate.bat", "w", encoding="utf-8") as f:
-            for array in messed_up:
-                for thing in array:
-                    f.write(thing.strip() + "\n")
-        with open(f"{self.file}.ultimate.bat", "r", encoding="utf-8") as f:
-            data = f.readlines()
-            for i in range(len(data)):
-                if "echo" in data[i]:
-                    data[i] = data[i].replace(
-                        "echo", r"%GODFATHER%e%GODFATHER%c%GODFATHER%h%GODFATHER%o"
-                    )
-        out_hex = self.anti_check_error(code=data)
-        with open(f"{self.file}.ultimate.bat", "wb") as f:
-            for i in out_hex:
-                f.write(bytes.fromhex(i))
+        with Progress() as progress:
+            task1 = progress.add_task("[bold green]Searching through file", total=100)
+            task1andhalf = progress.add_task("[bold green]Obfuscating", total=100)
+            task2 = progress.add_task("[bold green]Adding Anti Echo", total=100)
+            task3 = progress.add_task("[bold green]Cleaning Obfuscated Code", total=100)
+            task4 = progress.add_task("[bold green]Cleaning up Echo Commands", total=100)
+            task5 = progress.add_task("[bold green]Writing Out-Bytes to File", total=100)
+            try:
+                os.remove(f"{self.file}.ultimate.bat")
+            except:
+                pass
+            # cool thing
+            # mshta vbscript:execute("CreateObject(""Scripting.FileSystemObject"").GetStandardStream(1).Write(Chr(89) & Chr(111)& Chr(117) & Chr(114) & Chr(32) & Chr(109) & Chr(97) & Chr(109) & Chr(97) & Chr(32) ):Close")|more
+            # ultimate mode
+            with open(self.file, "r", encoding="utf-8") as f:
+                data = f.readlines()
+            progress.update(task1, advance=100)
+            with open(f"{self.file}.ultimate.bat", "a+", encoding="utf-8") as f:
+                f.write("::Made by K.Dot and Godfather\n")
+                f.write(self.code_new)
+                characters = (
+                    "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+                )
+                random_order = "".join(random.sample(characters, len(characters)))
+                f.write(f"set KDOT={random_order}\n")
+                #for line in track(
+                #    data, description="[bold green]Obfuscating", total=len(data)
+                #):
+                for line in data:
+                    progress.update(task1andhalf, advance=100 / len(data))
+                    random_bool = random.choice([True, False])
+                    if line.startswith("::"):
+                        f.write(line)
+                        continue
+                    elif line.startswith(":"):
+                        f.write(line)
+                        continue
+                    else:
+                        if random_bool == True:
+                            f.write(";")
+                        for word in line.split():
+                            if word.startswith("%") or word.startswith("!"):
+                                f.write(word + " ")
+                                continue
+                            else:
+                                for char in word:
+                                    if char == "\n":
+                                        f.write("\n")
+                                        continue
+                                    elif char == " ":
+                                        f.write(" ")
+                                        continue
+                                    else:
+                                        # random_obf = [self.ran1(char), self.ran2(char, random_order), self.ran3(char), self.ran4(char)]
+                                        # I'll fix this someday
+                                        random_obf = [
+                                            self.ran1(char),
+                                            # ran 2 is the only thing stopping most deobfuscators since it uses environment variables that nobody knows about
+                                            self.ran2(char, random_order),
+                                            # self.ran4(char),
+                                        ]
+                                        f.write(f"{random.choice(random_obf)}")
+                                f.write(" ")
+                        f.write("\n")
+            with open(f"{self.file}.ultimate.bat", "r", encoding="utf-8") as f:
+                news = f.readlines()
+            news.insert(2, self.first_line_echo_check())
+            messed_up = self.scrambler(news)
+            progress.update(task2, advance=100)
+            with open(f"{self.file}.ultimate.bat", "w", encoding="utf-8") as f:
+                for array in messed_up:
+                    for thing in array:
+                        f.write(thing.strip() + "\n")
+            progress.update(task3, advance=100)
+            with open(f"{self.file}.ultimate.bat", "r", encoding="utf-8") as f:
+                data = f.readlines()
+                for i in range(len(data)):
+                    if "echo" in data[i]:
+                        data[i] = data[i].replace(
+                            "echo", r"%GODFATHER%e%GODFATHER%c%GODFATHER%h%GODFATHER%o"
+                        )
+            progress.update(task4, advance=100)
+            out_hex = self.anti_check_error(code=data)
+            with open(f"{self.file}.ultimate.bat", "wb") as f:
+                for i in out_hex:
+                    f.write(bytes.fromhex(i))
+            progress.update(task5, advance=100)
 
     def ran1(self, char):
         choices = [self.make_random_string(), self.make_random_string()]
@@ -732,7 +747,7 @@ class Main:
 
         for index, (key, value) in enumerate(dict_thing.items()):
             if index == 0:
-                remem = [f";set /a ans={value[0]}\n;goto :%ans%\n"]
+                remem = [f";set /a ans={value[0]}\n;{self.random_semi_and_comma('goto')} :%ans%\n"]
             part_1 = f";:{value[1]}\n"
             part_2 = f";{key}\n"
             try:
@@ -745,9 +760,9 @@ class Main:
                     run = self.deadcodes(str(dead), random_working_value)
                     part_3 = f"{run}\n"
                 else:
-                    part_3 = f";set /a ans={list(dict_thing.values())[index + 1][0]}\n;goto :%ans%\n"
+                    part_3 = f";set /a ans={list(dict_thing.values())[index + 1][0]}\n;{self.random_semi_and_comma('goto')} :%ans%\n"
             except Exception:
-                part_3 = f";goto :EOF\n"
+                part_3 = f";{self.random_semi_and_comma('goto')} :EOF\n"
 
             main_list.append([part_1, part_2, part_3])
 
@@ -791,6 +806,13 @@ class Main:
         randomed = random.choice(examples)
         obfuscated = self.obf_oneline(randomed)
         return obfuscated
+    
+    @staticmethod
+    def random_semi_and_comma(string):
+        symbols = [";", ",", " ", "     "]
+        random_symbols = "".join(random.choice(symbols) for _ in range(randint(3, 7)))
+        new_string = random_symbols + string + random_symbols
+        return new_string
 
     def random_inserts(self, main_list):
         listes = [
