@@ -522,8 +522,12 @@ class Main:
             task1andhalf = progress.add_task("[bold green]Obfuscating", total=100)
             task2 = progress.add_task("[bold green]Adding Anti Echo", total=100)
             task3 = progress.add_task("[bold green]Cleaning Obfuscated Code", total=100)
-            task4 = progress.add_task("[bold green]Cleaning up Echo Commands", total=100)
-            task5 = progress.add_task("[bold green]Writing Out-Bytes to File", total=100)
+            task4 = progress.add_task(
+                "[bold green]Cleaning up Echo Commands", total=100
+            )
+            task5 = progress.add_task(
+                "[bold green]Writing Out-Bytes to File", total=100
+            )
             try:
                 os.remove(f"{self.file}.ultimate.bat")
             except:
@@ -542,9 +546,9 @@ class Main:
                 )
                 random_order = "".join(random.sample(characters, len(characters)))
                 f.write(f"set KDOT={random_order}\n")
-                #for line in track(
+                # for line in track(
                 #    data, description="[bold green]Obfuscating", total=len(data)
-                #):
+                # ):
                 for line in data:
                     progress.update(task1andhalf, advance=100 / len(data))
                     random_bool = random.choice([True, False])
@@ -747,7 +751,9 @@ class Main:
 
         for index, (key, value) in enumerate(dict_thing.items()):
             if index == 0:
-                remem = [f";set /a ans={value[0]}\n;{self.random_semi_and_comma('goto')} :%ans%\n"]
+                remem = [
+                    f";set /a ans={value[0]}\n;{self.random_semi_and_comma(self.obf_oneline('goto'))} :%ans%\n"
+                ]
             part_1 = f";:{value[1]}\n"
             part_2 = f";{key}\n"
             try:
@@ -760,9 +766,11 @@ class Main:
                     run = self.deadcodes(str(dead), random_working_value)
                     part_3 = f"{run}\n"
                 else:
-                    part_3 = f";set /a ans={list(dict_thing.values())[index + 1][0]}\n;{self.random_semi_and_comma('goto')} :%ans%\n"
+                    part_3 = f";set /a ans={list(dict_thing.values())[index + 1][0]}\n;{self.random_semi_and_comma(self.obf_oneline('goto'))} :%ans%\n"
             except Exception:
-                part_3 = f";{self.random_semi_and_comma('goto')} :EOF\n"
+                part_3 = (
+                    f";{self.random_semi_and_comma(self.obf_oneline('goto'))} :EOF\n"
+                )
 
             main_list.append([part_1, part_2, part_3])
 
@@ -806,7 +814,7 @@ class Main:
         randomed = random.choice(examples)
         obfuscated = self.obf_oneline(randomed)
         return obfuscated
-    
+
     @staticmethod
     def random_semi_and_comma(string):
         symbols = [";", ",", " ", "     "]
