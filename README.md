@@ -3,7 +3,7 @@
 </h1>
 
 <div align="center">
-  <img  src="https://gifdb.com/gif/eric-cartman-somalia-v0sk54k5k5gq086p.html?embed=true">
+  <img  src="https://github.com/KDot227/Somalifuscator/blob/main/assets/Eric%20Cartman%20Somalia.gif?raw=true">
   <br>
   <img  src="https://img.shields.io/github/languages/top/KDot227/Somalifuscator?color=27c722	">
   <img  src="https://img.shields.io/github/stars/KDot227/Somalifuscator?color=27c722	&logoColor=27c722	">
