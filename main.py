@@ -634,7 +634,9 @@ class Main:
         elif char in weird:
             return f"%CommonProgramFiles(x86):~{weird.index(char)},1%"
         elif char in psmodule_path:
-            return f"%PSModulePath:~{psmodule_path.index(char)},1%"
+            new = psmodule_path.index(char)
+            # Why do we have to add 2? I have no fucking idea lmao
+            return f"%PSModulePath:~{new + 2},1%"
         else:
             if char in string.ascii_letters:
                 var = f"%KDOT:~{random_order.index(char)},1%"
@@ -651,6 +653,37 @@ class Main:
 
     def ran4(self, char):
         return char
+    
+    def generate_math_problem(self, answer: int):
+        # no division since we don't want floats BUT we can use division in the answer since its how you undo multiplication
+        operators = ["+", "-"]
+        opp1 = random.choice(operators)
+        opp2 = random.choice(operators)
+        num1 = random.randint(100000, 1000000000)
+        num2 = random.randint(100000, 1000000000)
+
+        problem = f"{answer} {opp1} {num1} {opp2} {num2}"
+        ans = eval(problem)
+
+        # make new problem from original answer
+
+        if opp1 == "+":
+            opp1 = "-"
+        else:
+            opp1 = "+"
+
+        if opp2 == "+":
+            opp2 = "-"
+        else:
+            opp2 = "+"
+
+        problem2 = f"{ans} {opp1} {num1} {opp2} {num2}"
+
+        ans2 = eval(problem2)
+
+        batch_version = f"set /a ans={problem2}"
+
+        return problem2, ans2
 
     def scrambler(self, codeed):
         original_lines = codeed
@@ -671,32 +704,31 @@ class Main:
         main_list = []
 
         for index, item in enumerate(original_lines):
+            t = self.generate_math_problem(answer=random.randint(100000, 1000000000))
             dict_thing[item] = [
-                "".join(
-                    random.choice(chinese_characters)
-                    for _ in range(10)
-                ),
+                t[0],
+                t[1],
                 index,
             ]
 
         for index, (key, value) in enumerate(dict_thing.items()):
             if index == 0:
-                remem = [f"{self.obf_oneline('goto')} :{value[0]}\n"]
-            part_1 = f":{value[0]}\n"
+                remem = [f"set /a ans={value[0]}\ngoto :%ans%\n"]
+            part_1 = f":{value[1]}\n"
             part_2 = f"{key}\n"
             try:
                 random_t_f = random.choice([True, False])
                 if random_t_f:
-                    dead = list(dict_thing.values())[value[1]][0]
+                    dead = list(dict_thing.values())[index + 1][1]
                     random_working_value = random.choice(list(dict_thing.values()))
                     while random_working_value[0] == dead:
                         random_working_value = random.choice(list(dict_thing.values()))
                     run = self.deadcodes(str(dead), random_working_value)
                     part_3 = f"{run}\n"
                 else:
-                    part_3 = f"{self.obf_oneline('goto')} :{list(dict_thing.values())[value[1]][0]}\n"
+                    part_3 = f"set /a ans={list(dict_thing.values())[index + 1][1]}\ngoto :%ans%\n"
             except Exception:
-                part_3 = f"{self.obf_oneline('goto')} :EOF\n"
+                part_3 = f"goto :EOF\n"
 
             main_list.append([part_1, part_2, part_3])
 
