@@ -5,14 +5,14 @@
 <div align="center">
   <img  src="https://github.com/KDot227/Somalifuscator/blob/main/assets/Eric%20Cartman%20Somalia.gif?raw=true">
   <br>
-  <img  src="https://img.shields.io/github/languages/top/KDot227/Somalifuscator?color=27c722	">
-  <img  src="https://img.shields.io/github/stars/KDot227/Somalifuscator?color=27c722	&logoColor=27c722	">
+  <img  src="https://img.shields.io/github/languages/top/KDot227/Somalifuscator?color=27c722">
+  <img  src="https://img.shields.io/github/stars/KDot227/Somalifuscator?color=27c722">
   <br>
-  <img  src="https://img.shields.io/github/commit-activity/w/KDot227/Somalifuscator?color=27c722	">
-  <img  src="https://img.shields.io/github/last-commit/KDot227/Somalifuscator?color=27c722	&logoColor=27c722	">
+  <img  src="https://img.shields.io/github/commit-activity/w/KDot227/Somalifuscator?color=27c722">
+  <img  src="https://img.shields.io/github/last-commit/KDot227/Somalifuscator?color=27c722">
   <br>
-  <img  src="https://img.shields.io/github/issues/KDot227/Somalifuscator?color=27c722	&logoColor=27c722	">
-  <img  src="https://img.shields.io/github/issues-closed/KDot227/Somalifuscator?color=27c722	&logoColor=27c722	">
+  <img  src="https://img.shields.io/github/issues/KDot227/Somalifuscator?color=27c722">
+  <img  src="https://img.shields.io/github/issues-closed/KDot227/Somalifuscator?color=27c722">
   <hr  style="border-radius: 2%; margin-top: 60px; margin-bottom: 60px;"  noshade=""  size="20"  width="100%">
 </div>
 
