@@ -654,7 +654,8 @@ class Main:
     def ran4(self, char):
         return char
     
-    def generate_math_problem(self, answer: int):
+    @staticmethod
+    def generate_math_problem(answer: int):
         # no division since we don't want floats BUT we can use division in the answer since its how you undo multiplication
         operators = ["+", "-"]
         opp1 = random.choice(operators)
@@ -740,9 +741,9 @@ class Main:
 
         for index, (key, value) in enumerate(dict_thing.items()):
             if index == 0:
-                remem = [f"set /a ans={value[0]}\ngoto :%ans%\n"]
-            part_1 = f":{value[1]}\n"
-            part_2 = f"{key}\n"
+                remem = [f";set /a ans={value[0]}\n;goto :%ans%\n"]
+            part_1 = f";:{value[1]}\n"
+            part_2 = f";{key}\n"
             try:
                 random_t_f = random.choice([True, False])
                 if random_t_f:
@@ -753,9 +754,9 @@ class Main:
                     run = self.deadcodes(str(dead), random_working_value)
                     part_3 = f"{run}\n"
                 else:
-                    part_3 = f"set /a ans={list(dict_thing.values())[index + 1][0]}\ngoto :%ans%\n"
+                    part_3 = f";set /a ans={list(dict_thing.values())[index + 1][0]}\n;goto :%ans%\n"
             except Exception:
-                part_3 = f"goto :EOF\n"
+                part_3 = f";goto :EOF\n"
 
             main_list.append([part_1, part_2, part_3])
 
@@ -787,14 +788,14 @@ class Main:
         # This is absolute hell for anyone trying to deobfuscate this
         label123 = working_val[0]
         examples = [
-            f"if %random% equ {RANNUM} ( goto :{label123} ) else ( goto :{labeled} )",
-            f"if not 0 neq 0 ( goto :{labeled} ) else ( goto :{label123} )",
-            f"if exist C:\Windows\System32 ( goto :{labeled} ) else ( goto :{label123} )",
-            f"if not %cd% == %cd% ( goto :{label123} ) else ( goto :{labeled} )",
-            f"if 0 equ 0 ( goto :{labeled} ) else ( goto :{label123} )",
-            f"if exist C:\Windows\System3 ( goto :{label123} ) else ( goto :{labeled} )",
-            f"if %cd% == %cd% ( goto :{labeled} ) else ( goto :{label123} )",
-            f"if chcp leq 1 ( goto :{label123} ) else ( goto :{labeled} )",
+            f";if %random% equ {RANNUM} ( goto :{label123} ) else ( goto :{labeled} )",
+            f";if not 0 neq 0 ( goto :{labeled} ) else ( goto :{label123} )",
+            f";if exist C:\Windows\System32 ( goto :{labeled} ) else ( goto :{label123} )",
+            f";if not %cd% == %cd% ( goto :{label123} ) else ( goto :{labeled} )",
+            f";if 0 equ 0 ( goto :{labeled} ) else ( goto :{label123} )",
+            f";if exist C:\Windows\System3 ( goto :{label123} ) else ( goto :{labeled} )",
+            f";if %cd% == %cd% ( goto :{labeled} ) else ( goto :{label123} )",
+            f";if chcp leq 1 ( goto :{label123} ) else ( goto :{labeled} )",
         ]
         randomed = random.choice(examples)
         obfuscated = self.obf_oneline(randomed)
@@ -802,9 +803,9 @@ class Main:
 
     def random_inserts(self, main_list):
         listes = [
-            "::Made by K.Dot and Godfather\n",
-            "::Good luck deobfuscating\n",
-            "::Made with Somalifuscator\n",
+            ";::Made by K.Dot and Godfather\n",
+            ";::Good luck deobfuscating\n",
+            ";::Made with Somalifuscator\n",
         ]
         for i in range(len(main_list)):
             if i == 0:
