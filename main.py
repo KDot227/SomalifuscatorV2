@@ -12,6 +12,7 @@ try:
     import requests
     import random
     import string
+    import re
 except:
     print(
         "You don't have the required modules installed. Please run the setup.bat file to fix this."
@@ -549,6 +550,7 @@ class Main:
                 # for line in track(
                 #    data, description="[bold green]Obfuscating", total=len(data)
                 # ):
+                regex_bat = re.compile(r"\w+=[^=]*%\w+%\b|\w+=[^=]*%\w+%\B")
                 for line in data:
                     progress.update(task1andhalf, advance=100 / len(data))
                     random_bool = random.choice([True, False])
@@ -563,6 +565,10 @@ class Main:
                             f.write(";")
                         for word in line.split():
                             if word.startswith("%") or word.startswith("!"):
+                                f.write(word + " ")
+                                continue
+                            elif re.match(regex_bat, word):
+                                # regex be my bae
                                 f.write(word + " ")
                                 continue
                             else:
@@ -1069,6 +1075,9 @@ exit /b """
         os.remove("JREPL.bat")
         file = self.file.replace(".bat", "_obfuscated.bat")
         os.rename(f"{file}", f"{self.file}.level5.bat")
+
+    def pogdog(self):
+        raise OverflowError("Pogdog is not implemented yet")
 
     def bat2exe(self):
         code = r"""[Version]
