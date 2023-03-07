@@ -20,6 +20,15 @@
   READ
 </h1>
 
+<h2 align="center">
+  How To Use
+</h2>
+
+Download python (any version past 3.10)
+Clone repo or download as zip (Then extract repo from zip (Yes people don't do that))
+Run setup.bat
+Have fun obfuscating!
+
 <h3 align="center">
   BUILT IN VARIABLES HAVE A FIX!!!
 </h3>
@@ -40,31 +49,60 @@ Not only is the Obfuscator very fast but it's also very customizable. If you kno
 
 Another thing is that after using modes such as ultimate, you can then use other modes such as level 5 or level 4 to make your code more secure/obfuscated
 
-## Level 1.)
+<h2 align="center">
+  Level 1
+</h2>
+
 ![level 1](https://i.imgur.com/g6XpRIj.png)
 
-## Level 2.)
+<h2 align="center">
+  Level 2
+</h2>
+
 ![level 2](https://i.imgur.com/aQQe5wE.png)
 
-## Level 3.)
+<h2 align="center">
+  Level 3
+</h2>
+
 ![level 3](https://i.imgur.com/nVsqpmm.png)
 
-## Level 4.) (edited by me to actually work :skull:))
+<h2 align="center">
+  Level 4 (edited by me to actually work :skull:))
+</h2>
+
 No image provided
 
-## Level 5.) (not made by me))
+<h2 align="center">
+  Level 5 (not made by me))
+</h2>
+
 No image provided
 
-## Fud mode.) (undetected from virus total)
+<h2 align="center">
+  Fud Mode (Undetected from virus total)
+</h2>
+
 ![fud mode (undetected from virus total)](https://i.imgur.com/0gy7szh.png)
 
-## All levels.) (looks the same as level 3 but has levels 2 and 1 also applied) (sorry for embed fail 💀)
+<h2 align="center">
+  All (applies 1, 2 and 3) NOTE THIS IS OUTDATED USE ULTIMATE
+</h2>
+
 ![all levels (looks the same as level 3 but has levels 2 and 1 also applied)](https://i.imgur.com/g2vvIwo.jpeg)
 
-## Ultimate.)
+<h2 align="center">
+  The "Ultimate" Batch Obfuscation
+</h2>
+
 ![Ultimate Mode](https://i.imgur.com/Z50vfPR.png)
 
-## embed.)
+<h2 align="center">
+  Embed
+</h2>
+
 No image but it embeds powershell files (ps1 files) at the end of the batch script and when ran the batch script will rerun with powershell which runs the powershell. (I will eventually add Jscript/Wscript and maybe full support for Vbs)
 
-# If you like this project please give it a star!
+<h1 align="center">
+  If you like this repo please give it a star ⭐
+</h1>
