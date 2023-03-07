@@ -92,7 +92,7 @@ No image provided
 ![all levels (looks the same as level 3 but has levels 2 and 1 also applied)](https://i.imgur.com/g2vvIwo.jpeg)
 
 <h2 align="center">
-  The "Ultimate" Batch Obfuscation
+  The "Ultimate" Batch Obfuscation (note it looks a lot lot worse with notepad due to left right unicode.
 </h2>
 
 ![Ultimate Mode](https://i.imgur.com/Z50vfPR.png)
