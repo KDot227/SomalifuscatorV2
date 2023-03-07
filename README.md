@@ -24,9 +24,9 @@
   How To Use
 </h2>
 
-Download python (any version past 3.10)
-Clone repo or download as zip (Then extract repo from zip (Yes people don't do that))
-Run setup.bat
+Download python (any version past 3.10)\
+Clone repo or download as zip (Then extract repo from zip (Yes people don't do that))\
+Run setup.bat\
 Have fun obfuscating!
 
 <h3 align="center">
