@@ -113,10 +113,14 @@ class AutoUpdate:
             "https://raw.githubusercontent.com/KDot227/Somalifuscator/main/main.py"
         )
         self.bypass = False
-        username = os.getlogin()
-        if username == "this1":
+        
+        try:
+            username = os.getlogin()
+            if username == "this1":
+                self.bypass = True
+            self.update()
+        except OSError:
             self.bypass = True
-        self.update()
 
     def update(self):
         if not self.bypass:
@@ -137,7 +141,8 @@ class AutoUpdate:
 class Main:
     def __init__(self):
         # if u on linux kys
-        os.system("cls")
+        # nvm I'm on linux now I gotta fix this
+        os.system("cls" if os.name == "nt" else "clear")
         print(Colorate.Vertical(Colors.purple_to_blue, banner, 2))
         self.carrot = False
         self.label = False
