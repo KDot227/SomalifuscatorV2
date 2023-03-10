@@ -13,6 +13,8 @@
   <br>
   <img  src="https://img.shields.io/github/issues/KDot227/Somalifuscator?color=27c722">
   <img  src="https://img.shields.io/github/issues-closed/KDot227/Somalifuscator?color=27c722">
+  <br>
+  <img  src="https://shields-io-visitor-counter.herokuapp.com/badge?page=KDot227.Somalifuscator&color=27c722">
   <hr  style="border-radius: 2%; margin-top: 60px; margin-bottom: 60px;"  noshade=""  size="20"  width="100%">
 </div>
 
