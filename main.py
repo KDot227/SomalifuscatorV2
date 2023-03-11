@@ -213,12 +213,20 @@ class Main:
 
     def random_dead_code(self, entire_array):
 
+        random_used_env = self.used_env_vars
+
+        if random_used_env:
+            codeed = random.choice(random_used_env)
+        else:
+            codeed = self.make_random_string()
+
         dead_code = [
             "echo Best Batch Obfuscated By KDot and Godfather\n",
             "if 0 == 0 (echo Best Batch Obfuscated By KDot and Godfather)\n",
             f"set KDOT={self.fake_KDOT()}\n",
             f"{self.fake_ceaser_cipher()}\n",
             f"{self.fake_ceaser_cipher_obfuscated()}\n",
+            f"echo {codeed}",
         ]
         for array in entire_array:
             if randint(0, 3) == 3:
@@ -248,20 +256,38 @@ class Main:
         random_order = "".join(random.sample(characters, len(characters)))
         return random_order
 
-    def obf_oneline(self, line):
+    @staticmethod
+    def obf_oneline(line):
         final_string = ""
         bad_starts = ["/", "for", "%"]
         for word in line.split(" "):
             if word in bad_starts:
                 final_string += word + " "
-                continue
-            elif word.__contains__("%"):
-                final_string += word + " "
             else:
                 for char in word:
-                    # only this for now
-                    choices = [self.simple(char)]
-                    final_string += random.choice(choices)
+                    public = r"C:\Users\Public"
+                    weird = r"C:\Program Files (x86)\Common Files"
+                    program_1 = r"C:\Program Files"
+                    program_2 = r"C:\Program Files (x86)"
+                    psmodule_path = r"%ProgramFiles%\WindowsPowerShell\Modules;C:\WINDOWS\system32\WindowsPowerShell\v1.0\Modules"
+                    if char in program_1:
+                        final_string += f"%programfiles:~{program_1.index(char)},1%"
+                    elif char in program_2:
+                        final_string += (
+                            f"%programfiles(x86):~{program_2.index(char)},1%"
+                        )
+                    elif char in public:
+                        final_string += f"%public:~{public.index(char)},1%"
+                    elif char in weird:
+                        final_string += (
+                            f"%CommonProgramFiles(x86):~{weird.index(char)},1%"
+                        )
+                    elif char in psmodule_path:
+                        new = psmodule_path.index(char)
+                        # Why do we have to add 2? I have no fucking idea lmao
+                        final_string += f"%PSModulePath:~{new + 2},1%"
+                    else:
+                        final_string += char
                 final_string += " "
 
         return final_string
@@ -574,6 +600,118 @@ class Main:
 
             data = new_lines
 
+            env_vars = [
+                r"%ALLUSERSPROFILE%",
+                r"%APPDATA%",
+                r"%CD%",
+                r"%CMDCMDLINE%",
+                r"%CMDEXTVERSION%",
+                r"%COMPUTERNAME%",
+                r"%COMSPEC%",
+                r"%DATE%",
+                r"%ERRORLEVEL%",
+                r"%HOMEDRIVE%",
+                r"%HOMEPATH%",
+                r"%NUMBER_OF_PROCESSORS%",
+                r"%OS%",
+                r"%PATH%",
+                r"%PATHEXT%",
+                r"%PROCESSOR_ARCHITECTURE%",
+                r"%PROCESSOR_LEVEL%",
+                r"%PROCESSOR_REVISION%",
+                r"%PROMPT%",
+                r"%RANDOM%",
+                r"%SYSTEMDRIVE%",
+                r"%SYSTEMROOT%",
+                r"%TMP%",
+                r"%TEMP%",
+                r"%TIME%",
+                r"%USERDOMAIN%",
+                r"%USERNAME%",
+                r"%USERPROFILE%",
+                r"%WINDIR%",
+                r"%0",
+                r"%1",
+                r"%2",
+                r"%3",
+                r"%4",
+                r"%5",
+                r"%6",
+                r"%7",
+                r"%8",
+                r"%9",
+                r"%*",
+                r"%~dp0",
+                r"%~dp1",
+                r"%~dp2",
+                r"%~dp3",
+                r"%~dp4",
+                r"%~dp5",
+                r"%~dp6",
+                r"%~dp7",
+                r"%~dp8",
+                r"%~dp9",
+                r"%~f0",
+                r"%~f1",
+                r"%~f2",
+                r"%~f3",
+                r"%~f4",
+                r"%~f5",
+                r"%~f6",
+                r"%~f7",
+                r"%~f8",
+                r"%~f9",
+                r"%~nx0",
+                r"%~nx1",
+                r"%~nx2",
+                r"%~nx3",
+                r"%~nx4",
+                r"%~nx5",
+                r"%~nx6",
+                r"%~nx7",
+                r"%~nx8",
+                r"%~nx9",
+                r"%~s0",
+                r"%~s1",
+                r"%~s2",
+                r"%~s3",
+                r"%~s4",
+                r"%~s5",
+                r"%~s6",
+                r"%~s7",
+                r"%~s8",
+                r"%~s9",
+                r"%~t0",
+                r"%~t1",
+                r"%~t2",
+                r"%~t3",
+                r"%~t4",
+                r"%~t5",
+                r"%~t6",
+                r"%~t7",
+                r"%~t8",
+                r"%~t9",
+                r"%~x0",
+                r"%~x1",
+                r"%~x2",
+                r"%~x3",
+                r"%~x4",
+                r"%~x5",
+                r"%~x6",
+                r"%~x7",
+                r"%~x8",
+                r"%~x9",
+                r"%~a0",
+                r"%~dpn0",
+                r"%~dpnx0",
+            ]
+
+            self.used_env_vars = []
+
+            for env_var in env_vars:
+                if env_var in data:
+                    self.used_env_vars.append(env_var)
+
             progress.update(task1, advance=100)
             with open(f"{self.file}.ultimate.bat", "a+", encoding="utf-8") as f:
                 f.write("::Made by K.Dot and Godfather\n")
@@ -883,19 +1021,35 @@ class Main:
     def first_line_echo_check(self):
         # I hate people who echo :angryface:
         self.checked123 = True
-        if self.checked123 == True:
-            command = (
-                r'IF /I %0 NEQ "%~dpnx0" exit\necho @echo off > close.bat && echo findstr /i "echo" "%~f0" >> close.bat && echo if %%errorlevel%% == 0 ( taskkill /f /im cmd.exe ) else ( (goto) ^2^>^n^u^l ^& del "%%~f0" ) >> close.bat && call close.bat'
-                + "\n"
-            )
-            self.checked123 = not self.checked123
-            return command
+        self.debug = False
+        if self.debug:
+            if self.checked123 == True:
+                command = (
+                    r'echo @echo off > close.bat && echo findstr /i "echo" "%~f0" >> close.bat && echo if %%errorlevel%% == 0 ( taskkill /f /im cmd.exe ) else ( (goto) ^2^>^n^u^l ^& del "%%~f0" ) >> close.bat && call close.bat'
+                    + "\n"
+                )
+                self.checked123 = not self.checked123
+                return command
+            else:
+                command = (
+                    r'echo @echo off >> close.bat && echo findstr /i "echo" "%~f0" >> close.bat && echo if %%errorlevel%% == 0 ( taskkill /f /im cmd.exe ) else ( (goto) ^2^>^n^u^l ^& del "%%~f0" ) >> close.bat && call close.bat'
+                    + "\n"
+                )
+                return command
         else:
-            command = (
-                r'IF /I %0 NEQ "%~dpnx0" exit\necho @echo off >> close.bat && echo findstr /i "echo" "%~f0" >> close.bat && echo if %%errorlevel%% == 0 ( taskkill /f /im cmd.exe ) else ( (goto) ^2^>^n^u^l ^& del "%%~f0" ) >> close.bat && call close.bat'
-                + "\n"
-            )
-            return command
+            if self.checked123 == True:
+                command = (
+                    """IF /I %0 NEQ "%~dpnx0" (del close.bat & exit)\necho @echo off > close.bat && echo findstr /i "echo" "%~f0" >> close.bat && echo if %%errorlevel%% == 0 ( taskkill /f /im cmd.exe ) else ( (goto) ^2^>^n^u^l ^& del "%%~f0" ) >> close.bat && call close.bat"""
+                    + "\n"
+                )
+                self.checked123 = not self.checked123
+                return command
+            else:
+                command = (
+                    """IF /I %0 NEQ "%~dpnx0" (del close.bat & exit)\necho @echo off >> close.bat && echo findstr /i "echo" "%~f0" >> close.bat && echo if %%errorlevel%% == 0 ( taskkill /f /im cmd.exe ) else ( (goto) ^2^>^n^u^l ^& del "%%~f0" ) >> close.bat && call close.bat"""
+                    + "\n"
+                )
+                return command
 
     def anti_check_error(self, code):
         strung = ">nul 2>&1 && exit > nul \n@%nobruh%e%nobruh%c%nobruh%h%nobruh%o o%nobruh%f%nobruh%f%nobruh%\n"
