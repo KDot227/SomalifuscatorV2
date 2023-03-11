@@ -964,29 +964,37 @@ class Main:
         return main_list
 
     def deadcodes(self, labeled, working_val):
+        self.rep_num = 0
         # gotta love %random%
         RANNUM = randint(32768, 99999)
-        # 911 lol
-        # choicees = [9, 11]
-        # cho = random.choice(choicees)
-        # label123 = "".join(
-        #    random.choice(string.ascii_uppercase + string.digits) for _ in range(cho)
-        # )
         # This is absolute hell for anyone trying to deobfuscate this
         label123 = working_val[0]
-        examples = [
-            f";if %random% equ {RANNUM} ( goto :{label123} ) else ( goto :{labeled} )",
-            f";if not 0 neq 0 ( goto :{labeled} ) else ( goto :{label123} )",
-            f";if exist C:\Windows\System32 ( goto :{labeled} ) else ( goto :{label123} )",
-            f";if not %cd% == %cd% ( goto :{label123} ) else ( goto :{labeled} )",
-            f";if 0 equ 0 ( goto :{labeled} ) else ( goto :{label123} )",
-            f";if exist C:\Windows\System3 ( goto :{label123} ) else ( goto :{labeled} )",
-            f";if %cd% == %cd% ( goto :{labeled} ) else ( goto :{label123} )",
-            f";if chcp leq 1 ( goto :{label123} ) else ( goto :{labeled} )",
-            f";if not defined KDOT ( goto :EOF ) else ( goto :{labeled} )",
-        ]
+        if self.rep_num < 5:
+            examples = [
+                f";if %random% equ {RANNUM} ( goto :{label123} ) else ( goto :{labeled} )",
+                f";if not 0 neq 0 ( goto :{labeled} ) else ( goto :{label123} )",
+                f";if exist C:\Windows\System32 ( goto :{labeled} ) else ( goto :{label123} )",
+                f";if not %cd% == %cd% ( goto :{label123} ) else ( goto :{labeled} )",
+                f";if 0 equ 0 ( goto :{labeled} ) else ( goto :{label123} )",
+                f";if exist C:\Windows\System3 ( goto :{label123} ) else ( goto :{labeled} )",
+                f";if %cd% == %cd% ( goto :{labeled} ) else ( goto :{label123} )",
+                f";if chcp leq 1 ( goto :{label123} ) else ( goto :{labeled} )",
+            ]
+        else:
+            examples = [
+                f";if %random% equ {RANNUM} ( goto :{label123} ) else ( goto :{labeled} )",
+                f";if not 0 neq 0 ( goto :{labeled} ) else ( goto :{label123} )",
+                f";if exist C:\Windows\System32 ( goto :{labeled} ) else ( goto :{label123} )",
+                f";if not %cd% == %cd% ( goto :{label123} ) else ( goto :{labeled} )",
+                f";if 0 equ 0 ( goto :{labeled} ) else ( goto :{label123} )",
+                f";if exist C:\Windows\System3 ( goto :{label123} ) else ( goto :{labeled} )",
+                f";if %cd% == %cd% ( goto :{labeled} ) else ( goto :{label123} )",
+                f";if chcp leq 1 ( goto :{label123} ) else ( goto :{labeled} )",
+                f";if not defined KDOT ( goto :EOF ) else ( goto :{labeled} )",
+            ]
         randomed = random.choice(examples)
         obfuscated = self.obf_oneline(randomed)
+        self.rep_num += 1
         return obfuscated
 
     @staticmethod
@@ -1047,7 +1055,7 @@ class Main:
                 return command
 
     def anti_check_error(self, code):
-        strung = ">nul 2>&1 && exit > nul \n@%nobruh%e%nobruh%c%nobruh%h%nobruh%o o%nobruh%f%nobruh%f%nobruh%\n"
+        strung = ">nul 2>&1 && exit >nul 2>&1 || cls \n@%nobruh%e%nobruh%c%nobruh%h%nobruh%o o%nobruh%f%nobruh%f%nobruh%\n"
         code.insert(0, strung)
 
         # There is a 99% chance I could have just used .encode() but im just lazy like that if u gotta problem wit it make a pr
