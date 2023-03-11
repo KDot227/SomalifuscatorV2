@@ -213,20 +213,12 @@ class Main:
 
     def random_dead_code(self, entire_array):
 
-        random_used_env = self.used_env_vars
-
-        if random_used_env:
-            codeed = random.choice(random_used_env)
-        else:
-            codeed = self.make_random_string()
-
         dead_code = [
             "echo Best Batch Obfuscated By KDot and Godfather\n",
             "if 0 == 0 (echo Best Batch Obfuscated By KDot and Godfather)\n",
             f"set KDOT={self.fake_KDOT()}\n",
             f"{self.fake_ceaser_cipher()}\n",
             f"{self.fake_ceaser_cipher_obfuscated()}\n",
-            f"echo {codeed}",
         ]
         for array in entire_array:
             if randint(0, 3) == 3:
@@ -259,10 +251,13 @@ class Main:
     @staticmethod
     def obf_oneline(line):
         final_string = ""
-        bad_starts = ["/", "for", "%"]
         for word in line.split(" "):
-            if word in bad_starts:
+            if word.startswith("%"):
                 final_string += word + " "
+                continue
+            if word.find("%~") != -1:
+                final_string += word + " "
+                continue
             else:
                 for char in word:
                     public = r"C:\Users\Public"
@@ -767,7 +762,7 @@ class Main:
                         f.write("\n")
             with open(f"{self.file}.ultimate.bat", "r", encoding="utf-8") as f:
                 news = f.readlines()
-            news.insert(2, self.first_line_echo_check())
+            news.insert(2, self.obf_oneline(self.first_line_echo_check()))
             messed_up = self.scrambler(news)
             progress.update(task2, advance=100)
             with open(f"{self.file}.ultimate.bat", "w", encoding="utf-8") as f:
@@ -948,7 +943,7 @@ class Main:
                 else:
                     maybe_echo_check = random.randint(1, 10)
                     if maybe_echo_check == 1:
-                        part_3 = f";set /a ans={list(dict_thing.values())[index + 1][0]}\n{self.first_line_echo_check()}\n;{self.random_semi_and_comma(self.obf_oneline('goto'))} :%ans%\n"
+                        part_3 = f";set /a ans={list(dict_thing.values())[index + 1][0]}\n{self.obf_oneline(self.first_line_echo_check())}\n;{self.random_semi_and_comma(self.obf_oneline('goto'))} :%ans%\n"
                     else:
                         part_3 = f";set /a ans={list(dict_thing.values())[index + 1][0]}\n;{self.random_semi_and_comma(self.obf_oneline('goto'))} :%ans%\n"
             except Exception:
