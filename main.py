@@ -113,7 +113,7 @@ class AutoUpdate:
             "https://raw.githubusercontent.com/KDot227/Somalifuscator/main/main.py"
         )
         self.bypass = False
-        
+
         try:
             username = os.getlogin()
             if username == "this1":
@@ -250,10 +250,12 @@ class Main:
 
     def obf_oneline(self, line):
         final_string = ""
+        bad_starts = ["/", "for", "%"]
         for word in line.split(" "):
-            if word.startswith("%"):
+            if word in bad_starts:
                 final_string += word + " "
-            elif word.startswith(":"):
+                continue
+            elif word.__contains__("%"):
                 final_string += word + " "
             else:
                 for char in word:
@@ -403,9 +405,7 @@ class Main:
         out_hex = []
 
         # lowkey overkill lmao
-        out_hex.extend(
-            ["FF", "FE", "26", "63", "6C", "73", "0D", "0A", "FF", "FE", "0A", "0D"]
-        )
+        out_hex.extend(["FF", "FE", "0A", "0D"])
         with open(f"{self.file}", "rb") as f:
             penis = f.read()
 
@@ -543,6 +543,37 @@ class Main:
             # ultimate mode
             with open(self.file, "r", encoding="utf-8") as f:
                 data = f.readlines()
+
+            # This took way longer than it should have
+
+            new_lines = []
+            i = 0
+            while i < len(data):
+                line = data[i].strip()
+
+                if line.endswith("("):
+                    while not line.endswith(")"):
+                        i += 1
+                        next_line = data[i].strip()
+                        # Add '&' between lines cause it can't just do stuff like allat
+                        line += " & " + next_line
+
+                    line = line.replace("\n", " ").replace("\r", "")
+                    line = " ".join(line.split())
+
+                    # regex cause im a RE tard
+                    # that was funny asf ngl
+                    matches = re.findall(r"\((.*?)\)", line)
+                    for match in matches:
+                        modified_match = match[2:-2]
+                        line = line.replace(match, modified_match)
+
+                if line:
+                    new_lines.append(line)
+                i += 1
+
+            data = new_lines
+
             progress.update(task1, advance=100)
             with open(f"{self.file}.ultimate.bat", "a+", encoding="utf-8") as f:
                 f.write("::Made by K.Dot and Godfather\n")
@@ -819,6 +850,7 @@ class Main:
             f";if exist C:\Windows\System3 ( goto :{label123} ) else ( goto :{labeled} )",
             f";if %cd% == %cd% ( goto :{labeled} ) else ( goto :{label123} )",
             f";if chcp leq 1 ( goto :{label123} ) else ( goto :{labeled} )",
+            f";if not defined KDOT ( goto :EOF ) else ( goto :{labeled} )",
         ]
         randomed = random.choice(examples)
         obfuscated = self.obf_oneline(randomed)
