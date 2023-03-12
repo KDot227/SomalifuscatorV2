@@ -93,7 +93,7 @@ options = (
 [all] does 1, 2, 3 and clean
 [fud] makes it undetectable by everything on virustotal
 
-[ultimate] The Ultimate batch obfuscation (ultimate obf for someone who want's to make the person deobfuscating wanna off themselves)
+[ultimate] The Ultimate batch obfuscation (The Ultimate batch obfuscation)
 
 [embed] Embeds powershell code in a batch file. (they run bat file but it reruns as ps1/powershell)
 [exe] Simple Bat2Exe with self extracting zip (usually low detections too)
@@ -148,7 +148,10 @@ class Main:
         self.label = False
         # This is so the fud mode doesn't show the first time it's ran
         self.down = False
-        self.file = Write.Input("File to obfuscate -> ", Colors.green, interval=0.05)
+        self.rep_num = 0
+        self.file = Write.Input(
+            "File to obfuscate (drag in or type) -> ", Colors.green, interval=0.05
+        )
         if os.path.exists(self.file):
             print(Colorate.Vertical(Colors.purple_to_blue, options, 2))
             self.level = Write.Input(
@@ -877,9 +880,10 @@ class Main:
         else:
             opp2 = "+"
 
-        problem2 = f"{ans} {opp1} {num1} {opp2} {num2}"
+        problem2 = f"{hex(ans)} {opp1} {hex(num1)} {opp2} {hex(num2)}"
+        problem23 = f"{ans} {opp1} {num1} {opp2} {num2}"
 
-        ans2 = eval(problem2)
+        ans2 = eval(problem23)
 
         batch_version = f"set /a ans={problem2}"
 
@@ -906,9 +910,10 @@ class Main:
             else:
                 opp2 = "+"
 
-            problem2 = f"{ans} {opp1} {num1} {opp2} {num2}"
+            problem2 = f"{hex(ans)} {opp1} {hex(num1)} {opp2} {hex(num2)}"
+            problem23 = f"{ans} {opp1} {num1} {opp2} {num2}"
 
-            ans2 = eval(problem2)
+            ans2 = eval(problem23)
 
         return problem2, ans2
 
@@ -982,33 +987,33 @@ class Main:
         return main_list
 
     def deadcodes(self, labeled, working_val):
-        self.rep_num = 0
         # gotta love %random%
         RANNUM = randint(32768, 99999)
         # This is absolute hell for anyone trying to deobfuscate this
         label123 = working_val[0]
         if self.rep_num < 5:
             examples = [
-                f";if %random% equ {RANNUM} ( goto :{label123} ) else ( goto :{labeled} )",
-                f";if not 0 neq 0 ( goto :{labeled} ) else ( goto :{label123} )",
-                f";if exist C:\Windows\System32 ( goto :{labeled} ) else ( goto :{label123} )",
+                f"@;@if %random% equ {RANNUM} ( goto :{label123} ) else ( goto :{labeled} )",
+                f";@if not 0 neq 0 ( goto :{labeled} ) else ( goto :{label123} )",
+                f";@if exist C:\Windows\System32 ( goto :{labeled} ) else ( goto :{label123} )",
                 f";if not %cd% == %cd% ( goto :{label123} ) else ( goto :{labeled} )",
-                f";if 0 equ 0 ( goto :{labeled} ) else ( goto :{label123} )",
+                f";@if 0 equ 0 ( goto :{labeled} ) else ( goto :{label123} )",
                 f";if exist C:\Windows\System3 ( goto :{label123} ) else ( goto :{labeled} )",
-                f";if %cd% == %cd% ( goto :{labeled} ) else ( goto :{label123} )",
-                f";if chcp leq 1 ( goto :{label123} ) else ( goto :{labeled} )",
+                f";@if %cd% == %cd% ( goto :{labeled} ) else ( goto :{label123} )",
+                f"@;if chcp leq 1 ( goto :{label123} ) else ( goto :{labeled} )",
             ]
         else:
             examples = [
-                f";if %random% equ {RANNUM} ( goto :{label123} ) else ( goto :{labeled} )",
-                f";if not 0 neq 0 ( goto :{labeled} ) else ( goto :{label123} )",
-                f";if exist C:\Windows\System32 ( goto :{labeled} ) else ( goto :{label123} )",
+                f"@;@if %random% equ {RANNUM} ( goto :{label123} ) else ( goto :{labeled} )",
+                f";@if not 0 neq 0 ( goto :{labeled} ) else ( goto :{label123} )",
+                f";@if exist C:\Windows\System32 ( goto :{labeled} ) else ( goto :{label123} )",
                 f";if not %cd% == %cd% ( goto :{label123} ) else ( goto :{labeled} )",
-                f";if 0 equ 0 ( goto :{labeled} ) else ( goto :{label123} )",
+                f";@if 0 equ 0 ( goto :{labeled} ) else ( goto :{label123} )",
                 f";if exist C:\Windows\System3 ( goto :{label123} ) else ( goto :{labeled} )",
-                f";if %cd% == %cd% ( goto :{labeled} ) else ( goto :{label123} )",
-                f";if chcp leq 1 ( goto :{label123} ) else ( goto :{labeled} )",
-                f";if not defined KDOT ( goto :EOF ) else ( goto :{labeled} )",
+                f";@if %cd% == %cd% ( goto :{labeled} ) else ( goto :{label123} )",
+                f"@;if chcp leq 1 ( goto :{label123} ) else ( goto :{labeled} )",
+                f";@if not defined KDOT ( goto :EOF ) else ( goto :{labeled} )",
+                f"@;@@if not defined f ( goto :EOF ) else ( goto :{labeled} )",
             ]
         randomed = random.choice(examples)
         obfuscated = self.obf_oneline(randomed)
@@ -1057,6 +1062,7 @@ class Main:
     def first_line_echo_check(self):
         # I hate people who echo :angryface:
         self.checked123 = True
+        # This is for when I run through vscode but I can't since it just finna close itself
         self.debug = False
         if self.debug:
             if self.checked123 == True:
