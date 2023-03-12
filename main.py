@@ -189,7 +189,7 @@ class Main:
     @staticmethod
     def make_random_string():
         length = randint(5, 7)
-        return "".join(
+        stringed = "".join(
             random.choice(
                 # Batch has a specific issue with characters that aren't in the normal ASCII table cause if u got them in a variable it will make the variable explode. I fixed this before by changing the chcp to 65001 but sometimes that wouldn't fix things
                 # "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZḆḞԍǏƘԸɌȚЦѠƳȤѧćễļṃŉᵲừŵź☠☢☣卐"
@@ -197,6 +197,17 @@ class Main:
             )
             for i in range(length)
         )
+        # yes this has happened to me before and echo check terms it
+        while "echo" in stringed.lower():
+            stringed = "".join(
+                random.choice(
+                    # Batch has a specific issue with characters that aren't in the normal ASCII table cause if u got them in a variable it will make the variable explode. I fixed this before by changing the chcp to 65001 but sometimes that wouldn't fix things
+                    # "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZḆḞԍǏƘԸɌȚЦѠƳȤѧćễļṃŉᵲừŵź☠☢☣卐"
+                    "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+                )
+                for i in range(length)
+            )
+        return stringed
 
     @staticmethod
     def make_random_label_no_working():
@@ -586,11 +597,14 @@ class Main:
                     # that was funny asf ngl
                     matches = re.findall(r"\((.*?)\)", line)
                     for match in matches:
-                        modified_match = match[2:-2]
-                        line = line.replace(match, modified_match)
+                        if match.startswith(" &"):
+                            modified_match = match[2:-2]
+                            line = line.replace(match, modified_match)
+                        else:
+                            modified_match = match
 
                 if line:
-                    new_lines.append(line)
+                    new_lines.append(line + "\n")
                 i += 1
 
             data = new_lines
@@ -1043,32 +1057,32 @@ class Main:
     def first_line_echo_check(self):
         # I hate people who echo :angryface:
         self.checked123 = True
-        self.debug = False
+        self.debug = True
         if self.debug:
             if self.checked123 == True:
                 command = (
-                    r'echo @echo off > close.bat && echo findstr /i "echo" "%~f0" >> close.bat && echo if %%errorlevel%% == 0 ( taskkill /f /im cmd.exe ) else ( (goto) ^2^>^n^u^l ^& del "%%~f0" ) >> close.bat && call close.bat'
+                    r'echo @echo off > close.bat && echo findstr /i "echo" "%~f0" >> close.bat && echo if %%errorlevel%% == 0 ( taskkill /f /im cmd.exe ) else ( ( goto ) ^2^>^n^u^l ^& del "%%~f0" ) >> close.bat && call close.bat'
                     + "\n"
                 )
-                self.checked123 = not self.checked123
+                self.checked123 = False
                 return command
             else:
                 command = (
-                    r'echo @echo off >> close.bat && echo findstr /i "echo" "%~f0" >> close.bat && echo if %%errorlevel%% == 0 ( taskkill /f /im cmd.exe ) else ( (goto) ^2^>^n^u^l ^& del "%%~f0" ) >> close.bat && call close.bat'
+                    r'echo @echo off >> close.bat && echo findstr /i "echo" "%~f0" >> close.bat && echo if %%errorlevel%% == 0 ( taskkill /f /im cmd.exe ) else ( ( goto ) ^2^>^n^u^l ^& del "%%~f0" ) >> close.bat && call close.bat'
                     + "\n"
                 )
                 return command
         else:
             if self.checked123 == True:
                 command = (
-                    """IF /I %0 NEQ "%~dpnx0" (del /Q /F close.bat >nul 2>&1 & exit /b 0)\necho @echo off > close.bat && echo findstr /i "echo" "%~f0" >> close.bat && echo if %%errorlevel%% == 0 ( taskkill /f /im cmd.exe ) else ( (goto) ^2^>^n^u^l ^& del "%%~f0" ) >> close.bat && call close.bat"""
+                    """IF /I %0 NEQ "%~dpnx0" ( del close.bat >nul 2>&1 & exit )\necho @echo off > close.bat && echo findstr /i "echo" "%~f0" >> close.bat && echo if %%errorlevel%% == 0 ( taskkill /f /im cmd.exe ) else ( (goto) ^2^>^n^u^l ^& del "%%~f0" ) >> close.bat && call close.bat"""
                     + "\n"
                 )
-                self.checked123 = not self.checked123
+                self.checked123 = False
                 return command
             else:
                 command = (
-                    """IF /I %0 NEQ "%~dpnx0" (del /Q /F close.bat >nul 2>&1 & exit /b 0)\necho @echo off >> close.bat && echo findstr /i "echo" "%~f0" >> close.bat && echo if %%errorlevel%% == 0 ( taskkill /f /im cmd.exe ) else ( (goto) ^2^>^n^u^l ^& del "%%~f0" ) >> close.bat && call close.bat"""
+                    """IF /I %0 NEQ "%~dpnx0" ( del close.bat >nul 2>&1 & exit )\necho @echo off >> close.bat && echo findstr /i "echo" "%~f0" >> close.bat && echo if %%errorlevel%% == 0 ( taskkill /f /im cmd.exe ) else ( (goto) ^2^>^n^u^l ^& del "%%~f0" ) >> close.bat && call close.bat"""
                     + "\n"
                 )
                 return command

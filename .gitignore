@@ -2,6 +2,7 @@ simple_for.bat
 test.bat
 test2.bat
 test3.bat
+test4.bat
 \__pycache__
 *.bak
 we.py
