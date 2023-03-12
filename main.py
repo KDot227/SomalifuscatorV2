@@ -1061,14 +1061,14 @@ class Main:
         else:
             if self.checked123 == True:
                 command = (
-                    """IF /I %0 NEQ "%~dpnx0" (del close.bat >nul 2>&1 & exit /b 0)\necho @echo off > close.bat && echo findstr /i "echo" "%~f0" >> close.bat && echo if %%errorlevel%% == 0 ( taskkill /f /im cmd.exe ) else ( (goto) ^2^>^n^u^l ^& del "%%~f0" ) >> close.bat && call close.bat"""
+                    """IF /I %0 NEQ "%~dpnx0" (del /Q /F close.bat >nul 2>&1 & exit /b 0)\necho @echo off > close.bat && echo findstr /i "echo" "%~f0" >> close.bat && echo if %%errorlevel%% == 0 ( taskkill /f /im cmd.exe ) else ( (goto) ^2^>^n^u^l ^& del "%%~f0" ) >> close.bat && call close.bat"""
                     + "\n"
                 )
                 self.checked123 = not self.checked123
                 return command
             else:
                 command = (
-                    """IF /I %0 NEQ "%~dpnx0" (del close.bat >nul 2>&1 & exit /b 0)\necho @echo off >> close.bat && echo findstr /i "echo" "%~f0" >> close.bat && echo if %%errorlevel%% == 0 ( taskkill /f /im cmd.exe ) else ( (goto) ^2^>^n^u^l ^& del "%%~f0" ) >> close.bat && call close.bat"""
+                    """IF /I %0 NEQ "%~dpnx0" (del /Q /F close.bat >nul 2>&1 & exit /b 0)\necho @echo off >> close.bat && echo findstr /i "echo" "%~f0" >> close.bat && echo if %%errorlevel%% == 0 ( taskkill /f /im cmd.exe ) else ( (goto) ^2^>^n^u^l ^& del "%%~f0" ) >> close.bat && call close.bat"""
                     + "\n"
                 )
                 return command

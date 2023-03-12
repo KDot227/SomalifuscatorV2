@@ -1,9 +1,8 @@
 @echo off
-setlocal enabledelayedexpansion
-::echo 1 through 100
-
-@echo off
 SETLOCAL EnableDelayedExpansion
+
+set starttime=%time%
+
 Set "_var=first"
 Set "_var=second" & Echo %_var% !_var!
 
@@ -142,5 +141,11 @@ echo 97
 echo 98
 echo 99
 echo 100
+
+set Endtime=%time%
+
+echo Start %starttime%
+echo End %Endtime%
+
 pause
 exit

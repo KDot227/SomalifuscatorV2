@@ -1,4 +1,5 @@
 @echo off
-echo this is a test && echo %~dpn0
+setlocal
+echo this is a test && echo %~dp0
 pause
 exit
