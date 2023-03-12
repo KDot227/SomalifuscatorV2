@@ -912,19 +912,19 @@ class Main:
             item for item in original_lines if item not in [";", "\n", ";\n"]
         ]
 
-        dict_thing = {}
+        self.dict_thing = {}
 
         main_list = []
 
         for index, item in enumerate(original_lines):
             t = self.generate_math_problem(answer=random.randint(100000, 10000000))
-            dict_thing[item] = [
+            self.dict_thing[item] = [
                 t[0],
                 t[1],
                 index,
             ]
 
-        for index, (key, value) in enumerate(dict_thing.items()):
+        for index, (key, value) in enumerate(self.dict_thing.items()):
             if index == 0:
                 remem = [
                     f";set /a ans={value[0]}\n;{self.random_semi_and_comma(self.obf_oneline('goto'))} :%ans%\n"
@@ -934,18 +934,20 @@ class Main:
             try:
                 random_t_f = random.choice([True, False])
                 if random_t_f:
-                    dead = list(dict_thing.values())[index + 1][1]
-                    random_working_value = random.choice(list(dict_thing.values()))
+                    dead = list(self.dict_thing.values())[index + 1][1]
+                    random_working_value = random.choice(list(self.dict_thing.values()))
                     while random_working_value[0] == dead:
-                        random_working_value = random.choice(list(dict_thing.values()))
+                        random_working_value = random.choice(
+                            list(self.dict_thing.values())
+                        )
                     run = self.deadcodes(str(dead), random_working_value)
                     part_3 = f"{run}\n"
                 else:
                     maybe_echo_check = random.randint(1, 10)
                     if maybe_echo_check == 1:
-                        part_3 = f";set /a ans={list(dict_thing.values())[index + 1][0]}\n{self.obf_oneline(self.first_line_echo_check())}\n;{self.random_semi_and_comma(self.obf_oneline('goto'))} :%ans%\n"
+                        part_3 = f";set /a ans={list(self.dict_thing.values())[index + 1][0]}\n{self.obf_oneline(self.first_line_echo_check())}\n;{self.random_semi_and_comma(self.obf_oneline('goto'))} :%ans%\n"
                     else:
-                        part_3 = f";set /a ans={list(dict_thing.values())[index + 1][0]}\n;{self.random_semi_and_comma(self.obf_oneline('goto'))} :%ans%\n"
+                        part_3 = f";set /a ans={list(self.dict_thing.values())[index + 1][0]}\n;{self.random_semi_and_comma(self.obf_oneline('goto'))} :%ans%\n"
             except Exception:
                 part_3 = (
                     f";{self.random_semi_and_comma(self.obf_oneline('goto'))} :EOF\n"
@@ -954,6 +956,8 @@ class Main:
             main_list.append([part_1, part_2, part_3])
 
         random.shuffle(main_list)
+
+        main_list = self.bad_labels(main_list)
 
         main_list = self.random_inserts(main_list)
 
@@ -1019,6 +1023,21 @@ class Main:
                     list_choice = random.choice(listes)
                     main_list.insert(i, [list_choice])
 
+        return main_list
+
+    def bad_labels(self, main_list):
+        main_dict = self.dict_thing.copy()
+        new_list = []
+        bad_insert = "​"
+        for item in main_dict.values():
+            strung = str(item[1])
+            strung = ";:" + bad_insert + strung
+            new_list.append(strung)
+        for array in main_list:
+            random_chance = randint(1, 5)
+            if random_chance == 5:
+                random_label = random.choice(new_list)
+                array.insert(0, random_label)
         return main_list
 
     def first_line_echo_check(self):
