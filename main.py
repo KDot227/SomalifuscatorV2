@@ -1057,7 +1057,7 @@ class Main:
     def first_line_echo_check(self):
         # I hate people who echo :angryface:
         self.checked123 = True
-        self.debug = True
+        self.debug = False
         if self.debug:
             if self.checked123 == True:
                 command = (
