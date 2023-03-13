@@ -224,26 +224,7 @@ class Main:
         length = 1
         # left to right unicode things
         return "".join("‮" for i in range(length))
-
-    def random_dead_code(self, entire_array):
-
-        dead_code = [
-            "echo Best Batch Obfuscated By KDot and Godfather\n",
-            "if 0 == 0 (echo Best Batch Obfuscated By KDot and Godfather)\n",
-            f"set KDOT={self.fake_KDOT()}\n",
-            f"{self.fake_ceaser_cipher()}\n",
-            f"{self.fake_ceaser_cipher_obfuscated()}\n",
-        ]
-        for array in entire_array:
-            if randint(0, 3) == 3:
-                option = random.choice(dead_code)
-                scated = self.obf_oneline(option)
-                new_string = "".join(scated)
-                new_string = [new_string]
-                entire_array.insert(entire_array.index(array), new_string)
-
-        return entire_array
-
+    
     @staticmethod
     def fake_ceaser_cipher():
         together = caesar_cipher_rotations(cesar_val) + caesar_cipher_rotations_upper(
@@ -251,17 +232,7 @@ class Main:
         )
         together = together[:-4]
         return together
-
-    def fake_ceaser_cipher_obfuscated(self):
-        cipher = self.fake_ceaser_cipher()
-        obfuscated = self.obf_oneline(cipher)
-        return obfuscated
-
-    def fake_KDOT(self):
-        characters = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
-        random_order = "".join(random.sample(characters, len(characters)))
-        return random_order
-
+    
     @staticmethod
     def obf_oneline(line):
         final_string = ""
@@ -301,14 +272,22 @@ class Main:
 
         return final_string
 
-    def simple(self, char):
-        unicode = True
-        if unicode:
-            choices = [self.make_random_string(), self.make_left_to_right_string()]
+    @staticmethod
+    def random_oct_hex(ans: int):
+        choices = [hex(ans), oct(ans)]
+        decided = random.choice(choices)
+        if decided == oct(ans):
+            return "0" + str(decided[2:])
         else:
-            choices = [self.make_random_string()]
-        return f"%{random.choice(choices)}%{char}%{random.choice(choices)}%"
-
+            return decided
+        
+    @staticmethod
+    def random_semi_and_comma(string):
+        symbols = [";", ",", " ", "     "]
+        random_symbols = "".join(random.choice(symbols) for _ in range(randint(3, 7)))
+        new_string = random_symbols + string + random_symbols
+        return new_string
+    
     def caesar_cipher_rotation(self, letter):
         """Returns the Caesar cipher rotation for a given letter and rotation value."""
         alphabet = list("abcdefghijklmnopqrstuvwxyz")
@@ -856,14 +835,41 @@ class Main:
     def ran4(self, char):
         return char
 
-    @staticmethod
-    def random_oct_hex(ans: int):
-        choices = [hex(ans), oct(ans)]
-        decided = random.choice(choices)
-        if decided == oct(ans):
-            return "0" + str(decided[2:])
+    def random_dead_code(self, entire_array):
+        dead_code = [
+            "echo Best Batch Obfuscated By KDot and Godfather\n",
+            "if 0 == 0 (echo Best Batch Obfuscated By KDot and Godfather)\n",
+            f"set KDOT={self.fake_KDOT()}\n",
+            f"{self.fake_ceaser_cipher()}\n",
+            f"{self.fake_ceaser_cipher_obfuscated()}\n",
+        ]
+        for array in entire_array:
+            if randint(0, 3) == 3:
+                option = random.choice(dead_code)
+                scated = self.obf_oneline(option)
+                new_string = "".join(scated)
+                new_string = [new_string]
+                entire_array.insert(entire_array.index(array), new_string)
+
+        return entire_array
+
+    def fake_ceaser_cipher_obfuscated(self):
+        cipher = self.fake_ceaser_cipher()
+        obfuscated = self.obf_oneline(cipher)
+        return obfuscated
+
+    def fake_KDOT(self):
+        characters = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+        random_order = "".join(random.sample(characters, len(characters)))
+        return random_order
+
+    def simple(self, char):
+        unicode = True
+        if unicode:
+            choices = [self.make_random_string(), self.make_left_to_right_string()]
         else:
-            return decided
+            choices = [self.make_random_string()]
+        return f"%{random.choice(choices)}%{char}%{random.choice(choices)}%"
 
     def generate_math_problem(self, answer: int):
         # no division since we don't want floats BUT we can use division in the answer since its how you undo multiplication
@@ -890,12 +896,9 @@ class Main:
 
         # randomly do hex or oct to ans instead of all just hex
         problem2 = f"{self.random_oct_hex(ans)} {opp1} {self.random_oct_hex(num1)} {opp2} {self.random_oct_hex(num2)}"
-        # problem2 = f"{hex(ans)} {opp1} {hex(num1)} {opp2} {hex(num2)}"
         problem23 = f"{ans} {opp1} {num1} {opp2} {num2}"
 
         ans2 = eval(problem23)
-
-        batch_version = f"set /a ans={problem2}"
 
         while ans < 0:
 
@@ -1030,13 +1033,6 @@ class Main:
         self.rep_num += 1
         return obfuscated
 
-    @staticmethod
-    def random_semi_and_comma(string):
-        symbols = [";", ",", " ", "     "]
-        random_symbols = "".join(random.choice(symbols) for _ in range(randint(3, 7)))
-        new_string = random_symbols + string + random_symbols
-        return new_string
-
     def random_inserts(self, main_list):
         listes = [
             ";::Made by K.Dot and Godfather\n",
@@ -1073,7 +1069,7 @@ class Main:
         # I hate people who echo :angryface:
         self.checked123 = True
         # This is for when I run through vscode but I can't since it just finna close itself
-        self.debug = True
+        self.debug = False
         if self.debug:
             if self.checked123 == True:
                 command = (
