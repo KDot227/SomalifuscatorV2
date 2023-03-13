@@ -857,7 +857,15 @@ class Main:
         return char
 
     @staticmethod
-    def generate_math_problem(answer: int):
+    def random_oct_hex(ans: int):
+        choices = [hex(ans), oct(ans)]
+        decided = random.choice(choices)
+        if decided == oct(ans):
+            return "0" + str(decided[2:])
+        else:
+            return decided
+
+    def generate_math_problem(self, answer: int):
         # no division since we don't want floats BUT we can use division in the answer since its how you undo multiplication
         operators = ["+", "-"]
         opp1 = random.choice(operators)
@@ -880,7 +888,9 @@ class Main:
         else:
             opp2 = "+"
 
-        problem2 = f"{hex(ans)} {opp1} {hex(num1)} {opp2} {hex(num2)}"
+        # randomly do hex or oct to ans instead of all just hex
+        problem2 = f"{self.random_oct_hex(ans)} {opp1} {self.random_oct_hex(num1)} {opp2} {self.random_oct_hex(num2)}"
+        # problem2 = f"{hex(ans)} {opp1} {hex(num1)} {opp2} {hex(num2)}"
         problem23 = f"{ans} {opp1} {num1} {opp2} {num2}"
 
         ans2 = eval(problem23)
@@ -1063,7 +1073,7 @@ class Main:
         # I hate people who echo :angryface:
         self.checked123 = True
         # This is for when I run through vscode but I can't since it just finna close itself
-        self.debug = False
+        self.debug = True
         if self.debug:
             if self.checked123 == True:
                 command = (
