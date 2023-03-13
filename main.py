@@ -482,6 +482,7 @@ class Main:
             data = f.readlines()
         with open(f"{self.file}.fud.bat", "a+", encoding="utf-8") as f:
             f.write("::Made by K.Dot and Godfather\n")
+            # this is so I don't have to see the status bar when using mixer
             if self.down == False:
                 for line in data:
                     if line.startswith(":") and not line.startswith("::"):
@@ -537,6 +538,7 @@ class Main:
         self.down = not self.down
 
     def ultimate(self) -> None:
+        # progress bar things
         with Progress() as progress:
             task1 = progress.add_task("[bold green]Searching through file", total=100)
             task1andhalf = progress.add_task("[bold green]Obfuscating", total=100)
@@ -559,6 +561,7 @@ class Main:
                 data = f.readlines()
 
             # This took way longer than it should have
+            # Basically the entire point of it is to turn multiline commands that could be oneline into just oneline commands. I'm guessing this will break for anything larger than like 30 lines. If that's the cause then do if not stuff
 
             new_lines = []
             i = 0
@@ -715,6 +718,8 @@ class Main:
                 # for line in track(
                 #    data, description="[bold green]Obfuscating", total=len(data)
                 # ):
+                # This regex is basically tryna get variables that are set to a value. For example if someone has set "starttime=%time%"
+                # TODO Add support for built in vars such as %~dpn0
                 regex_bat = re.compile(r"\w+=[^=]*%\w+%\b|\w+=[^=]*%\w+%\B")
                 for line in data:
                     progress.update(task1andhalf, advance=100 / len(data))
@@ -748,6 +753,7 @@ class Main:
                                         # random_obf = [self.ran1(char), self.ran2(char, random_order), self.ran3(char), self.ran4(char)]
                                         # I'll fix this someday
                                         random_obf = [
+                                            # If you want even better obfuscation comment self.ran1(char) this is cause most deobfuscators and people can somewhat easily solve this part but not ran2. Up 2 u tho its still really hard either way and I could be wrong
                                             self.ran1(char),
                                             # ran 2 is the only thing stopping most deobfuscators since it uses environment variables that nobody knows about
                                             self.ran2(char, random_order),
@@ -756,6 +762,7 @@ class Main:
                                         f.write(f"{random.choice(random_obf)}")
                                 f.write(" ")
                         f.write("\n")
+            # ignore everything below this until the function ends I could have made this 100x better but I'm lazy
             with open(f"{self.file}.ultimate.bat", "r", encoding="utf-8") as f:
                 news = f.readlines()
             news.insert(2, self.obf_oneline(self.first_line_echo_check()))
@@ -781,6 +788,7 @@ class Main:
             progress.update(task5, advance=100)
 
     def ran1(self, char):
+        # caesar cipher rotation shi
         choices = [self.make_random_string(), self.make_random_string()]
         randomed = random.choice(choices)
         if char in string.ascii_letters:
@@ -796,6 +804,7 @@ class Main:
             return f"{char}%{randomed}%"
 
     def ran2(self, char, random_order):
+        # getting the index of the character in the random string and then getting the character at that index in the random string
         public = r"C:\Users\Public"
         weird = r"C:\Program Files (x86)\Common Files"
         program_1 = r"C:\Program Files"
@@ -836,6 +845,7 @@ class Main:
         return char
 
     def random_dead_code(self, entire_array):
+        """Dead code that just won't be executed so it can be whatever. If u wanna add more its all u"""
         dead_code = [
             "echo Best Batch Obfuscated By KDot and Godfather\n",
             "if 0 == 0 (echo Best Batch Obfuscated By KDot and Godfather)\n",
@@ -854,16 +864,19 @@ class Main:
         return entire_array
 
     def fake_ceaser_cipher_obfuscated(self):
+        """simple function to obfuscate the cipher"""
         cipher = self.fake_ceaser_cipher()
         obfuscated = self.obf_oneline(cipher)
         return obfuscated
 
     def fake_KDOT(self):
+        """makes fake KDOT var"""
         characters = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
         random_order = "".join(random.sample(characters, len(characters)))
         return random_order
 
     def simple(self, char):
+        """simple obfuscation that won't be executed but it makes it harder to read."""
         unicode = True
         if unicode:
             choices = [self.make_random_string(), self.make_left_to_right_string()]
@@ -872,12 +885,16 @@ class Main:
         return f"%{random.choice(choices)}%{char}%{random.choice(choices)}%"
 
     def generate_math_problem(self, answer: int):
+        """Entire point of this is to make a math problem for the set /a. We do this cause kids need a calculator but once they see that there are octals and hexadecimals they'll prolly give up lmao"""
+        # TODO add bitwise operations such as xor, or, etc
         # no division since we don't want floats BUT we can use division in the answer since its how you undo multiplication
         operators = ["+", "-"]
         opp1 = random.choice(operators)
         opp2 = random.choice(operators)
         num1 = random.randint(10000, 10000000)
         num2 = random.randint(10000, 10000000)
+        
+        # maybe add division and multiplication to the problem using even dividers and getting remainder to check if zero.
 
         problem = f"{answer} {opp1} {num1} {opp2} {num2}"
         ans = eval(problem)
@@ -931,6 +948,7 @@ class Main:
         return problem2, ans2
 
     def scrambler(self, codeed):
+        """This absolutely beautiful function takes the code, puts it into a nested array of goto values that all point to each other then obfuscates tf outta it."""
         original_lines = codeed
 
         for index, line in enumerate(original_lines):
@@ -956,6 +974,7 @@ class Main:
                 index,
             ]
 
+        # I use ; infront of everything cause it gets rid of syntax highlight on vscode and notepad++ lmao
         for index, (key, value) in enumerate(self.dict_thing.items()):
             if index == 0:
                 remem = [
@@ -994,12 +1013,14 @@ class Main:
         main_list = self.random_inserts(main_list)
 
         main_list = self.random_dead_code(main_list)
-
+        
+        # pointer that points to first line of the actual code.
         main_list.insert(0, remem)
 
         return main_list
 
     def deadcodes(self, labeled, working_val):
+        """not really deadcode but it just makes it hard for kids to understand"""
         # gotta love %random%
         RANNUM = randint(32768, 99999)
         # This is absolute hell for anyone trying to deobfuscate this
@@ -1051,6 +1072,7 @@ class Main:
         return main_list
 
     def bad_labels(self, main_list):
+        """inserts labels that are valid but won't do anything since they have a zero width space infront. This mainly messes up looking at it from a text editor. You can still goto it if you use the weird translated bytes."""
         main_dict = self.dict_thing.copy()
         new_list = []
         bad_insert = "​"
@@ -1066,6 +1088,7 @@ class Main:
         return main_list
 
     def first_line_echo_check(self):
+        """basically just checks the entire file for the word echo. If it finds it then it will kill the process. Also the no debug checks to see if the user is double clicking the file instead of running it through a different application"""
         # I hate people who echo :angryface:
         self.checked123 = True
         # This is for when I run through vscode but I can't since it just finna close itself
@@ -1100,6 +1123,7 @@ class Main:
                 return command
 
     def anti_check_error(self, code):
+        """This just checks to see if the first byte of the file is the utf-16 BOM. If it is then it clears screen otherwise it exits."""
         strung = ">nul 2>&1 && exit >nul 2>&1 || cls \n@%nobruh%e%nobruh%c%nobruh%h%nobruh%o o%nobruh%f%nobruh%f%nobruh%\n"
         code.insert(0, strung)
 
