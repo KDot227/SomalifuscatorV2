@@ -224,7 +224,7 @@ class Main:
         length = 1
         # left to right unicode things
         return "".join("‮" for i in range(length))
-    
+
     @staticmethod
     def fake_ceaser_cipher():
         together = caesar_cipher_rotations(cesar_val) + caesar_cipher_rotations_upper(
@@ -232,7 +232,7 @@ class Main:
         )
         together = together[:-4]
         return together
-    
+
     @staticmethod
     def obf_oneline(line):
         final_string = ""
@@ -280,14 +280,14 @@ class Main:
             return "0" + str(decided[2:])
         else:
             return decided
-        
+
     @staticmethod
     def random_semi_and_comma(string):
         symbols = [";", ",", " ", "     "]
         random_symbols = "".join(random.choice(symbols) for _ in range(randint(3, 7)))
         new_string = random_symbols + string + random_symbols
         return new_string
-    
+
     def caesar_cipher_rotation(self, letter):
         """Returns the Caesar cipher rotation for a given letter and rotation value."""
         alphabet = list("abcdefghijklmnopqrstuvwxyz")
@@ -592,7 +592,7 @@ class Main:
                     new_lines.append(line + "\n")
                 i += 1
 
-            data = new_lines
+            data = new_lines.copy()
 
             env_vars = [
                 r"%ALLUSERSPROFILE%",
@@ -702,9 +702,10 @@ class Main:
 
             self.used_env_vars = []
 
-            for env_var in env_vars:
-                if env_var in data:
-                    self.used_env_vars.append(env_var)
+            for line in data:
+                for env_var in env_vars:
+                    if env_var in line.strip():
+                        self.used_env_vars.append(env_var)
 
             progress.update(task1, advance=100)
             with open(f"{self.file}.ultimate.bat", "a+", encoding="utf-8") as f:
@@ -720,7 +721,6 @@ class Main:
                 # ):
                 # This regex is basically tryna get variables that are set to a value. For example if someone has set "starttime=%time%"
                 # TODO Add support for built in vars such as %~dpn0
-                regex_bat = re.compile(r"\w+=[^=]*%\w+%\b|\w+=[^=]*%\w+%\B")
                 for line in data:
                     progress.update(task1andhalf, advance=100 / len(data))
                     random_bool = random.choice([True, False])
@@ -730,15 +730,36 @@ class Main:
                     elif line.startswith(":"):
                         f.write(line)
                         continue
+                    elif line.startswith("set"):
+                        for env_var in self.used_env_vars:
+                            if env_var in line:
+                                f.write(line)
+                                continue
+                            else:
+                                for word in line.split():
+                                    if word.startswith("%") or word.startswith("!"):
+                                        f.write(word + " ")
+                                        continue
+                                    else:
+                                        for char in word:
+                                            if char == "\n":
+                                                f.write("\n")
+                                                continue
+                                            elif char == " ":
+                                                f.write(" ")
+                                                continue
+                                            else:
+                                                random_obf = [
+                                                    self.ran1(char),
+                                                    self.ran2(char, random_order),
+                                                ]
+                                                f.write(f"{random.choice(random_obf)}")
+                                        f.write(" ")
                     else:
                         if random_bool == True:
                             f.write(";")
                         for word in line.split():
                             if word.startswith("%") or word.startswith("!"):
-                                f.write(word + " ")
-                                continue
-                            elif re.match(regex_bat, word):
-                                # regex be my bae
                                 f.write(word + " ")
                                 continue
                             else:
@@ -893,7 +914,7 @@ class Main:
         opp2 = random.choice(operators)
         num1 = random.randint(10000, 10000000)
         num2 = random.randint(10000, 10000000)
-        
+
         # maybe add division and multiplication to the problem using even dividers and getting remainder to check if zero.
 
         problem = f"{answer} {opp1} {num1} {opp2} {num2}"
@@ -1013,7 +1034,7 @@ class Main:
         main_list = self.random_inserts(main_list)
 
         main_list = self.random_dead_code(main_list)
-        
+
         # pointer that points to first line of the actual code.
         main_list.insert(0, remem)
 
@@ -1092,7 +1113,7 @@ class Main:
         # I hate people who echo :angryface:
         self.checked123 = True
         # This is for when I run through vscode but I can't since it just finna close itself
-        self.debug = False
+        self.debug = True
         if self.debug:
             if self.checked123 == True:
                 command = (
