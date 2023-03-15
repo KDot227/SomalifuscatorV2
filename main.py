@@ -53,7 +53,7 @@ together = caesar_cipher_rotations(cesar_val) + caesar_cipher_rotations_upper(ce
 together = together[:-4]
 
 
-# average W batch thing where u get a error every line :skull:
+# average W batch thing where u get a error every line
 chinese = False
 
 if chinese:
@@ -978,7 +978,7 @@ class Main:
         for index, (key, value) in enumerate(self.dict_thing.items()):
             if index == 0:
                 remem = [
-                    f";set /a ans={value[0]}\n;{self.random_semi_and_comma(self.obf_oneline('goto'))} :%ans%\n"
+                    f";{self.obf_oneline('set')} /a {self.obf_oneline('ans')}={self.obf_oneline(value[0])}\n;{self.random_semi_and_comma(self.obf_oneline('goto'))} :%ans%\n"
                 ]
             part_1 = f";:{value[1]}\n"
             part_2 = f";{key}\n"
@@ -996,9 +996,9 @@ class Main:
                 else:
                     maybe_echo_check = random.randint(1, 10)
                     if maybe_echo_check == 1:
-                        part_3 = f";set /a ans={list(self.dict_thing.values())[index + 1][0]}\n{self.obf_oneline(self.first_line_echo_check())}\n;{self.random_semi_and_comma(self.obf_oneline('goto'))} :%ans%\n"
+                        part_3 = f";{self.obf_oneline('set')} /a {self.obf_oneline('ans')}={self.obf_oneline(list(self.dict_thing.values())[index + 1][0])}\n{self.obf_oneline(self.first_line_echo_check())}\n;{self.random_semi_and_comma(self.obf_oneline('goto'))} :%ans%\n"
                     else:
-                        part_3 = f";set /a ans={list(self.dict_thing.values())[index + 1][0]}\n;{self.random_semi_and_comma(self.obf_oneline('goto'))} :%ans%\n"
+                        part_3 = f";{self.obf_oneline('set')} /a {self.obf_oneline('ans')}={self.obf_oneline(list(self.dict_thing.values())[index + 1][0])}\n;{self.random_semi_and_comma(self.obf_oneline('goto'))} :%ans%\n"
             except Exception:
                 part_3 = (
                     f";{self.random_semi_and_comma(self.obf_oneline('goto'))} :EOF\n"
