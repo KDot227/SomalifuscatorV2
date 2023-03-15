@@ -592,7 +592,7 @@ class Main:
                     new_lines.append(line + "\n")
                 i += 1
 
-            data = new_lines.copy()
+            data = new_lines
 
             env_vars = [
                 r"%ALLUSERSPROFILE%",
@@ -702,10 +702,9 @@ class Main:
 
             self.used_env_vars = []
 
-            for line in data:
-                for env_var in env_vars:
-                    if env_var in line.strip():
-                        self.used_env_vars.append(env_var)
+            for env_var in env_vars:
+                if env_var in data:
+                    self.used_env_vars.append(env_var)
 
             progress.update(task1, advance=100)
             with open(f"{self.file}.ultimate.bat", "a+", encoding="utf-8") as f:
@@ -721,6 +720,7 @@ class Main:
                 # ):
                 # This regex is basically tryna get variables that are set to a value. For example if someone has set "starttime=%time%"
                 # TODO Add support for built in vars such as %~dpn0
+                regex_bat = re.compile(r"\w+=[^=]*%\w+%\b|\w+=[^=]*%\w+%\B")
                 for line in data:
                     progress.update(task1andhalf, advance=100 / len(data))
                     random_bool = random.choice([True, False])
@@ -730,36 +730,15 @@ class Main:
                     elif line.startswith(":"):
                         f.write(line)
                         continue
-                    elif line.startswith("set"):
-                        for env_var in self.used_env_vars:
-                            if env_var in line:
-                                f.write(line)
-                                continue
-                            else:
-                                for word in line.split():
-                                    if word.startswith("%") or word.startswith("!"):
-                                        f.write(word + " ")
-                                        continue
-                                    else:
-                                        for char in word:
-                                            if char == "\n":
-                                                f.write("\n")
-                                                continue
-                                            elif char == " ":
-                                                f.write(" ")
-                                                continue
-                                            else:
-                                                random_obf = [
-                                                    self.ran1(char),
-                                                    self.ran2(char, random_order),
-                                                ]
-                                                f.write(f"{random.choice(random_obf)}")
-                                        f.write(" ")
                     else:
                         if random_bool == True:
                             f.write(";")
                         for word in line.split():
                             if word.startswith("%") or word.startswith("!"):
+                                f.write(word + " ")
+                                continue
+                            elif re.match(regex_bat, word):
+                                # regex be my bae
                                 f.write(word + " ")
                                 continue
                             else:
@@ -1113,7 +1092,7 @@ class Main:
         # I hate people who echo :angryface:
         self.checked123 = True
         # This is for when I run through vscode but I can't since it just finna close itself
-        self.debug = True
+        self.debug = False
         if self.debug:
             if self.checked123 == True:
                 command = (
