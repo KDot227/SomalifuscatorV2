@@ -97,7 +97,7 @@ No image provided
   The "Ultimate" Batch Obfuscation (note it looks a lot lot worse with notepad due to left right unicode.
 </h2>
 
-![Ultimate Mode](https://i.imgur.com/PQQNkRl.png)
+![Ultimate Mode](https://i.imgur.com/flte4s3.jpeg)
 
 <h2 align="center">
   Embed
