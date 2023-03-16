@@ -11,6 +11,9 @@ chinese = False
 # pogdog_fun basically makes the code unreadable (literially) but it makes the file big asf and also tanks performance
 pogdog_fun = False
 
+# hell mode it basically a slightly better version of pogdog_fun cause it won't make the file 14kb and just 1.4kb
+hell = False
+
 try:
     from rich.progress import Progress, track
     from zipfile import ZipFile
@@ -1001,29 +1004,54 @@ class Main:
                 ]
             part_1 = f";:{value[1]}\n"
             part_2 = f";{key}\n"
-            badded = (
-                " ็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็"
-                * random.randint(10, 20)
-            )
-            try:
-                random_t_f = random.choice([True, False])
-                if random_t_f:
-                    dead = list(self.dict_thing.values())[index + 1][1]
-                    random_working_value = random.choice(list(self.dict_thing.values()))
-                    while random_working_value[0] == dead:
+            if hell:
+                badded = (
+                    " ็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็"
+                    * random.randint(10, 20)
+                )
+                try:
+                    random_t_f = random.choice([True, False])
+                    if random_t_f:
+                        dead = list(self.dict_thing.values())[index + 1][1]
                         random_working_value = random.choice(
                             list(self.dict_thing.values())
                         )
-                    run = self.deadcodes(str(dead), random_working_value)
-                    part_3 = f"{run}\n::{badded}\n"
-                else:
-                    maybe_echo_check = random.randint(1, 10)
-                    if maybe_echo_check == 1:
-                        part_3 = f";{self.obf_oneline('set')} /a {self.obf_oneline('ans')}={self.obf_oneline(list(self.dict_thing.values())[index + 1][0])}\n::{badded}\n::{badded}\n::{badded}\n{self.obf_oneline(self.first_line_echo_check())}\n;{self.random_semi_and_comma(self.obf_oneline('goto'))} :%ans%\n"
+                        while random_working_value[0] == dead:
+                            random_working_value = random.choice(
+                                list(self.dict_thing.values())
+                            )
+                        run = self.deadcodes(str(dead), random_working_value)
+                        part_3 = f"{run}\n::{badded}\n"
                     else:
-                        part_3 = f";{self.obf_oneline('set')} /a {self.obf_oneline('ans')}={self.obf_oneline(list(self.dict_thing.values())[index + 1][0])}\n::{badded}\n::{badded}\n::{badded}\n;{self.random_semi_and_comma(self.obf_oneline('goto'))} :%ans%\n"
-            except Exception:
-                part_3 = f";{self.random_semi_and_comma(self.obf_oneline('goto'))} :EOF\n::{badded}\n::{badded}\n::{badded}\n"
+                        maybe_echo_check = random.randint(1, 10)
+                        if maybe_echo_check == 1:
+                            part_3 = f";{self.obf_oneline('set')} /a {self.obf_oneline('ans')}={self.obf_oneline(list(self.dict_thing.values())[index + 1][0])}\n::{badded}\n::{badded}\n::{badded}\n{self.obf_oneline(self.first_line_echo_check())}\n;{self.random_semi_and_comma(self.obf_oneline('goto'))} :%ans%\n"
+                        else:
+                            part_3 = f";{self.obf_oneline('set')} /a {self.obf_oneline('ans')}={self.obf_oneline(list(self.dict_thing.values())[index + 1][0])}\n::{badded}\n::{badded}\n::{badded}\n;{self.random_semi_and_comma(self.obf_oneline('goto'))} :%ans%\n"
+                except Exception:
+                    part_3 = f";{self.random_semi_and_comma(self.obf_oneline('goto'))} :EOF\n::{badded}\n::{badded}\n::{badded}\n"
+            else:
+                try:
+                    random_t_f = random.choice([True, False])
+                    if random_t_f:
+                        dead = list(self.dict_thing.values())[index + 1][1]
+                        random_working_value = random.choice(
+                            list(self.dict_thing.values())
+                        )
+                        while random_working_value[0] == dead:
+                            random_working_value = random.choice(
+                                list(self.dict_thing.values())
+                            )
+                        run = self.deadcodes(str(dead), random_working_value)
+                        part_3 = f"{run}\n::{badded}\n"
+                    else:
+                        maybe_echo_check = random.randint(1, 10)
+                        if maybe_echo_check == 1:
+                            part_3 = f";{self.obf_oneline('set')} /a {self.obf_oneline('ans')}={self.obf_oneline(list(self.dict_thing.values())[index + 1][0])}\n{self.obf_oneline(self.first_line_echo_check())}\n;{self.random_semi_and_comma(self.obf_oneline('goto'))} :%ans%\n"
+                        else:
+                            part_3 = f";{self.obf_oneline('set')} /a {self.obf_oneline('ans')}={self.obf_oneline(list(self.dict_thing.values())[index + 1][0])}\n;{self.random_semi_and_comma(self.obf_oneline('goto'))} :%ans%\n"
+                except Exception:
+                    part_3 = f";{self.random_semi_and_comma(self.obf_oneline('goto'))} :EOF\n"
 
             main_list.append([part_1, part_2, part_3])
 
