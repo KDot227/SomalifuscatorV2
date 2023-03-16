@@ -10,6 +10,7 @@ import os
 chinese = False
 
 # pogdog_fun basically makes the code unreadable (literially) but it makes the file big asf and also tanks performance
+# Another cool thing is that when u enable this with ultimate mode the user can't edit the file in notepad++ or text editor lmao
 pogdog_fun = False
 
 # hell mode it basically a slightly better version of pogdog_fun cause it won't make the file 14kb and just 1.4kb
@@ -230,13 +231,6 @@ class Main:
         return "".join(random.choice(chinese_characters) for i in range(length))
 
     @staticmethod
-    def make_left_to_right_string():
-        # Change if u want
-        length = 1
-        # left to right unicode things
-        return "".join("‮" for i in range(length))
-
-    @staticmethod
     def fake_ceaser_cipher():
         together = caesar_cipher_rotations(cesar_val) + caesar_cipher_rotations_upper(
             cesar_val
@@ -278,7 +272,7 @@ class Main:
                         # Why do we have to add 2? I have no fucking idea lmao
                         final_string += f"%PSModulePath:~{new + 2},1%"
                     else:
-                        final_string += char
+                        final_string += f"%‮%{char}%‮%"
                 final_string += " "
 
         return final_string
@@ -897,15 +891,6 @@ class Main:
         characters = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
         random_order = "".join(random.sample(characters, len(characters)))
         return random_order
-
-    def simple(self, char):
-        """simple obfuscation that won't be executed but it makes it harder to read."""
-        unicode = True
-        if unicode:
-            choices = [self.make_random_string(), self.make_left_to_right_string()]
-        else:
-            choices = [self.make_random_string()]
-        return f"%{random.choice(choices)}%{char}%{random.choice(choices)}%"
 
     def generate_math_problem(self, answer: int):
         """Entire point of this is to make a math problem for the set /a. We do this cause kids need a calculator but once they see that there are octals and hexadecimals they'll prolly give up lmao"""
