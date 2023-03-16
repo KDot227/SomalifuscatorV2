@@ -7,14 +7,17 @@ import os
 # If you have a bat file and you truly want it to be safe then enable all the settings. If you run it and it doesn't work try disabling the chinese mode and try again. otherwise go in ur code and try and make it more simple ig or join the server and lmk the issue
 
 # chinese allows the obfuscator to use chinese characters that all look very very similar but this can cause issues due to batch variables exploding (yes real issue)
-chinese = False
+chinese = True
 
 # pogdog_fun basically makes the code unreadable (literially) but it makes the file big asf and also tanks performance
 # Another cool thing is that when u enable this with ultimate mode the user can't edit the file in notepad++ or text editor lmao
-pogdog_fun = False
+pogdog_fun = True
 
 # hell mode it basically a slightly better version of pogdog_fun cause it won't make the file 14kb and just 1.4kb
-hell = False
+hell = True
+
+# inserts eicar string so if it's deobfuscated it'll be deleted by antivirus
+eicar = True
 
 try:
     from rich.progress import Progress, track
@@ -105,7 +108,7 @@ options = (
 [all] does 1, 2, 3 and clean
 [fud] makes it undetectable by everything on virustotal
 
-[ultimate] The Ultimate batch obfuscation (The Ultimate batch obfuscation)
+[ultimate] The Ultimate batch obfuscation (The Ultimate batch obfuscation) (Also fud from virus total and all AV)
 
 [embed] Embeds powershell code in a batch file. (they run bat file but it reruns as ps1/powershell)
 [exe] Simple Bat2Exe with self extracting zip (usually low detections too)
@@ -870,10 +873,21 @@ class Main:
             f"{self.fake_ceaser_cipher_obfuscated()}\n",
             f"set somalifuscator=op_asf\n",
         ]
+        if eicar:
+            dead_code.append(
+                "X5O!P%@AP[4\PZX54(P^)7CC)7}$EICAR-STANDARD-ANTIVIRUS-TEST-FILE!$H+H*\n"
+            )
         for array in entire_array:
             if randint(0, 3) == 3:
                 option = random.choice(dead_code)
-                scated = self.obf_oneline(option)
+                if (
+                    option
+                    # it's funny cause it's still fud even unobfuscated
+                    == "X5O!P%@AP[4\PZX54(P^)7CC)7}$EICAR-STANDARD-ANTIVIRUS-TEST-FILE!$H+H*\n"
+                ):
+                    scated = option
+                else:
+                    scated = self.obf_oneline(option)
                 new_string = "".join(scated)
                 new_string = [new_string]
                 entire_array.insert(entire_array.index(array), new_string)
