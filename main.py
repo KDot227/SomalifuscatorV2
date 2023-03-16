@@ -1044,7 +1044,7 @@ class Main:
                                 list(self.dict_thing.values())
                             )
                         run = self.deadcodes(str(dead), random_working_value)
-                        part_3 = f"{run}\n::{badded}\n"
+                        part_3 = f"{run}\n"
                     else:
                         maybe_echo_check = random.randint(1, 10)
                         if maybe_echo_check == 1:
