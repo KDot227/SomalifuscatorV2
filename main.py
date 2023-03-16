@@ -4,6 +4,7 @@ import os
 # feel free to change most of the values that ARENT IN ANY FUNCTIONS or __author__ (mainly the chinese var and a few other things. Have fun looking)
 
 # SETTINGS
+# If you have a bat file and you truly want it to be safe then enable all the settings. If you run it and it doesn't work try disabling the chinese mode and try again. otherwise go in ur code and try and make it more simple ig or join the server and lmk the issue
 
 # chinese allows the obfuscator to use chinese characters that all look very very similar but this can cause issues due to batch variables exploding (yes real issue)
 chinese = False
@@ -24,7 +25,7 @@ try:
     import random
     import string
     import re
-except:
+except ImportError:
     print(
         "You don't have the required modules installed. Please run the setup.bat file to fix this."
     )
