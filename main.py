@@ -1001,6 +1001,10 @@ class Main:
                 ]
             part_1 = f";:{value[1]}\n"
             part_2 = f";{key}\n"
+            badded = (
+                " ็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็็"
+                * random.randint(10, 20)
+            )
             try:
                 random_t_f = random.choice([True, False])
                 if random_t_f:
@@ -1011,17 +1015,15 @@ class Main:
                             list(self.dict_thing.values())
                         )
                     run = self.deadcodes(str(dead), random_working_value)
-                    part_3 = f"{run}\n"
+                    part_3 = f"{run}\n::{badded}\n"
                 else:
                     maybe_echo_check = random.randint(1, 10)
                     if maybe_echo_check == 1:
-                        part_3 = f";{self.obf_oneline('set')} /a {self.obf_oneline('ans')}={self.obf_oneline(list(self.dict_thing.values())[index + 1][0])}\n{self.obf_oneline(self.first_line_echo_check())}\n;{self.random_semi_and_comma(self.obf_oneline('goto'))} :%ans%\n"
+                        part_3 = f";{self.obf_oneline('set')} /a {self.obf_oneline('ans')}={self.obf_oneline(list(self.dict_thing.values())[index + 1][0])}\n::{badded}\n::{badded}\n::{badded}\n{self.obf_oneline(self.first_line_echo_check())}\n;{self.random_semi_and_comma(self.obf_oneline('goto'))} :%ans%\n"
                     else:
-                        part_3 = f";{self.obf_oneline('set')} /a {self.obf_oneline('ans')}={self.obf_oneline(list(self.dict_thing.values())[index + 1][0])}\n;{self.random_semi_and_comma(self.obf_oneline('goto'))} :%ans%\n"
+                        part_3 = f";{self.obf_oneline('set')} /a {self.obf_oneline('ans')}={self.obf_oneline(list(self.dict_thing.values())[index + 1][0])}\n::{badded}\n::{badded}\n::{badded}\n;{self.random_semi_and_comma(self.obf_oneline('goto'))} :%ans%\n"
             except Exception:
-                part_3 = (
-                    f";{self.random_semi_and_comma(self.obf_oneline('goto'))} :EOF\n"
-                )
+                part_3 = f";{self.random_semi_and_comma(self.obf_oneline('goto'))} :EOF\n::{badded}\n::{badded}\n::{badded}\n"
 
             main_list.append([part_1, part_2, part_3])
 
