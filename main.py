@@ -1,5 +1,6 @@
 import time
 import os
+from tkinter import filedialog as kdot2
 
 # feel free to change most of the values that ARENT IN ANY FUNCTIONS or __author__ (mainly the chinese var and a few other things. Have fun looking)
 
@@ -7,14 +8,14 @@ import os
 # If you have a bat file and you truly want it to be safe then enable all the settings. If you run it and it doesn't work try disabling the chinese mode and try again. otherwise go in ur code and try and make it more simple ig or join the server and lmk the issue
 
 # chinese allows the obfuscator to use chinese characters that all look very very similar but this can cause issues due to batch variables exploding (yes real issue)
-chinese = True
+chinese = False
 
 # pogdog_fun basically makes the code unreadable (literially) but it makes the file big asf and also tanks performance
 # Another cool thing is that when u enable this with ultimate mode the user can't edit the file in notepad++ or text editor lmao
-pogdog_fun = True
+pogdog_fun = False
 
 # hell mode it basically a slightly better version of pogdog_fun cause it won't make the file 14kb and just 1.4kb
-hell = True
+hell = False
 
 # inserts eicar string so if it's deobfuscated it'll be deleted by antivirus
 eicar = True
@@ -23,6 +24,7 @@ try:
     from rich.progress import Progress, track
     from zipfile import ZipFile
     from random import randint
+    from ctypes import windll
     from pystyle import *
     import colorama
     import requests
@@ -37,6 +39,8 @@ except ImportError:
     os._exit(1)
 
 colorama.deinit()
+
+windll.shcore.SetProcessDpiAwareness(1)
 
 __author__ = "K.Dot#4044 and Godfather"
 
@@ -164,8 +168,9 @@ class Main:
         # This is so the fud mode doesn't show the first time it's ran
         self.down = False
         self.rep_num = 0
-        self.file = Write.Input(
-            "File to obfuscate (drag in or type) -> ", Colors.green, interval=0.05
+        self.file = kdot2.askopenfilename(
+            title="Select a file to obfuscate",
+            filetypes=(("Batch files", "*.bat"), ("All files", "*.*")),
         )
         if os.path.exists(self.file):
             print(Colorate.Vertical(Colors.purple_to_blue, options, 2))
