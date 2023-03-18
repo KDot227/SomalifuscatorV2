@@ -2,3 +2,4 @@ pystyle
 requests
 rich
 colorama
+customtkinter
