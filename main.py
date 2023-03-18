@@ -31,9 +31,10 @@ try:
     import random
     import string
     import re
-except ImportError:
+except Exception as e:
     print(
-        "You don't have the required modules installed. Please run the setup.bat file to fix this."
+        e
+        + "\nYou don't have the required modules installed. Please run the setup.bat file to fix this."
     )
     time.sleep(5)
     os._exit(1)
@@ -168,6 +169,9 @@ class Main:
         # This is so the fud mode doesn't show the first time it's ran
         self.down = False
         self.rep_num = 0
+        print(
+            Colorate.Vertical(Colors.purple_to_blue, "Pick your file to obfuscate", 2)
+        )
         self.file = kdot2.askopenfilename(
             title="Select a file to obfuscate",
             filetypes=(("Batch files", "*.bat"), ("All files", "*.*")),
