@@ -760,7 +760,11 @@ class Main:
                         continue
                     else:
                         if random_bool == True:
-                            f.write(";")
+                            symbols = [";", ",", " ", "     "]
+                            random_symbols = "".join(
+                                random.choice(symbols) for _ in range(randint(3, 7))
+                            )
+                            f.write(random_symbols)
                         for word in line.split():
                             if word.startswith("%") or word.startswith("!"):
                                 f.write(word + " ")
@@ -1120,6 +1124,7 @@ class Main:
             ";::Made by K.Dot and Godfather\n",
             ";::Good luck deobfuscating\n",
             ";::Made with Somalifuscator\n",
+            ";::discord.gg/batch\n",
         ]
         for i in range(len(main_list)):
             if i == 0:
