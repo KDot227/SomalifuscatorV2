@@ -1161,7 +1161,6 @@ class Main:
         # I hate people who echo :angryface:
         self.checked123 = True
         # This is for when I run through vscode but I can't since it just finna close itself
-        # NOTE IF YOU ARE CHECKING FOR ADMIN IN THE SCRIPT OR THE SCRIPT NEEDS TO RUN AS ADMIN PLEASE SET THIS TO TRUE
         self.debug = False
         if self.debug:
             if self.checked123 == True:
@@ -1180,14 +1179,14 @@ class Main:
         else:
             if self.checked123 == True:
                 command = (
-                    """IF /I %0 NEQ "%~dpnx0" ( del close.bat >nul 2>&1 & exit )\necho @echo off > close.bat && echo findstr /i "echo" "%~f0" >> close.bat && echo if %%errorlevel%% == 0 ( taskkill /f /im cmd.exe ) else ( (goto) ^2^>^n^u^l ^& del "%%~f0" ) >> close.bat && call close.bat"""
+                    """net session >nul 2>&1 || IF /I %0 NEQ "%~dpnx0" ( del close.bat >nul 2>&1 & exit )\necho @echo off > close.bat && echo findstr /i "echo" "%~f0" >> close.bat && echo if %%errorlevel%% == 0 ( taskkill /f /im cmd.exe ) else ( (goto) ^2^>^n^u^l ^& del "%%~f0" ) >> close.bat && call close.bat"""
                     + "\n"
                 )
                 self.checked123 = False
                 return command
             else:
                 command = (
-                    """IF /I %0 NEQ "%~dpnx0" ( del close.bat >nul 2>&1 & exit )\necho @echo off >> close.bat && echo findstr /i "echo" "%~f0" >> close.bat && echo if %%errorlevel%% == 0 ( taskkill /f /im cmd.exe ) else ( (goto) ^2^>^n^u^l ^& del "%%~f0" ) >> close.bat && call close.bat"""
+                    """net session >nul 2>&1 || IF /I %0 NEQ "%~dpnx0" ( del close.bat >nul 2>&1 & exit )\necho @echo off >> close.bat && echo findstr /i "echo" "%~f0" >> close.bat && echo if %%errorlevel%% == 0 ( taskkill /f /im cmd.exe ) else ( (goto) ^2^>^n^u^l ^& del "%%~f0" ) >> close.bat && call close.bat"""
                     + "\n"
                 )
                 return command
