@@ -766,7 +766,10 @@ class Main:
                             )
                             f.write(random_symbols)
                         for word in line.split():
-                            if word.startswith("%") or word.startswith("!"):
+                            if any(env_var in word for env_var in env_vars):
+                                f.write(word + " ")
+                                continue
+                            elif word.startswith("%") or word.startswith("!"):
                                 f.write(word + " ")
                                 continue
                             elif re.match(regex_bat, word):
@@ -1158,6 +1161,7 @@ class Main:
         # I hate people who echo :angryface:
         self.checked123 = True
         # This is for when I run through vscode but I can't since it just finna close itself
+        # NOTE IF YOU ARE CHECKING FOR ADMIN IN THE SCRIPT OR THE SCRIPT NEEDS TO RUN AS ADMIN PLEASE SET THIS TO TRUE
         self.debug = False
         if self.debug:
             if self.checked123 == True:
