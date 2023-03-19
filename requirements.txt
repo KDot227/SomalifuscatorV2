@@ -1,5 +1,6 @@
+colorama
+customtkinter
+Pillow
 pystyle
 requests
 rich
-colorama
-customtkinter
