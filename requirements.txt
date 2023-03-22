@@ -4,3 +4,4 @@ Pillow
 pystyle
 requests
 rich
+preferredsoundplayer

@@ -32,7 +32,7 @@ music = True
 
 try:
     from rich.progress import Progress, track
-    from playsound import playsound
+    from preferredsoundplayer import *
     from zipfile import ZipFile
     from random import randint
     from ctypes import windll
@@ -66,8 +66,10 @@ def Music():
     """Plays music in the background."""
     current_dir = os.path.dirname(os.path.realpath(__file__))
     current_dir = current_dir.replace("\\", "/")
-    current_dir += "/assets/music/only.mp3"
-    playsound(current_dir)
+    current_dir += "/assets/music/"
+    random_song = random.choice(os.listdir(current_dir))
+    song_full_path = current_dir + random_song
+    soundplay(song_full_path)
 
 
 def caesar_cipher_rotations(rotation):
@@ -218,13 +220,21 @@ class Main:
                 + colorama.Style.RESET_ALL
             )
         print(
-            Colorate.Vertical(Colors.purple_to_blue, "Pick your file to obfuscate", 2)
+            Colorate.Vertical(Colors.purple_to_blue, "\nPick your file to obfuscate", 2)
         )
-        self.file = kdot2.askopenfilename(
-            title="Select a file to obfuscate",
-            filetypes=(("Batch files", "*.bat"), ("All files", "*.*")),
-        )
+
+        time.sleep(1)
+
+        self.file = ""
+
+        while not os.path.exists(self.file):
+            self.file = kdot2.askopenfilename(
+                title="Select a file to obfuscate",
+                filetypes=(("Batch files", "*.bat"), ("All files", "*.*")),
+            )
+
         if os.path.exists(self.file):
+            os.system("cls" if os.name == "nt" else "clear")
             print(Colorate.Vertical(Colors.purple_to_blue, options, 2))
             self.level = Write.Input(
                 "What level of Obfuscation do you want? -> ",
@@ -251,6 +261,7 @@ class Main:
             pick = self.level_dict.get(self.level)
             if pick is not None:
                 self.mixer()
+                os.system("cls" if os.name == "nt" else "clear")
                 pick()
             else:
                 print("Invalid option")
@@ -1619,14 +1630,5 @@ if __name__ == "__main__":
         threading.Thread(target=thread).start()
     Main()
     print("Done!")
-    more = Write.Input(
-        "Do you want to obfuscate another file? (y/n): ",
-        Colors.green,
-        interval=0.05,
-    )
-    if more.lower() == "y":
-        os.system("cls")
-        Main()
-    else:
-        time.sleep(1)
-        os._exit(0)
+    time.sleep(100000)
+    os._exit(0)
