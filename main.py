@@ -8,23 +8,23 @@ from tkinter import filedialog as kdot2
 # If you have a bat file and you truly want it to be safe then enable all the settings. If you run it and it doesn't work try disabling the chinese mode and try again. otherwise go in ur code and try and make it more simple ig or join the server and lmk the issue
 
 # chinese allows the obfuscator to use chinese characters that all look very very similar but this can cause issues due to batch variables exploding (yes real issue)
-chinese = False
+chinese = True
 
 # pogdog_fun basically makes the code unreadable (literially) but it makes the file big asf and also tanks performance
 # Another cool thing is that when u enable this with ultimate mode the user can't edit the file in notepad++ or text editor lmao
-pogdog_fun = False
+pogdog_fun = True
 
 # hell mode it basically a slightly better version of pogdog_fun cause it won't make the file 14kb and just 1.4kb
-hell = False
+hell = True
 
 # inserts eicar string so if it's deobfuscated it'll be deleted by antivirus
-eicar = False
+eicar = True
 
 # can cause encoding errors in some modes when combining
-unicode = False
+unicode = True
 
 # utf-16 BOM basically makes all the code look chinese
-utf_16_bom = False
+utf_16_bom = True
 
 try:
     from rich.progress import Progress, track
