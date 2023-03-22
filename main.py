@@ -246,6 +246,10 @@ class Main:
         return stringed
 
     @staticmethod
+    def random_capitalization(string):
+        return "".join(random.choice([char.upper(), char.lower()]) for char in string)
+
+    @staticmethod
     def make_random_label_no_working():
         # 911 lol
         length = random.choice([9, 11])
@@ -788,7 +792,7 @@ class Main:
                                 f.write(word + " ")
                                 continue
                             elif word.startswith("%") or word.startswith("!"):
-                                f.write(word + " ")
+                                f.write(self.random_capitalization(word) + " ")
                                 continue
                             elif re.match(regex_bat, word):
                                 # regex be my bae
@@ -868,26 +872,27 @@ class Main:
         program_1 = r"C:\Program Files"
         program_2 = r"C:\Program Files (x86)"
         psmodule_path = r"%ProgramFiles%\WindowsPowerShell\Modules;C:\WINDOWS\system32\WindowsPowerShell\v1.0\Modules"
-        # who_even_knows = r"C:\Windows\apppatch\Custom\Custom64"
+        driver_stuff = r"C:\Windows\System32\Drivers\DriverData"
+        comspec = r"C:\WINDOWS\system32\cmd.exe"
         if char in program_1:
-            return f"%programfiles:~{program_1.index(char)},1%"
+            return f"%{self.random_capitalization('programfiles')}:~{program_1.index(char)},1%"
         elif char in program_2:
-            return f"%programfiles(x86):~{program_2.index(char)},1%"
-        # elif char in who_even_knows:
-        #    return (
-        #        f"%windir%\\apppatch\\Custom\\Custom64:~{who_even_knows.index(char)},1%"
-        #    )
+            return f"%{self.random_capitalization('programfiles(x86)')}:~{program_2.index(char)},1%"
         elif char in public:
-            return f"%public:~{public.index(char)},1%"
+            return f"%{self.random_capitalization('public')}:~{public.index(char)},1%"
         elif char in weird:
-            return f"%CommonProgramFiles(x86):~{weird.index(char)},1%"
+            return f"%{self.random_capitalization('CommonProgramFiles(x86)')}:~{weird.index(char)},1%"
         elif char in psmodule_path:
             new = psmodule_path.index(char)
             # Why do we have to add 2? I have no fucking idea lmao
-            return f"%PSModulePath:~{new + 2},1%"
+            return f"%{self.random_capitalization('PSModulePath')}:~{new + 2},1%"
+        elif char in driver_stuff:
+            return f"%{self.random_capitalization('DriverData')}:~{driver_stuff.index(char)},1%"
+        elif char in comspec:
+            return f"%{self.random_capitalization('comspec')}:~{comspec.index(char)},1%"
         else:
             if char in string.ascii_letters:
-                var = f"%KDOT:~{random_order.index(char)},1%"
+                var = f"%{self.random_capitalization('KDOT')}:~{random_order.index(char)},1%"
                 return var
             else:
                 return char
