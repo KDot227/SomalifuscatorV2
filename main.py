@@ -1,5 +1,6 @@
 import time
 import os
+import threading
 from tkinter import filedialog as kdot2
 
 # feel free to change most of the values that ARENT IN ANY FUNCTIONS or __author__ (mainly the chinese var and a few other things. Have fun looking)
@@ -26,8 +27,12 @@ unicode = True
 # utf-16 BOM basically makes all the code look chinese
 utf_16_bom = True
 
+# set to False if you don't want any music
+music = True
+
 try:
     from rich.progress import Progress, track
+    from playsound import playsound
     from zipfile import ZipFile
     from random import randint
     from ctypes import windll
@@ -55,6 +60,14 @@ windll.shcore.SetProcessDpiAwareness(1)
 __author__ = "K.Dot#4044 and Godfather"
 
 cesar_val = randint(1, 13)
+
+
+def Music():
+    """Plays music in the background."""
+    current_dir = os.path.dirname(os.path.realpath(__file__))
+    current_dir = current_dir.replace("\\", "/")
+    current_dir += "/assets/music/only.mp3"
+    playsound(current_dir)
 
 
 def caesar_cipher_rotations(rotation):
@@ -135,6 +148,16 @@ options = (
     + "\n\n"
 )
 
+settings = [
+    f"Chinese = {chinese}",
+    f"Pogdog = {pogdog_fun}",
+    f"Hell = {hell}",
+    f"Eicar = {eicar}",
+    f"Unicode = {unicode}",
+    f"UTF-16-BOM = {utf_16_bom}",
+    f"Music = {music}",
+]
+
 
 class AutoUpdate:
     def __init__(self):
@@ -178,6 +201,22 @@ class Main:
         # This is so the fud mode doesn't show the first time it's ran
         self.down = False
         self.rep_num = 0
+        for setting in settings:
+            setting_name, setting_value = setting.split("=")
+            setting_name = setting_name.strip()
+            setting_value = setting_value.strip()
+            if setting_value == "True":
+                value_color = colorama.Fore.GREEN
+            else:
+                value_color = colorama.Fore.RED
+            print(
+                colorama.Fore.BLUE
+                + setting_name
+                + " = "
+                + value_color
+                + setting_value
+                + colorama.Style.RESET_ALL
+            )
         print(
             Colorate.Vertical(Colors.purple_to_blue, "Pick your file to obfuscate", 2)
         )
@@ -1575,7 +1614,9 @@ oStream.Close();
 
 
 if __name__ == "__main__":
-    AutoUpdate()
+    threads = [AutoUpdate, Music]
+    for thread in threads:
+        threading.Thread(target=thread).start()
     Main()
     print("Done!")
     more = Write.Input(
