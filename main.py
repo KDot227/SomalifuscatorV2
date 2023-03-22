@@ -2,33 +2,21 @@ import time
 import os
 import threading
 from tkinter import filedialog as kdot2
+import json
 
-# feel free to change most of the values that ARENT IN ANY FUNCTIONS or __author__ (mainly the chinese var and a few other things. Have fun looking)
+current_dir = os.path.dirname(os.path.realpath(__file__))
+settings_path = current_dir + "/settings.json"
 
-# SETTINGS
-# If you have a bat file and you truly want it to be safe then enable all the settings. If you run it and it doesn't work try disabling the chinese mode and try again. otherwise go in ur code and try and make it more simple ig or join the server and lmk the issue
+with open(settings_path, "r") as f:
+    settings = json.load(f)
 
-# chinese allows the obfuscator to use chinese characters that all look very very similar but this can cause issues due to batch variables exploding (yes real issue)
-chinese = True
-
-# pogdog_fun basically makes the code unreadable (literially) but it makes the file big asf and also tanks performance
-# Another cool thing is that when u enable this with ultimate mode the user can't edit the file in notepad++ or text editor lmao
-pogdog_fun = True
-
-# hell mode it basically a slightly better version of pogdog_fun cause it won't make the file 14kb and just 1.4kb
-hell = True
-
-# inserts eicar string so if it's deobfuscated it'll be deleted by antivirus
-eicar = True
-
-# can cause encoding errors in some modes when combining
-unicode = True
-
-# utf-16 BOM basically makes all the code look chinese
-utf_16_bom = True
-
-# set to False if you don't want any music
-music = True
+chinese = settings["chinese"]
+pogdog_fun = settings["pogdog"]
+hell = settings["hell"]
+eicar = settings["eicar"]
+unicode = settings["unicode"]
+utf_16_bom = settings["utf_16_bom"]
+music = settings["music"]
 
 try:
     from rich.progress import Progress, track
