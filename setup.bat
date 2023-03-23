@@ -2,3 +2,4 @@
 color 0a
 python -m pip install -r requirements.txt
 python -m main
+exit /b 0

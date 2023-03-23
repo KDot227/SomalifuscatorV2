@@ -33,7 +33,7 @@ try:
 except Exception as e:
     print(
         e
-        + "\nYou don't have the required modules installed. Please run the setup.bat file to fix this."
+        + "\nYou don't have the required modules installed. Please run the setup.bat file to fix this. If that doesn't work that means the requirements were updated. If this is the case please redownload the setup.bat from the github"
     )
     time.sleep(5)
     os._exit(1)
@@ -115,8 +115,7 @@ banner = Center.XCenter(
 )
 
 options = (
-    r"""
-[1] Level 1 (Recommended to use AFTER 2) (Rot-x method)
+    r"""[1] Level 1 (Recommended to use AFTER 2) (Rot-x method)
 [2] Level 2 (More Variable replacement)
 [3] Level 3 (Encoding trick by changing first 2 bytes)
 [4] Level 4 (NOTE: Don't end your files with exit when its done with this command or it might break. (same with pause))
@@ -133,7 +132,7 @@ options = (
 [COMING SOON] [exe3] Third method for Bat2Exe (100% fud)
 [ONELINE] I did it
 
-[?] (If you want to use built in variables such as %~dp0 etc wrap them in percent signes then run the clean mode afterwards.)
+[?] (If you want to use built in variables such as %~dp0 etc wrap them in percent signes then run the clean mode afterwards. You DONT have to do this if your using ultimate)
 """
     + "\n\n"
 )
