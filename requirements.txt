@@ -4,4 +4,4 @@ Pillow
 pystyle
 requests
 rich
-preferredsoundplayer
+pygame

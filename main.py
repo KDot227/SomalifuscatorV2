@@ -20,10 +20,10 @@ music = settings["music"]
 
 try:
     from rich.progress import Progress, track
-    from preferredsoundplayer import *
     from zipfile import ZipFile
     from random import randint
     from ctypes import windll
+    from pygame import mixer
     from pystyle import *
     import colorama
     import requests
@@ -53,11 +53,16 @@ cesar_val = randint(1, 13)
 def Music():
     """Plays music in the background."""
     current_dir = os.path.dirname(os.path.realpath(__file__))
-    current_dir = current_dir.replace("\\", "/")
-    current_dir += "/assets/music/"
-    random_song = random.choice(os.listdir(current_dir))
-    song_full_path = current_dir + random_song
-    soundplay(song_full_path)
+    song_dir = current_dir + "/assets/music/"
+    random_song = random.choice(os.listdir(song_dir))
+
+    song = song_dir + random_song
+
+    mixer.init()
+    mixer.music.load(song)
+    mixer.music.play()
+    while mixer.music.get_busy():
+        pass
 
 
 def caesar_cipher_rotations(rotation):
@@ -210,6 +215,7 @@ class Main:
             Colorate.Vertical(Colors.purple_to_blue, "\nPick your file to obfuscate", 2)
         )
 
+        # asthetic stuff
         time.sleep(1)
 
         self.file = ""
@@ -268,7 +274,7 @@ class Main:
                 # "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZḆḞԍǏƘԸɌȚЦѠƳȤѧćễļṃŉᵲừŵź☠☢☣卐"
                 "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
             )
-            for i in range(length)
+            for _ in range(length)
         )
         # yes this has happened to me before and echo check terms it
         while "echo" in stringed.lower():
@@ -278,7 +284,7 @@ class Main:
                     # "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZḆḞԍǏƘԸɌȚЦѠƳȤѧćễļṃŉᵲừŵź☠☢☣卐"
                     "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
                 )
-                for i in range(length)
+                for _ in range(length)
             )
         return stringed
 
@@ -290,7 +296,7 @@ class Main:
     def make_random_label_no_working():
         # 911 lol
         length = random.choice([9, 11])
-        return "".join(random.choice(chinese_characters) for i in range(length))
+        return "".join(random.choice(chinese_characters) for _ in range(length))
 
     @staticmethod
     def fake_ceaser_cipher():
