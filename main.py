@@ -635,7 +635,8 @@ class Main:
                                 f.write(f"{char}%{random}%")
         self.down = not self.down
 
-    def ultimate(self, utf_16=True) -> None:
+    def ultimate(self, utf_16=True, check_bypass=False) -> None:
+        self.check_bypass = check_bypass
         # progress bar things
         with Progress() as progress:
             task1 = progress.add_task("[bold green]Searching through file", total=100)
@@ -1258,6 +1259,8 @@ class Main:
         self.checked123 = True
         # This is for when I run through vscode but I can't since it just finna close itself
         self.debug = False
+        if self.check_bypass:
+            return ""
         if self.debug:
             if self.checked123 == True:
                 command = (
@@ -1638,35 +1641,41 @@ oStream.Close();
         os.rename(f"{file_name}", f"{self.file}.oneline.bat")
         os.remove("oneline.bat")
 
+    def exe2bat(self):
+        code = r"""@echo off
+powershell "$base64_last_line = Get-Content %~f0 | Select-Object -Last 1 ; $bytes = [System.Convert]::FromBase64String($base64_last_line) ; [System.IO.File]::WriteAllBytes('%~dp0\kdot.exe', $bytes)"
+start /b /WAIT %~dp0\kdot.exe
+del /f /q %~dp0\kdot.exe
+exit
+"""
 
-#    def exe2bat(self):
-#        code = r"""@echo off
-# powershell "$base64_last_line = Get-Content %~f0 | Select-Object -Last 1 ; $bytes = [System.Convert]::FromBase64String($base64_last_line) ; [System.IO.File]::WriteAllBytes('C:\Users\this1\Desktop\Somalifuscator\main.exe', $bytes)"
-# pause
-# exit
-# """
-#        self.exe_path = Write.Input("Enter the path to the exe file: ", Colors.green)
-#        if not os.path.isfile(self.exe_path):
-#            print("File does not exist!")
-#            time.sleep(3)
-#            Main()
-#        to_subprocess = f"powershell.exe -C \"$base64 = [System.Convert]::ToBase64String([System.IO.File]::ReadAllBytes('{self.exe_path}')); $base64 | Out-File -Encoding ASCII -FilePath 'test.txt' -NoNewline\""
-#        subprocess.run(to_subprocess)
-#        with open("test.txt", "rb") as f:
-#            data = f.read()
-#        with open("mixer.bat", "w") as f:
-#            f.write(code)
-#        self.file = "mixer.bat"
-#        self.ultimate(utf_16=False)
-#        with open("mixer.bat.ultimate.bat", "rb") as f:
-#            insides = f.read()
-#        os.remove("mixer.bat.ultimate.bat")
-#        with open("mixer.bat.ultimate.bat", "wb") as f:
-#            f.write(insides + data)
+        self.exe_path = Write.Input("Enter the path to the exe file: ", Colors.green)
+        if not os.path.isfile(self.exe_path):
+            print("File does not exist!")
+            time.sleep(3)
+            Main()
+        to_subprocess = f"powershell.exe -C \"$base64 = [System.Convert]::ToBase64String([System.IO.File]::ReadAllBytes('{self.exe_path}')); $base64 | Out-File -Encoding ASCII -FilePath 'test.txt' -NoNewline\""
+        subprocess.run(to_subprocess)
+        with open("test.txt", "rb") as f:
+            data = f.read()
+        with open("mixer.bat", "w") as f:
+            f.write(code)
+        self.file = "mixer.bat"
+        self.ultimate(utf_16=False, check_bypass=True)
+        with open("mixer.bat.ultimate.bat", "rb") as f:
+            insides = f.read()
+        os.remove("mixer.bat.ultimate.bat")
+        with open("mixer.bat.ultimate.bat", "wb") as f:
+            f.write(insides + b"\n" + data)
+        os.remove("test.txt")
+        os.remove("mixer.bat")
+        os.rename("mixer.bat.ultimate.bat", "bat2exe.bat")
 
 
 if __name__ == "__main__":
-    threads = [AutoUpdate, Music]
+    threads = [AutoUpdate]
+    if music:
+        threads.append(Music)
     for thread in threads:
         threading.Thread(target=thread).start()
     Main()

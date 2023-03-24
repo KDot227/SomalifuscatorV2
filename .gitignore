@@ -5,5 +5,7 @@ test3.bat
 test4.bat
 test5.bat
 test6.bat
+base64.ps1
+main.exe
 \__pycache__
 *.bak
