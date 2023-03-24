@@ -151,6 +151,7 @@ settings = [
     f"Unicode = {unicode}",
     f"UTF-16-BOM = {utf_16_bom}",
     f"Music = {music}",
+    f"ADS = {ads} (Experimental)",
 ]
 
 
