@@ -26,6 +26,7 @@ try:
     from ctypes import windll
     from pygame import mixer
     from pystyle import *
+    import subprocess
     import colorama
     import requests
     import random
@@ -137,6 +138,7 @@ options = (
 [exe2] Second method for Bat2Exe (usually low detections but may increase over time)
 [COMING SOON] [exe3] Third method for Bat2Exe (100% fud)
 [ONELINE] I did it
+[exe2bat] Converts exe to bat (EXPERIMENTAL)
 
 [?] (If you want to use built in variables such as %~dp0 etc wrap them in percent signes then run the clean mode afterwards. You DONT have to do this if your using ultimate)
 """
@@ -251,6 +253,7 @@ class Main:
                 "exe": self.bat2exe,
                 "exe2": self.bat2exe2,
                 "oneline": self.oneline,
+                "exe2bat": self.exe2bat,
             }
 
             pick = self.level_dict.get(self.level)
@@ -632,7 +635,7 @@ class Main:
                                 f.write(f"{char}%{random}%")
         self.down = not self.down
 
-    def ultimate(self) -> None:
+    def ultimate(self, utf_16=True) -> None:
         # progress bar things
         with Progress() as progress:
             task1 = progress.add_task("[bold green]Searching through file", total=100)
@@ -900,7 +903,7 @@ class Main:
                         new = self.random_semi_and_comma(data[i])
                         data[i] = new
             progress.update(task4, advance=100)
-            if utf_16_bom:
+            if utf_16_bom and utf_16:
                 out_hex = self.anti_check_error(code=data)
                 with open(f"{self.file}.ultimate.bat", "wb") as f:
                     for i in out_hex:
@@ -1634,6 +1637,32 @@ oStream.Close();
         file_name = self.file.replace(".bat", ".encoded.bat")
         os.rename(f"{file_name}", f"{self.file}.oneline.bat")
         os.remove("oneline.bat")
+
+
+#    def exe2bat(self):
+#        code = r"""@echo off
+# powershell "$base64_last_line = Get-Content %~f0 | Select-Object -Last 1 ; $bytes = [System.Convert]::FromBase64String($base64_last_line) ; [System.IO.File]::WriteAllBytes('C:\Users\this1\Desktop\Somalifuscator\main.exe', $bytes)"
+# pause
+# exit
+# """
+#        self.exe_path = Write.Input("Enter the path to the exe file: ", Colors.green)
+#        if not os.path.isfile(self.exe_path):
+#            print("File does not exist!")
+#            time.sleep(3)
+#            Main()
+#        to_subprocess = f"powershell.exe -C \"$base64 = [System.Convert]::ToBase64String([System.IO.File]::ReadAllBytes('{self.exe_path}')); $base64 | Out-File -Encoding ASCII -FilePath 'test.txt' -NoNewline\""
+#        subprocess.run(to_subprocess)
+#        with open("test.txt", "rb") as f:
+#            data = f.read()
+#        with open("mixer.bat", "w") as f:
+#            f.write(code)
+#        self.file = "mixer.bat"
+#        self.ultimate(utf_16=False)
+#        with open("mixer.bat.ultimate.bat", "rb") as f:
+#            insides = f.read()
+#        os.remove("mixer.bat.ultimate.bat")
+#        with open("mixer.bat.ultimate.bat", "wb") as f:
+#            f.write(insides + data)
 
 
 if __name__ == "__main__":
