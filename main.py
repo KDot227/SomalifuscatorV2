@@ -17,6 +17,7 @@ eicar = settings["eicar"]
 unicode = settings["unicode"]
 utf_16_bom = settings["utf_16_bom"]
 music = settings["music"]
+ads = settings["ads"]
 
 try:
     from rich.progress import Progress, track
@@ -799,6 +800,20 @@ class Main:
                 if env_var in data:
                     self.used_env_vars.append(env_var)
 
+            if ads:
+                lines = data.copy()
+                new_lines = []
+
+                for line in lines:
+                    line = line.lower()
+                    if line.startswith("echo") and not line.startswith("echo @"):
+                        new_lines.append(
+                            line
+                            + " > somalifuscator.txt:kdot\nmore < somalifuscator.txt:kdot\n"
+                        )
+
+            data = new_lines
+
             progress.update(task1, advance=100)
             with open(f"{self.file}.ultimate.bat", "a+", encoding="utf-8") as f:
                 f.write("::Made by K.Dot and Godfather\n")
@@ -880,6 +895,9 @@ class Main:
                         data[i] = data[i].replace(
                             "echo", r"%GODFATHER%e%GODFATHER%c%GODFATHER%h%GODFATHER%o"
                         )
+                    if not data[i].startswith(";") or not data[i].startswith("; "):
+                        new = self.random_semi_and_comma(data[i])
+                        data[i] = new
             progress.update(task4, advance=100)
             if utf_16_bom:
                 out_hex = self.anti_check_error(code=data)
