@@ -31,6 +31,8 @@ Clone repo or download as zip (Then extract repo from zip (Yes people don't do t
 Run setup.bat\
 Have fun obfuscating!
 
+Note: You can use the gui version if you want but it's missing a lot of features that the normal version has.
+
 <h3 align="center">
   BUILT IN VARIABLES HAVE A FIX!!!
 </h3>
@@ -94,7 +96,7 @@ No image provided
 ![all levels (looks the same as level 3 but has levels 2 and 1 also applied)](https://i.imgur.com/g2vvIwo.jpeg)
 
 <h2 align="center">
-  The "Ultimate" Batch Obfuscation (note it looks a lot lot worse with notepad due to left right unicode.
+  The "Ultimate" Batch Obfuscation (You can't open it in notepad or notepad++ or else it crashes)
 </h2>
 
 ![Ultimate Mode](https://i.imgur.com/flte4s3.jpeg)
