@@ -1330,7 +1330,7 @@ cd /d "%~dp0"
 
 echo K.Dot up
 
-powershell -ep Bypass -Command "IEX $([System.IO.File]::ReadAllText('{%~f0}'))"
+powershell.exe -ep Bypass -Command "IEX $([System.IO.File]::ReadAllText('%~f0'))"
 goto :eof
 """
         ps1_file_location = Write.Input(
@@ -1352,7 +1352,7 @@ goto :eof
             with open("place_holder.bat", "w", encoding="utf-8") as f:
                 f.write(starting_code_to_obf)
                 self.file = "place_holder.bat"
-            self.ultimate()
+            self.ultimate(utf_16=False, check_bypass=True)
             os.remove("place_holder.bat")
             os.rename("place_holder.bat.ultimate.bat", "embed.bat")
             with open("embed.bat", "r+", encoding="utf-8") as f:
