@@ -813,11 +813,16 @@ class Main:
                     line = line.lower()
                     if line.startswith("echo") and not line.startswith("echo @"):
                         new_lines.append(
-                            line
+                            line.strip()
                             + " > somalifuscator.txt:kdot\nmore < somalifuscator.txt:kdot\n"
                         )
+                    else:
+                        new_lines.append(line)
 
             data = new_lines
+
+            with open("debug.bat", "w", encoding="utf-8") as f:
+                f.writelines(data)
 
             progress.update(task1, advance=100)
             with open(f"{self.file}.ultimate.bat", "a+", encoding="utf-8") as f:
