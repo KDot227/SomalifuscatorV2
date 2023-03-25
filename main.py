@@ -1,3 +1,5 @@
+# yo! if your reading this smd!
+
 import time
 import os
 import threading
@@ -6,7 +8,15 @@ from tkinter import Tk
 import json
 
 # hide the tkinter window
-Tk().withdraw()
+root = Tk()
+root.withdraw()
+
+root.overrideredirect(True)
+root.geometry("0x0+0+0")
+
+root.deiconify()
+root.lift()
+root.focus_force()
 
 current_dir = os.path.dirname(os.path.realpath(__file__))
 settings_path = current_dir + "/settings.json"
@@ -240,6 +250,8 @@ class Main:
                 title="Select a file to obfuscate",
                 filetypes=(("Batch files", "*.bat"), ("All files", "*.*")),
             )
+
+        root.destroy()
 
         if os.path.exists(self.file):
             os.system("cls" if os.name == "nt" else "clear")
