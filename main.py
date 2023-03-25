@@ -821,9 +821,6 @@ class Main:
 
             data = new_lines
 
-            with open("debug.bat", "w", encoding="utf-8") as f:
-                f.writelines(data)
-
             progress.update(task1, advance=100)
             with open(f"{self.file}.ultimate.bat", "a+", encoding="utf-8") as f:
                 f.write("::Made by K.Dot and Godfather\n")
