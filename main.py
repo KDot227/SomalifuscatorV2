@@ -282,8 +282,8 @@ class Main:
             Main()
 
     @staticmethod
-    def make_random_string():
-        length = randint(5, 7)
+    def make_random_string(length_nums=(5, 7)):
+        length = random.randint(*length_nums)
         stringed = "".join(
             random.choice(
                 # Batch has a specific issue with characters that aren't in the normal ASCII table cause if u got them in a variable it will make the variable explode. I fixed this before by changing the chcp to 65001 but sometimes that wouldn't fix things
@@ -676,6 +676,8 @@ class Main:
             # This took way longer than it should have
             # Basically the entire point of it is to turn multiline commands that could be oneline into just oneline commands. I'm guessing this will break for anything larger than like 30 lines. If that's the cause then do if not stuff
 
+            # basic parsing of the file and changing things that need to be changed
+
             new_lines = []
             i = 0
             while i < len(data):
@@ -705,7 +707,21 @@ class Main:
                     new_lines.append(line + "\n")
                 i += 1
 
-            data = new_lines
+            checked_labels = {}
+
+            for index, line in enumerate(data):
+                if line.startswith(":") and not line.startswith("::"):
+                    label_name = line.split(":")[1]
+                    random_string = self.make_random_string((8, 9))
+                    checked_labels[label_name] = random_string
+
+            for label_name, new_label_name in checked_labels.items():
+                for index, line in enumerate(data):
+                    if line.startswith(":") and not line.startswith("::"):
+                        if line.split(":")[1] == label_name:
+                            data[index] = f":{new_label_name}\n"
+                    else:
+                        data[index] = line.replace(label_name, new_label_name + "\n")
 
             if debug:
                 with open("debug1.bat", "w", encoding="utf-8") as f:
