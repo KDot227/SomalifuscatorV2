@@ -6,7 +6,7 @@ goto :start2
 goto :start3
 
 :start2
-goto :start1
+if %cd% == %cd% goto :start1
 
 :start3
 echo worked!
