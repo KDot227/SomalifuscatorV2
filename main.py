@@ -23,6 +23,13 @@ utf_16_bom = settings["utf_16_bom"]
 music = settings["music"]
 ads = settings["ads"]
 
+global debug
+debug = False
+
+if debug:
+    print("For best debugging experiences, turn off all settings")
+    time.sleep(3)
+
 try:
     from rich.progress import Progress, track
     from zipfile import ZipFile
@@ -641,6 +648,9 @@ class Main:
 
     def ultimate(self, utf_16=True, check_bypass=False) -> None:
         self.check_bypass = check_bypass
+        if debug:
+            self.check_bypass = True
+            utf_16 = False
         # progress bar things
         with Progress() as progress:
             task1 = progress.add_task("[bold green]Searching through file", total=100)
@@ -696,6 +706,10 @@ class Main:
                 i += 1
 
             data = new_lines
+
+            if debug:
+                with open("debug1.bat", "w", encoding="utf-8") as f:
+                    f.writelines(data)
 
             env_vars = [
                 r"%ALLUSERSPROFILE%",
@@ -891,6 +905,9 @@ class Main:
             # ignore everything below this until the function ends I could have made this 100x better but I'm lazy
             with open(f"{self.file}.ultimate.bat", "r", encoding="utf-8") as f:
                 news = f.readlines()
+            if debug:
+                with open("debug2.bat", "w", encoding="utf-8") as f:
+                    f.writelines(news)
             news.insert(2, self.obf_oneline(self.first_line_echo_check()))
             messed_up = self.scrambler(news)
             progress.update(task2, advance=100)
@@ -898,6 +915,11 @@ class Main:
                 for array in messed_up:
                     for thing in array:
                         f.write(thing.strip() + "\n")
+            if debug:
+                with open("debug3.bat", "w", encoding="utf-8") as f:
+                    for array in messed_up:
+                        for thing in array:
+                            f.write(thing.strip() + "\n")
             progress.update(task3, advance=100)
             with open(f"{self.file}.ultimate.bat", "r", encoding="utf-8") as f:
                 data = f.readlines()
@@ -909,6 +931,9 @@ class Main:
                     if not data[i].startswith(";") or not data[i].startswith("; "):
                         new = self.random_semi_and_comma(data[i])
                         data[i] = new
+            if debug:
+                with open("debug4.bat", "w", encoding="utf-8") as f:
+                    f.writelines(data)
             progress.update(task4, advance=100)
             if utf_16_bom and utf_16:
                 out_hex = self.anti_check_error(code=data)
