@@ -1326,7 +1326,7 @@ goto :eof
 #>"""
         starting_code_to_obf = """@echo off
 setlocal
-cd /d "{%~dp0}"
+cd /d "%~dp0"
 
 echo K.Dot up
 
@@ -1680,5 +1680,5 @@ if __name__ == "__main__":
         threading.Thread(target=thread).start()
     Main()
     print("Done!")
-    time.sleep(100000)
+    input()
     os._exit(0)
