@@ -2,7 +2,11 @@ import time
 import os
 import threading
 from tkinter import filedialog as kdot2
+from tkinter import Tk
 import json
+
+# hide the tkinter window
+Tk().withdraw()
 
 current_dir = os.path.dirname(os.path.realpath(__file__))
 settings_path = current_dir + "/settings.json"
