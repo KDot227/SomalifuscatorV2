@@ -198,11 +198,11 @@ class AutoUpdate:
         if not self.bypass:
             print("Checking for updates...")
             code = requests.get(self.code, timeout=10).text
-            with open(__file__, "r", encoding="utf-8") as f:
+            with open(__file__, "r", encoding="utf-8", errors="ignore") as f:
                 main_code = f.read()
             if code != main_code:
                 print("Updating...")
-                with open(__file__, "w", encoding="utf-8") as f:
+                with open(__file__, "w", encoding="utf-8", errors="ignore") as f:
                     f.write(code)
                 os.startfile(__file__)
                 os._exit(0)
@@ -434,7 +434,7 @@ class Main:
             f.write(code)
         self.file = "mixer.bat"
         self.fud()
-        with open("mixer.bat.fud.bat", "r", encoding="utf-8") as f:
+        with open("mixer.bat.fud.bat", "r", encoding="utf-8", errors="ignore") as f:
             self.code_new = f.read()
         os.remove("mixer.bat")
         os.remove("mixer.bat.fud.bat")
@@ -447,9 +447,11 @@ class Main:
             os.remove(f"{self.file}.level1.bat")
         except:
             pass
-        with open(self.file, "r", encoding="utf-8") as f:
+        with open(self.file, "r", encoding="utf-8", errors="ignore") as f:
             data = f.readlines()
-        with open(f"{self.file}.level1.bat", "a+", encoding="utf-8") as f:
+        with open(
+            f"{self.file}.level1.bat", "a+", encoding="utf-8", errors="ignore"
+        ) as f:
             f.write(self.code_new)
             for line in track(
                 data, description="[bold green]Obfuscating", total=len(data)
@@ -500,9 +502,11 @@ class Main:
             os.remove(f"{self.file}.level2.bat")
         except:
             pass
-        with open(self.file, "r", encoding="utf-8") as f:
+        with open(self.file, "r", encoding="utf-8", errors="ignore") as f:
             data = f.readlines()
-        with open(f"{self.file}.level2.bat", "a+", encoding="utf-8") as f:
+        with open(
+            f"{self.file}.level2.bat", "a+", encoding="utf-8", errors="ignore"
+        ) as f:
             f.write(f"set KDOT={random_order}\nchcp 65001 > nul\n")
             for line in track(
                 data, description="[bold green]Obfuscating", total=len(data)
@@ -552,9 +556,11 @@ class Main:
                 f.write(bytes.fromhex(i))
 
     def clean(self):
-        with open(self.file, "r", encoding="utf-8") as f:
+        with open(self.file, "r", encoding="utf-8", errors="ignore") as f:
             contents = f.read()
-        with open(f"{self.file}.cleaned.bat", "a+", encoding="utf-8") as f:
+        with open(
+            f"{self.file}.cleaned.bat", "a+", encoding="utf-8", errors="ignore"
+        ) as f:
             # if there are any others that people use please make a pr and add them.
             batch_vars = [
                 "%~dp0",
@@ -600,9 +606,9 @@ class Main:
             os.remove(f"{self.file}.fud.bat")
         except:
             pass
-        with open(self.file, "r", encoding="utf-8") as f:
+        with open(self.file, "r", encoding="utf-8", errors="ignore") as f:
             data = f.readlines()
-        with open(f"{self.file}.fud.bat", "a+", encoding="utf-8") as f:
+        with open(f"{self.file}.fud.bat", "a+", encoding="utf-8", errors="ignore") as f:
             f.write("::Made by K.Dot and Godfather\n")
             # this is so I don't have to see the status bar when using mixer
             if self.down == False:
@@ -683,7 +689,7 @@ class Main:
             # cool thing
             # mshta vbscript:execute("CreateObject(""Scripting.FileSystemObject"").GetStandardStream(1).Write(Chr(89) & Chr(111)& Chr(117) & Chr(114) & Chr(32) & Chr(109) & Chr(97) & Chr(109) & Chr(97) & Chr(32) ):Close")|more
             # ultimate mode
-            with open(self.file, "r", encoding="utf-8") as f:
+            with open(self.file, "r", encoding="utf-8", errors="ignore") as f:
                 data = f.readlines()
 
             # This took way longer than it should have
@@ -737,7 +743,7 @@ class Main:
                         data[index] = line.replace(label_name, new_label_name + "\n")
 
             if debug:
-                with open("debug1.bat", "w", encoding="utf-8") as f:
+                with open("debug1.bat", "w", encoding="utf-8", errors="ignore") as f:
                     f.writelines(data)
 
             env_vars = [
@@ -869,7 +875,9 @@ class Main:
             data = new_lines
 
             progress.update(task1, advance=100)
-            with open(f"{self.file}.ultimate.bat", "a+", encoding="utf-8") as f:
+            with open(
+                f"{self.file}.ultimate.bat", "a+", encoding="utf-8", errors="ignore"
+            ) as f:
                 f.write("::Made by K.Dot and Godfather\n")
                 f.write(self.code_new)
                 characters = (
@@ -927,25 +935,31 @@ class Main:
                                 f.write(" ")
                         f.write("\n")
             # ignore everything below this until the function ends I could have made this 100x better but I'm lazy
-            with open(f"{self.file}.ultimate.bat", "r", encoding="utf-8") as f:
+            with open(
+                f"{self.file}.ultimate.bat", "r", encoding="utf-8", errors="ignore"
+            ) as f:
                 news = f.readlines()
             if debug:
-                with open("debug2.bat", "w", encoding="utf-8") as f:
+                with open("debug2.bat", "w", encoding="utf-8", errors="ignore") as f:
                     f.writelines(news)
             news.insert(2, self.obf_oneline(self.first_line_echo_check()))
             messed_up = self.scrambler(news)
             progress.update(task2, advance=100)
-            with open(f"{self.file}.ultimate.bat", "w", encoding="utf-8") as f:
+            with open(
+                f"{self.file}.ultimate.bat", "w", encoding="utf-8", errors="ignore"
+            ) as f:
                 for array in messed_up:
                     for thing in array:
                         f.write(thing.strip() + "\n")
             if debug:
-                with open("debug3.bat", "w", encoding="utf-8") as f:
+                with open("debug3.bat", "w", encoding="utf-8", errors="ignore") as f:
                     for array in messed_up:
                         for thing in array:
                             f.write(thing.strip() + "\n")
             progress.update(task3, advance=100)
-            with open(f"{self.file}.ultimate.bat", "r", encoding="utf-8") as f:
+            with open(
+                f"{self.file}.ultimate.bat", "r", encoding="utf-8", errors="ignore"
+            ) as f:
                 data = f.readlines()
                 for i in range(len(data)):
                     if "echo" in data[i]:
@@ -956,7 +970,7 @@ class Main:
                         new = self.random_semi_and_comma(data[i])
                         data[i] = new
             if debug:
-                with open("debug4.bat", "w", encoding="utf-8") as f:
+                with open("debug4.bat", "w", encoding="utf-8", errors="ignore") as f:
                     f.writelines(data)
             progress.update(task4, advance=100)
             if utf_16_bom and utf_16:
@@ -965,7 +979,9 @@ class Main:
                     for i in out_hex:
                         f.write(bytes.fromhex(i))
             else:
-                with open(f"{self.file}.ultimate.bat", "w", encoding="utf-8") as f:
+                with open(
+                    f"{self.file}.ultimate.bat", "w", encoding="utf-8", errors="ignore"
+                ) as f:
                     for line in data:
                         f.write(line)
             progress.update(task5, advance=100)
@@ -1352,7 +1368,7 @@ class Main:
 
         # There is a 99% chance I could have just used .encode() but im just lazy like that if u gotta problem wit it make a pr
 
-        with open("placeholder.bat", "w", encoding="utf-8") as f:
+        with open("placeholder.bat", "w", encoding="utf-8", errors="ignore") as f:
             f.writelines(code)
         with open("placeholder.bat", "rb") as f:
             code = f.read()
@@ -1392,7 +1408,7 @@ goto :eof
             "Enter the location of the ps1 file: ", Colors.green, interval=0.05
         )
         try:
-            with open(ps1_file_location, "r", encoding="utf-8") as f:
+            with open(ps1_file_location, "r", encoding="utf-8", errors="ignore") as f:
                 data = f.readlines()
         except FileNotFoundError:
             print("File not found!")
@@ -1404,27 +1420,27 @@ goto :eof
             interval=0.05,
         )
         if obfuscate.lower() == "y":
-            with open("place_holder.bat", "w", encoding="utf-8") as f:
+            with open("place_holder.bat", "w", encoding="utf-8", errors="ignore") as f:
                 f.write(starting_code_to_obf)
                 self.file = "place_holder.bat"
             self.ultimate(utf_16=False, check_bypass=True)
             os.remove("place_holder.bat")
             os.rename("place_holder.bat.ultimate.bat", "embed.bat")
-            with open("embed.bat", "r+", encoding="utf-8") as f:
+            with open("embed.bat", "r+", encoding="utf-8", errors="ignore") as f:
                 data2 = f.readlines()
                 data2_size = len(data2)
                 data2.insert(0, "<# :validkdot\n")
                 data2.insert(data2_size + 1, "#>\n")
                 data2 += data
-            with open("embed.bat", "w+", encoding="utf-8") as f:
+            with open("embed.bat", "w+", encoding="utf-8", errors="ignore") as f:
                 f.writelines(data2)
         else:
             # I can FASHO make this a lot cleaner and better but im too lazy rn (split string into list instead of reading it from file :skull:)
-            with open("embed.bat", "w", encoding="utf-8") as f:
+            with open("embed.bat", "w", encoding="utf-8", errors="ignore") as f:
                 f.write(starting_code_normal)
-            with open("embed.bat", "r+", encoding="utf-8") as f:
+            with open("embed.bat", "r+", encoding="utf-8", errors="ignore") as f:
                 data2 = f.readlines()
-            with open("embed.bat", "w", encoding="utf-8") as f:
+            with open("embed.bat", "w", encoding="utf-8", errors="ignore") as f:
                 data2_size = len(data2)
                 data2.insert(data2_size, "\n")
                 data2 += data
