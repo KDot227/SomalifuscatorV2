@@ -62,6 +62,12 @@ Not only is the Obfuscator very fast but it's also very customizable. If you kno
 Another thing is that after using modes such as ultimate, you can then use other modes such as level 5 or level 4 to make your code more secure/obfuscated
 
 <h2 align="center">
+  Cool map thing I drew
+</h2>
+
+![map](https://i.imgur.com/Lc0EAe0.png)
+
+<h2 align="center">
   Level 1
 </h2>
 
@@ -118,3 +124,5 @@ No image but it embeds powershell files (ps1 files) at the end of the batch scri
 <h1 align="center">
   If you like this repo please give it a star ⭐
 </h1>
+
+Also @ John Hammond cause he's cool and I wanna see him deobfuscate this

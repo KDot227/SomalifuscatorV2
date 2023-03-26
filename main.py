@@ -1,4 +1,4 @@
-# yo! if your reading this smd!
+# yo! if your reading this smd! Documentation = in hell
 
 import time
 import os
@@ -8,6 +8,7 @@ from tkinter import Tk
 import json
 
 # hide the tkinter window
+# I love stack overflow
 root = Tk()
 root.withdraw()
 
@@ -918,14 +919,9 @@ class Main:
                                         f.write(" ")
                                         continue
                                     else:
-                                        # random_obf = [self.ran1(char), self.ran2(char, random_order), self.ran3(char), self.ran4(char)]
-                                        # I'll fix this someday
                                         random_obf = [
-                                            # If you want even better obfuscation comment self.ran1(char) this is cause most deobfuscators and people can somewhat easily solve this part but not ran2. Up 2 u tho its still really hard either way and I could be wrong
                                             self.ran1(char),
-                                            # ran 2 is the only thing stopping most deobfuscators since it uses environment variables that nobody knows about
                                             self.ran2(char, random_order),
-                                            # self.ran4(char),
                                         ]
                                         f.write(f"{random.choice(random_obf)}")
                                 f.write(" ")
