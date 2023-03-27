@@ -1,4 +1,4 @@
-# yo! if your reading this smd! Documentation = in hell
+# Documentation = in hell
 
 import time
 import os
@@ -1155,6 +1155,7 @@ class Main:
         """Entire point of this is to make a math problem for the set /a. We do this cause kids need a calculator but once they see that there are octals and hexadecimals they'll prolly give up lmao"""
         # TODO add bitwise operations such as xor, or, etc
         # no division since we don't want floats BUT we can use division in the answer since its how you undo multiplication
+        # but im not gonna do this cause it still makes floats and im slow
         operators = ["+", "-"]
         opp1 = random.choice(operators)
         opp2 = random.choice(operators)

@@ -1,5 +1,5 @@
 <h1 align="center">
-  Somalifuscator
+  Somalifuscator (Batch is cool)
 </h1>
 
 <div align="center">
