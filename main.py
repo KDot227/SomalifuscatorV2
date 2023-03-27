@@ -907,6 +907,10 @@ class Main:
 
             data = new_lines
 
+            if debug:
+                with open("debug1_2.bat", "w", encoding="utf-8", errors="ignore") as f:
+                    f.writelines(data)
+
             progress.update(task1, advance=100)
             with open(
                 f"{self.file}.ultimate.bat", "a+", encoding="utf-8", errors="ignore"
