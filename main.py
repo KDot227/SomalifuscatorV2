@@ -1303,7 +1303,7 @@ class Main:
 
         random.shuffle(main_list)
 
-        main_list = self.bad_labels(main_list)
+        main_list = self.bad_labels_and_dead_code(main_list)
 
         main_list = self.random_inserts(main_list)
 
@@ -1370,23 +1370,38 @@ class Main:
 
         return main_list
 
-    def bad_labels(self, main_list):
+    def bad_labels_and_dead_code(self, main_list):
         """inserts labels that are valid but won't do anything since they have a zero width space infront. This mainly messes up looking at it from a text editor. You can still goto it if you use the weird translated bytes."""
         main_dict = self.dict_thing.copy()
         new_list = []
-        if unicode:
-            bad_insert = "​"
-        else:
-            bad_insert = "GODFATHER"
+        types = [True, False]
+        doskey_options = [
+            "dir",
+            "echo",
+            "for",
+            "if",
+            "set",
+            "goto",
+            "cd",
+            "",
+        ]
+        random_choci = random.choice(types)
+        bad_insert = "GODFATHER"
         for item in main_dict.values():
             strung = str(item[1])
             strung = ";:" + bad_insert + strung
             new_list.append(strung)
         for array in main_list:
-            random_chance = randint(1, 5)
-            if random_chance == 5:
-                random_label = random.choice(new_list)
-                array.insert(0, random_label)
+            if random_choci:
+                random_chance = randint(1, 3)
+                if random_chance == 5:
+                    random_label = random.choice(new_list)
+                    random_place = randint(0, len(array))
+                    array.insert(random_place, random_label)
+            else:
+                doskey = f"doskey {random.choice(doskey_options)}={random.choice(doskey_options)}"
+                # we gotta place at zero or else we get bad output for errorlevel checking
+                array.insert(0, self.obf_oneline(doskey))
         return main_list
 
     def first_line_echo_check(self):
