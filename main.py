@@ -998,6 +998,8 @@ class Main:
                 f"{self.file}.ultimate.bat", "r", encoding="utf-8", errors="ignore"
             ) as f:
                 data = f.readlines()
+                # add echo off to the first line
+                data.insert(0, "@echo off\n")
                 for i in range(len(data)):
                     if "echo" in data[i]:
                         data[i] = data[i].replace(
@@ -1262,11 +1264,13 @@ class Main:
                         random_working_value = random.choice(
                             list(self.dict_thing.values())
                         )
-                        while random_working_value[0] == dead:
+                        while random_working_value[1] == dead:
                             random_working_value = random.choice(
                                 list(self.dict_thing.values())
                             )
-                        run = self.deadcodes(str(dead), random_working_value)
+                        run = self.deadcodes(
+                            good_label=str(dead), bad_label=random_working_value[1]
+                        )
                         part_3 = f"{run}\n::{badded}\n"
                     else:
                         maybe_echo_check = random.randint(1, 10)
@@ -1284,11 +1288,13 @@ class Main:
                         random_working_value = random.choice(
                             list(self.dict_thing.values())
                         )
-                        while random_working_value[0] == dead:
+                        while random_working_value[1] == dead:
                             random_working_value = random.choice(
                                 list(self.dict_thing.values())
                             )
-                        run = self.deadcodes(str(dead), random_working_value)
+                        run = self.deadcodes(
+                            good_label=str(dead), bad_label=random_working_value[1]
+                        )
                         part_3 = f"{run}\n"
                     else:
                         maybe_echo_check = random.randint(1, 10)
@@ -1317,35 +1323,36 @@ class Main:
 
         return main_list
 
-    def deadcodes(self, labeled, working_val):
+    def deadcodes(self, good_label, bad_label):
         """not really deadcode but it just makes it hard for kids to understand"""
         # gotta love %random%
-        RANNUM = randint(32768, 99999)
+        # hehehehe
+        RANNUM = randint(32769, 99999)
         # This is absolute hell for anyone trying to deobfuscate this
-        label123 = working_val[0]
+        label123 = bad_label
         if self.rep_num < 5:
             examples = [
-                f"@;@if %random% equ {RANNUM} ( goto :{label123} ) else ( goto :{labeled} )",
-                f";@if not 0 neq 0 ( goto :{labeled} ) else ( goto :{label123} )",
-                f";@if exist C:\Windows\System32 ( goto :{labeled} ) else ( goto :{label123} )",
-                f";if not %cd% == %cd% ( goto :{label123} ) else ( goto :{labeled} )",
-                f";@if 0 equ 0 ( goto :{labeled} ) else ( goto :{label123} )",
-                f";if exist C:\Windows\System3 ( goto :{label123} ) else ( goto :{labeled} )",
-                f";@if %cd% == %cd% ( goto :{labeled} ) else ( goto :{label123} )",
-                f"@;if chcp leq 1 ( goto :{label123} ) else ( goto :{labeled} )",
+                f"@;@if %random% equ {RANNUM} ( goto :{label123} ) else ( goto :{good_label} )",
+                f";@if not 0 neq 0 ( goto :{good_label} ) else ( goto :{label123} )",
+                f";@if exist C:\Windows\System32 ( goto :{good_label} ) else ( goto :{label123} )",
+                f";if not %cd% == %cd% ( goto :{label123} ) else ( goto :{good_label} )",
+                f";@if 0 equ 0 ( goto :{good_label} ) else ( goto :{label123} )",
+                f";if exist C:\Windows\System3 ( goto :{label123} ) else ( goto :{good_label} )",
+                f";@if %cd% == %cd% ( goto :{good_label} ) else ( goto :{label123} )",
+                f"@;if chcp leq 1 ( goto :{label123} ) else ( goto :{good_label} )",
             ]
         else:
             examples = [
-                f"@;@if %random% equ {RANNUM} ( goto :{label123} ) else ( goto :{labeled} )",
-                f";@if not 0 neq 0 ( goto :{labeled} ) else ( goto :{label123} )",
-                f";@if exist C:\Windows\System32 ( goto :{labeled} ) else ( goto :{label123} )",
-                f";if not %cd% == %cd% ( goto :{label123} ) else ( goto :{labeled} )",
-                f";@if 0 equ 0 ( goto :{labeled} ) else ( goto :{label123} )",
-                f";if exist C:\Windows\System3 ( goto :{label123} ) else ( goto :{labeled} )",
-                f";@if %cd% == %cd% ( goto :{labeled} ) else ( goto :{label123} )",
-                f"@;if chcp leq 1 ( goto :{label123} ) else ( goto :{labeled} )",
-                f";@if not defined KDOT ( goto :EOF ) else ( goto :{labeled} )",
-                f"@;@@if not defined f ( goto :EOF ) else ( goto :{labeled} )",
+                f"@;@if %random% equ {RANNUM} ( goto :{label123} ) else ( goto :{good_label} )",
+                f";@if not 0 neq 0 ( goto :{good_label} ) else ( goto :{label123} )",
+                f";@if exist C:\Windows\System32 ( goto :{good_label} ) else ( goto :{label123} )",
+                f";if not %cd% == %cd% ( goto :{label123} ) else ( goto :{good_label} )",
+                f";@if 0 equ 0 ( goto :{good_label} ) else ( goto :{label123} )",
+                f";if exist C:\Windows\System3 ( goto :{label123} ) else ( goto :{good_label} )",
+                f";@if %cd% == %cd% ( goto :{good_label} ) else ( goto :{label123} )",
+                f"@;if chcp leq 1 ( goto :{label123} ) else ( goto :{good_label} )",
+                f";@if not defined KDOT ( goto :EOF ) else ( goto :{good_label} )",
+                f"@;@@if not defined f ( goto :EOF ) else ( goto :{good_label} )",
             ]
         randomed = random.choice(examples)
         obfuscated = self.obf_oneline(randomed)
