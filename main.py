@@ -35,7 +35,7 @@ music = settings["music"]
 ads = settings["ads"]
 
 global debug
-debug = False
+debug = True
 
 if debug:
     print("For best debugging experiences, turn off all settings")
@@ -894,10 +894,17 @@ class Main:
             if ads:
                 lines = data.copy()
                 new_lines = []
+                maybe = False
 
                 for line in lines:
                     line = line.lower()
-                    if line.startswith("echo") and not line.startswith("echo @"):
+                    # basic checks
+                    if (
+                        line.startswith("echo")
+                        and not line.startswith("echo @")
+                        and ("&" not in line or "^&" in line)
+                    ):
+                        maybe = True
                         new_lines.append(
                             line.strip()
                             + " > somali.txt:kdot & more < somali.txt:kdot\n"
@@ -907,7 +914,11 @@ class Main:
 
                 new_lines.reverse()
                 for index, line in enumerate(new_lines):
-                    if line.startswith("echo") and not line.startswith("echo @"):
+                    if (
+                        line.startswith("echo")
+                        and not line.startswith("echo @")
+                        and maybe
+                    ):
                         new_lines[index] = line.strip() + " & del somali.txt\n"
                         break
                 new_lines.reverse()
