@@ -35,7 +35,7 @@ music = settings["music"]
 ads = settings["ads"]
 
 global debug
-debug = True
+debug = False
 
 if debug:
     print("For best debugging experiences, turn off all settings")
