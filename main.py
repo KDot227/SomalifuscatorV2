@@ -335,8 +335,7 @@ class Main:
         together = together[:-4]
         return together
 
-    @staticmethod
-    def obf_oneline(line):
+    def obf_oneline(self, line):
         final_string = ""
         for word in line.split(" "):
             if word.startswith("%"):
@@ -347,27 +346,61 @@ class Main:
                 continue
             else:
                 for char in word:
+                    # fasho could have used dict for this but idc its already done
                     public = r"C:\Users\Public"
                     weird = r"C:\Program Files (x86)\Common Files"
                     program_1 = r"C:\Program Files"
                     program_2 = r"C:\Program Files (x86)"
-                    psmodule_path = r"%ProgramFiles%\WindowsPowerShell\Modules;C:\WINDOWS\system32\WindowsPowerShell\v1.0\Modules"
-                    if char in program_1:
-                        final_string += f"%programfiles:~{program_1.index(char)},1%"
-                    elif char in program_2:
-                        final_string += (
-                            f"%programfiles(x86):~{program_2.index(char)},1%"
-                        )
-                    elif char in public:
-                        final_string += f"%public:~{public.index(char)},1%"
-                    elif char in weird:
-                        final_string += (
-                            f"%CommonProgramFiles(x86):~{weird.index(char)},1%"
-                        )
-                    elif char in psmodule_path:
-                        new = psmodule_path.index(char)
-                        # Why do we have to add 2? I have no fucking idea lmao
-                        final_string += f"%PSModulePath:~{new + 2},1%"
+                    psmodule_path = r"C:\Program Files\WindowsPowerShell\Modules;C:\WINDOWS\system32\WindowsPowerShell\v1.0\Modules"
+                    driver_stuff = r"C:\Windows\System32\Drivers\DriverData"
+                    comspec = r"C:\WINDOWS\system32\cmd.exe"
+                    pathext = r".COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC"
+
+                    list_of_all = [
+                        public,
+                        weird,
+                        program_1,
+                        program_2,
+                        psmodule_path,
+                        driver_stuff,
+                        comspec,
+                        pathext,
+                    ]
+
+                    corosponding = [
+                        "PUBLIC",
+                        "COMMONPROGRAMFILES(X86)",
+                        "PROGRAMFILES",
+                        "PROGRAMFILES(X86)",
+                        "PSMODULEPATH",
+                        "DRIVERDATA",
+                        "COMSPEC",
+                        "PATHEXT",
+                    ]
+
+                    new_lists = []
+
+                    for i in list_of_all:
+                        if char in i:
+                            new_lists.append(i)
+
+                    if len(new_lists) > 0:
+                        if char == " ":
+                            final_string += char
+                        new = random.choice(new_lists)
+                        if char in new:
+                            if new == psmodule_path:
+                                index = new.index(char)
+                                new = corosponding[list_of_all.index(new)]
+                                final_string += (
+                                    f"%{self.random_capitalization(new)}:~{index},1%"
+                                )
+                            else:
+                                index = new.index(char)
+                                new = corosponding[list_of_all.index(new)]
+                                final_string += (
+                                    f"%{self.random_capitalization(new)}:~{index},1%"
+                                )
                     else:
                         if unicode:
                             final_string += f"%‮%{char}%‮%"
@@ -1003,30 +1036,57 @@ class Main:
             return f"{char}%{randomed}%"
 
     def ran2(self, char, random_order):
-        # getting the index of the character in the random string and then getting the character at that index in the random string
+        # fasho could have used dict for this but idc its already done
         public = r"C:\Users\Public"
         weird = r"C:\Program Files (x86)\Common Files"
         program_1 = r"C:\Program Files"
         program_2 = r"C:\Program Files (x86)"
-        psmodule_path = r"%ProgramFiles%\WindowsPowerShell\Modules;C:\WINDOWS\system32\WindowsPowerShell\v1.0\Modules"
+        psmodule_path = r"C:\Program Files\WindowsPowerShell\Modules;C:\WINDOWS\system32\WindowsPowerShell\v1.0\Modules"
         driver_stuff = r"C:\Windows\System32\Drivers\DriverData"
         comspec = r"C:\WINDOWS\system32\cmd.exe"
-        if char in program_1:
-            return f"%{self.random_capitalization('programfiles')}:~{program_1.index(char)},1%"
-        elif char in program_2:
-            return f"%{self.random_capitalization('programfiles(x86)')}:~{program_2.index(char)},1%"
-        elif char in public:
-            return f"%{self.random_capitalization('public')}:~{public.index(char)},1%"
-        elif char in weird:
-            return f"%{self.random_capitalization('CommonProgramFiles(x86)')}:~{weird.index(char)},1%"
-        elif char in psmodule_path:
-            new = psmodule_path.index(char)
-            # Why do we have to add 2? I have no fucking idea lmao
-            return f"%{self.random_capitalization('PSModulePath')}:~{new + 2},1%"
-        elif char in driver_stuff:
-            return f"%{self.random_capitalization('DriverData')}:~{driver_stuff.index(char)},1%"
-        elif char in comspec:
-            return f"%{self.random_capitalization('comspec')}:~{comspec.index(char)},1%"
+        pathext = r".COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC"
+
+        list_of_all = [
+            public,
+            weird,
+            program_1,
+            program_2,
+            psmodule_path,
+            driver_stuff,
+            comspec,
+            pathext,
+        ]
+
+        corosponding = [
+            "PUBLIC",
+            "COMMONPROGRAMFILES(X86)",
+            "PROGRAMFILES",
+            "PROGRAMFILES(X86)",
+            "PSMODULEPATH",
+            "DRIVERDATA",
+            "COMSPEC",
+            "PATHEXT",
+        ]
+
+        new_lists = []
+
+        for i in list_of_all:
+            if char in i:
+                new_lists.append(i)
+
+        if len(new_lists) > 0:
+            if char == " ":
+                return char
+            new = random.choice(new_lists)
+            if char in new:
+                if new == psmodule_path:
+                    index = new.index(char)
+                    new = corosponding[list_of_all.index(new)]
+                    return f"%{self.random_capitalization(new)}:~{index},1%"
+                else:
+                    index = new.index(char)
+                    new = corosponding[list_of_all.index(new)]
+                    return f"%{self.random_capitalization(new)}:~{index},1%"
         else:
             if char in string.ascii_letters:
                 var = f"%{self.random_capitalization('KDOT')}:~{random_order.index(char)},1%"
