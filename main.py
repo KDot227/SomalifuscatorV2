@@ -225,7 +225,7 @@ class Main:
             setting_name, setting_value = setting.split("=")
             setting_name = setting_name.strip()
             setting_value = setting_value.strip()
-            if setting_value == "True":
+            if setting_value == "True" or setting_value == "True (Experimental)":
                 value_color = colorama.Fore.GREEN
             else:
                 value_color = colorama.Fore.RED
@@ -900,10 +900,17 @@ class Main:
                     if line.startswith("echo") and not line.startswith("echo @"):
                         new_lines.append(
                             line.strip()
-                            + " > somalifuscator.txt:kdot\nmore < somalifuscator.txt:kdot\n"
+                            + " > somali.txt:kdot & more < somali.txt:kdot\n"
                         )
                     else:
                         new_lines.append(line)
+
+                new_lines.reverse()
+                for index, line in enumerate(new_lines):
+                    if line.startswith("echo") and not line.startswith("echo @"):
+                        new_lines[index] = line.strip() + " & del somali.txt\n"
+                        break
+                new_lines.reverse()
 
             data = new_lines
 
