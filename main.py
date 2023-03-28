@@ -1232,7 +1232,9 @@ class Main:
 
             # for some reason if number is negative only hex will work idk why and im not tryna figure it out
             # mental health > octals
-            problem2 = f"{hex(ans)} {opp1} {hex(num1)} {opp2} {hex(num2)}"
+            problem2 = (
+                f"{hex(ans)} {opp1} {self.random_oct_hex(num1)} {opp2} {self.random_oct_hex(num2)}"
+            )
             problem23 = f"{ans} {opp1} {num1} {opp2} {num2}"
 
             ans2 = eval(problem23)
