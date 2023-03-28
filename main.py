@@ -1228,7 +1228,7 @@ class Main:
             else:
                 opp2 = "+"
 
-            problem2 = f"{hex(ans)} {opp1} {hex(num1)} {opp2} {hex(num2)}"
+            problem2 = f"{self.random_oct_hex(ans)} {opp1} {self.random_oct_hex(ans)} {opp2} {self.random_oct_hex(ans)}"
             problem23 = f"{ans} {opp1} {num1} {opp2} {num2}"
 
             ans2 = eval(problem23)
