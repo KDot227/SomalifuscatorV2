@@ -161,6 +161,7 @@ options = (
 [COMING SOON] [exe3] Third method for Bat2Exe (100% fud)
 [ONELINE] I did it
 [exe2bat] Converts exe to bat (EXPERIMENTAL)
+[py2bat] Converts python file to bat (Note you cant use things like getting the execution path cause that might break but idk ur choice)
 
 [?] (If you want to use built in variables such as %~dp0 etc wrap them in percent signes then run the clean mode afterwards. You DONT have to do this if your using ultimate)
 """
@@ -278,6 +279,7 @@ class Main:
                 "exe2": self.bat2exe2,
                 "oneline": self.oneline,
                 "exe2bat": self.exe2bat,
+                "py2bat": self.py2bat,
             }
 
             pick = self.level_dict.get(self.level)
@@ -1846,6 +1848,28 @@ exit
         os.remove("test.txt")
         os.remove("mixer.bat")
         os.rename("mixer.bat.ultimate.bat", "bat2exe.bat")
+
+    def py2bat(self):
+        # https://stackoverflow.com/questions/4571244/creating-a-bat-file-for-python-script
+        # I had another way of doing this but it was absolute dog compared to this method
+        start_code = """
+0<0# : ^
+'''
+@echo off
+echo batch
+python "%~f0" %*
+exit /b 0
+'''
+"""
+        python_code = Write.Input("Enter the path to the python file: ", Colors.green)
+        if not os.path.isfile(python_code):
+            print("File does not exist!")
+            time.sleep(3)
+            Main()
+        with open(python_code, "r", encoding="utf-8", errors="ignore") as f:
+            data = f.read()
+        with open("py2bat.bat", "w", encoding="utf-8", errors="ignore") as f:
+            f.write(start_code + data)
 
 
 if __name__ == "__main__":
