@@ -40,6 +40,7 @@ Note: You can use the gui version if you want but it's missing a lot of features
 Here are a couple of cool things Somalifuscator (ultimate mode) does to make it harder to deobfuscate:
 * File can't be opened in notepad or notepad ++
 * When you use something such as [this](https://github.com/DissectMalware/batch_deobfuscator) it can't get past this first layer. If you give it a chance and take that layer off it can't even interpret the code because of all the unicode. ON TOP OF THAT even if you have all other settings disabled it STILL won't be able to deobfuscate all the way. This is why Somalifuscator is the best batch obfuscator to ever be made.
+* In the end I'm not saying it's impossible to deobfuscate since technically every obfuscation is deobfuscateable. I'm just saying that this obfuscation is the best chance you have to prevent the inevitable deobfuscation
 
 <h3 align="center">
   BUILT IN VARIABLES HAVE A FIX!!!
