@@ -34,6 +34,8 @@ unicode = settings["unicode"]
 utf_16_bom = settings["utf_16_bom"]
 music = settings["music"]
 ads = settings["ads"]
+random_spacing = settings["random_spacing"]
+auto_update = settings["auto_update"]
 
 global debug
 debug = False
@@ -178,6 +180,8 @@ settings = [
     f"UTF-16-BOM = {utf_16_bom}",
     f"Music = {music}",
     f"ADS = {ads} (Experimental)",
+    f"Random Spacing = {random_spacing}",
+    f"Auto Update = {auto_update}",
 ]
 
 
@@ -337,6 +341,23 @@ class Main:
         )
         together = together[:-4]
         return together
+
+    @staticmethod
+    def more_dead_comments(main_list) -> list:
+        code_examples = [
+            "::Made with somalifuscator",
+            "::discord.gg/batch",
+            "::https://sped.lol",
+            "::KDot > Batch",
+        ]
+        for _ in range(len(main_list)):
+            random_chance = random.choice([True, False])
+            if random_chance:
+                main_list.insert(
+                    random.randint(0, len(main_list)),
+                    random.choice(code_examples),
+                )
+        return main_list
 
     def obf_oneline(self, line):
         final_string = ""
@@ -1338,6 +1359,9 @@ class Main:
 
         main_list = self.random_dead_code(main_list)
 
+        if random_spacing:
+            main_list = self.more_dead_comments(main_list)
+
         if pogdog_fun:
             main_list = self.pogdog(main_list)
 
@@ -1388,7 +1412,7 @@ class Main:
             ";::Good luck deobfuscating\n",
             ";::Made with Somalifuscator\n",
             ";::discord.gg/batch\n",
-            ";::... --- -- .- .-.. .. ..-. ..- ... -.-. .- - --- .-. / --- -. / - --- .--."
+            ";::... --- -- .- .-.. .. ..-. ..- ... -.-. .- - --- .-. / --- -. / - --- .--.",
         ]
         for i in range(len(main_list)):
             if i == 0:
@@ -1877,11 +1901,14 @@ exit /b 0
 
 
 if __name__ == "__main__":
-    threads = [AutoUpdate]
+    threads = []
     if music:
         threads.append(Music)
-    for thread in threads:
-        threading.Thread(target=thread).start()
+    if auto_update:
+        threads.append(AutoUpdate)
+    if not threads == []:
+        for thread in threads:
+            threading.Thread(target=thread).start()
     Main()
     print("Done!")
     input()

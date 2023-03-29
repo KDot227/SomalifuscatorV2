@@ -6,5 +6,7 @@
     "unicode": true,
     "utf_16_bom": true,
     "music": false,
-    "ads": true
+    "ads": true,
+    "random_spacing": false,
+    "auto_update": true
 }
