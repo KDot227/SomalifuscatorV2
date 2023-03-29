@@ -26,17 +26,24 @@ settings_path = current_dir + "/settings.json"
 with open(settings_path, "r") as f:
     settings = json.load(f)
 
-chinese = settings["chinese"]
-pogdog_fun = settings["pogdog"]
-hell = settings["hell"]
-eicar = settings["eicar"]
-unicode = settings["unicode"]
-utf_16_bom = settings["utf_16_bom"]
-music = settings["music"]
-ads = settings["ads"]
-random_spacing = settings["random_spacing"]
-auto_update = settings["auto_update"]
-echo_weird = settings["echo_weird"]
+try:
+    chinese = settings["chinese"]
+    pogdog_fun = settings["pogdog"]
+    hell = settings["hell"]
+    eicar = settings["eicar"]
+    unicode = settings["unicode"]
+    utf_16_bom = settings["utf_16_bom"]
+    music = settings["music"]
+    ads = settings["ads"]
+    random_spacing = settings["random_spacing"]
+    auto_update = settings["auto_update"]
+    echo_weird = settings["echo_weird"]
+except:
+    print(
+        "Your settings.json file has been update! Please redownload somalifuscator and try again"
+    )
+    time.sleep(30)
+    os._exit(1)
 
 global debug
 debug = False
@@ -1411,12 +1418,22 @@ class Main:
             ]
         if echo_weird:
             random_maybe = random.choice([True, False])
+            code_examples = [
+                "::Made with somalifuscator",
+                "::discord.gg/batch",
+                "::https://sped.lol",
+                "::KDot > Batch",
+            ]
             if random_maybe:
-                examples.append(
-                    f":: ^\n {random.choice(examples)} ^\n exit /b 0\n{random.choice(examples)}"
-                )
+                coded = f"{random.choice(code_examples)} ^\n {random.choice(examples)} ^\n exit /b 0\n{random.choice(examples)}"
+                for _ in range(3):
+                    examples.append(coded)
             else:
-                examples.append(f":: ^\n exit /b 0\n {random.choice(examples)}")
+                coded = f"{random.choice(code_examples)} ^\n exit /b 0\n {random.choice(examples)}"
+                for _ in range(3):
+                    examples.append(coded)
+        print(examples)
+
         randomed = random.choice(examples)
         obfuscated = self.obf_oneline(randomed)
         self.rep_num += 1
