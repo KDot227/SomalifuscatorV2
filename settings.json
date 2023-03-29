@@ -9,5 +9,5 @@
     "ads": false,
     "random_spacing": false,
     "auto_update": true,
-    "echo_weird": false
+    "echo_weird": true
 }

@@ -1,12 +1,12 @@
 # Documentation = in hell
 # Also don't ask me how the regex works cause idk either
 
-import time
 import os
-import threading
-from tkinter import filedialog as kdot2
-from tkinter import Tk
+import time
 import json
+import threading
+from tkinter import Tk
+from tkinter import filedialog as kdot2
 
 # hide the tkinter window
 # I love stack overflow
@@ -371,6 +371,9 @@ class Main:
                 final_string += word + " "
                 continue
             if word.startswith("^"):
+                final_string += word + " "
+                continue
+            if word.startswith("::"):
                 final_string += word + " "
                 continue
             else:
@@ -1299,7 +1302,7 @@ class Main:
                 remem = [
                     f";{self.obf_oneline('set')} /a {self.obf_oneline('ans')}={self.obf_oneline(value[0])}\n;{self.random_semi_and_comma(self.obf_oneline('goto'))} :%ans%\n"
                 ]
-            part_1 = f";:{value[1]}\n"
+            part_1 = f";:{value[1]} ^\n"
             part_2 = f";{key}\n"
             if hell and unicode:
                 badded = (
@@ -1410,12 +1413,10 @@ class Main:
             random_maybe = random.choice([True, False])
             if random_maybe:
                 examples.append(
-                    f"@echo 0<0t goto :{random.choice([label123, good_label])} ^\n{random.choice(examples)} ^\n{random.choice(examples)}\n{random.choice(examples)}"
+                    f":: ^\n {random.choice(examples)} ^\n exit /b 0\n{random.choice(examples)}"
                 )
             else:
-                examples.append(
-                    f"@echo 0<0t goto :{random.choice([label123, good_label])} ^\n{random.choice(examples)}\n{random.choice(examples)}"
-                )
+                examples.append(f":: ^\n exit /b 0\n {random.choice(examples)}")
         randomed = random.choice(examples)
         obfuscated = self.obf_oneline(randomed)
         self.rep_num += 1
@@ -1459,7 +1460,7 @@ class Main:
         bad_insert = "GODFATHER"
         for item in main_dict.values():
             strung = str(item[1])
-            strung = ";:" + bad_insert + strung
+            strung = ";:" + bad_insert + strung + " ^"
             new_list.append(strung)
         for array in main_list:
             if random_choci:
