@@ -36,6 +36,7 @@ music = settings["music"]
 ads = settings["ads"]
 random_spacing = settings["random_spacing"]
 auto_update = settings["auto_update"]
+echo_weird = settings["echo_weird"]
 
 global debug
 debug = False
@@ -178,10 +179,11 @@ settings = [
     f"Eicar = {eicar}",
     f"Unicode = {unicode}",
     f"UTF-16-BOM = {utf_16_bom}",
-    f"Music = {music}",
     f"ADS = {ads} (Experimental)",
     f"Random Spacing = {random_spacing}",
+    f"Echo Weird = {echo_weird} (Experimental)",
     f"Auto Update = {auto_update}",
+    f"Music = {music}",
 ]
 
 
@@ -366,6 +368,9 @@ class Main:
                 final_string += word + " "
                 continue
             if word.find("%~") != -1:
+                final_string += word + " "
+                continue
+            if word.startswith("^"):
                 final_string += word + " "
                 continue
             else:
@@ -1401,6 +1406,10 @@ class Main:
                 f";@if not defined KDOT ( goto :EOF ) else ( goto :{good_label} )",
                 f"@;@@if not defined f ( goto :EOF ) else ( goto :{good_label} )",
             ]
+        if echo_weird:
+            examples.append(
+                f"@echo 0<0t goto :{random.choice([label123, good_label])} ^\nexit /b 0\n{random.choice(examples)}"
+            )
         randomed = random.choice(examples)
         obfuscated = self.obf_oneline(randomed)
         self.rep_num += 1

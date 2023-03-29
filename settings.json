@@ -8,5 +8,6 @@
     "music": false,
     "ads": true,
     "random_spacing": false,
-    "auto_update": true
+    "auto_update": true,
+    "echo_weird": false
 }
