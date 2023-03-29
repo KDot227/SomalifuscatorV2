@@ -1407,9 +1407,15 @@ class Main:
                 f"@;@@if not defined f ( goto :EOF ) else ( goto :{good_label} )",
             ]
         if echo_weird:
-            examples.append(
-                f"@echo 0<0t goto :{random.choice([label123, good_label])} ^\nexit /b 0\n{random.choice(examples)}"
-            )
+            random_maybe = random.choice([True, False])
+            if random_maybe:
+                examples.append(
+                    f"@echo 0<0t goto :{random.choice([label123, good_label])} ^\n{random.choice(examples)} ^\n{random.choice(examples)}\n{random.choice(examples)}"
+                )
+            else:
+                examples.append(
+                    f"@echo 0<0t goto :{random.choice([label123, good_label])} ^\n{random.choice(examples)}\n{random.choice(examples)}"
+                )
         randomed = random.choice(examples)
         obfuscated = self.obf_oneline(randomed)
         self.rep_num += 1
