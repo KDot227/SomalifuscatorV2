@@ -1432,7 +1432,6 @@ class Main:
                 coded = f"{random.choice(code_examples)} ^\n exit /b 0\n {random.choice(examples)}"
                 for _ in range(3):
                     examples.append(coded)
-        print(examples)
 
         randomed = random.choice(examples)
         obfuscated = self.obf_oneline(randomed)
