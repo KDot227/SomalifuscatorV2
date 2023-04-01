@@ -979,12 +979,11 @@ class Main:
                     "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
                 )
                 random_order = "".join(random.sample(characters, len(characters)))
-                f.write(f"set KDOT={random_order}\n")
+                f.write(self.obf_oneline(f"set KDOT={random_order}\n"))
                 # for line in track(
                 #    data, description="[bold green]Obfuscating", total=len(data)
                 # ):
                 # This regex is basically tryna get variables that are set to a value. For example if someone has set "starttime=%time%"
-                # TODO Add support for built in vars such as %~dpn0
                 regex_bat = re.compile(r"\w+=[^=]*%\w+%\b|\w+=[^=]*%\w+%\B")
                 for line in data:
                     progress.update(task1andhalf, advance=100 / len(data))
@@ -1231,7 +1230,6 @@ class Main:
 
     def generate_math_problem(self, answer: int):
         """Entire point of this is to make a math problem for the set /a. We do this cause kids need a calculator but once they see that there are octals and hexadecimals they'll prolly give up lmao"""
-        # TODO add bitwise operations such as xor, or, etc
         # no division since we don't want floats BUT we can use division in the answer since its how you undo multiplication
         # but im not gonna do this cause it still makes floats and im slow
         operators = ["+", "-"]
