@@ -38,6 +38,7 @@ try:
     random_spacing = settings["random_spacing"]
     auto_update = settings["auto_update"]
     echo_weird = settings["echo_weird"]
+    anti_vm = settings["anti_vm"]
 except:
     print(
         "Your settings.json file has been update! Please redownload somalifuscator and try again"
@@ -1198,6 +1199,23 @@ class Main:
 
         return entire_array
 
+    def vm_test(self):
+        codes = [
+            # r"""for /f "tokens=2 delims==" %%a in ('wmic computersystem get manufacturer /value') do set manufacturer=%%a\nfor /f "tokens=2 delims==" %%a in ('wmic computersystem get model /value') do set model=%%a\nif "%manufacturer%"=="Microsoft Corporation" if "%model%"=="Virtual Machine" exit\nif "%manufacturer%"=="VMware, Inc." exit\nif "%model%"=="VirtualBox" exit""",
+            # r"""for /f "tokens=2 delims=:" %%a in ('systeminfo ^| find "Total Physical Memory"') do ( set available_memory=%%a ) & set available_memory=%available_memory: =% & set available_memory=%available_memory:M=% & set available_memory=%available_memory:B=% & set /a available_memory=%available_memory% / 1024 / 1024 & if not %available_memory% gtr 4 ( exit /b 1 )""",
+            # I love batch so much I gave up and used powershell
+            """powershell -NoLogo -NoProfile -ExecutionPolicy Bypass -Command \"$VM = Get-WmiObject -Class Win32_ComputerSystem ; if ($VM.Model -match 'Virtual') { Write-Host 'Virtual Machine Detected. Exiting script.' ^| Out-Default ; Exit }\""""
+        ]
+        # ill add more one day
+        return self.obf_oneline(random.choice(codes))
+
+    def tests(self):
+        # I just made this cause editing it the other way would be annoying
+        choices = [self.first_line_echo_check()]
+        if anti_vm:
+            choices.append(self.vm_test())
+        return choices
+
     def fake_ceaser_cipher_obfuscated(self):
         """simple function to obfuscate the cipher"""
         cipher = self.fake_ceaser_cipher()
@@ -1334,7 +1352,7 @@ class Main:
                     else:
                         maybe_echo_check = random.randint(1, 10)
                         if maybe_echo_check == 1:
-                            part_3 = f";{self.obf_oneline('set')} /a {self.obf_oneline('ans')}={self.obf_oneline(list(self.dict_thing.values())[index + 1][0])}\n::{badded}\n::{badded}\n::{badded}\n{self.obf_oneline(self.first_line_echo_check())}\n;{self.random_semi_and_comma(self.obf_oneline('goto'))} :%ans%\n"
+                            part_3 = f";{self.obf_oneline('set')} /a {self.obf_oneline('ans')}={self.obf_oneline(list(self.dict_thing.values())[index + 1][0])}\n::{badded}\n::{badded}\n::{badded}\n{self.obf_oneline(random.choice(self.tests()))}\n;{self.random_semi_and_comma(self.obf_oneline('goto'))} :%ans%\n"
                         else:
                             part_3 = f";{self.obf_oneline('set')} /a {self.obf_oneline('ans')}={self.obf_oneline(list(self.dict_thing.values())[index + 1][0])}\n::{badded}\n::{badded}\n::{badded}\n;{self.random_semi_and_comma(self.obf_oneline('goto'))} :%ans%\n"
                 except Exception:
@@ -1358,7 +1376,7 @@ class Main:
                     else:
                         maybe_echo_check = random.randint(1, 10)
                         if maybe_echo_check == 1:
-                            part_3 = f";{self.obf_oneline('set')} /a {self.obf_oneline('ans')}={self.obf_oneline(list(self.dict_thing.values())[index + 1][0])}\n{self.obf_oneline(self.first_line_echo_check())}\n;{self.random_semi_and_comma(self.obf_oneline('goto'))} :%ans%\n"
+                            part_3 = f";{self.obf_oneline('set')} /a {self.obf_oneline('ans')}={self.obf_oneline(list(self.dict_thing.values())[index + 1][0])}\n{self.obf_oneline(random.choice(self.tests()))}\n;{self.random_semi_and_comma(self.obf_oneline('goto'))} :%ans%\n"
                         else:
                             part_3 = f";{self.obf_oneline('set')} /a {self.obf_oneline('ans')}={self.obf_oneline(list(self.dict_thing.values())[index + 1][0])}\n;{self.random_semi_and_comma(self.obf_oneline('goto'))} :%ans%\n"
                 except Exception:
@@ -1394,27 +1412,27 @@ class Main:
         label123 = bad_label
         if self.rep_num < 5:
             examples = [
-                f"@;@if %random% equ {RANNUM} ( goto :{label123} ) else ( goto :{good_label} )",
+                f";@if %random% equ {RANNUM} ( goto :{label123} ) else ( goto :{good_label} )",
                 f";@if not 0 neq 0 ( goto :{good_label} ) else ( goto :{label123} )",
                 f";@if exist C:\Windows\System32 ( goto :{good_label} ) else ( goto :{label123} )",
-                f";if not %cd% == %cd% ( goto :{label123} ) else ( goto :{good_label} )",
+                f";@if not %cd% == %cd% ( goto :{label123} ) else ( goto :{good_label} )",
                 f";@if 0 equ 0 ( goto :{good_label} ) else ( goto :{label123} )",
-                f";if exist C:\Windows\System3 ( goto :{label123} ) else ( goto :{good_label} )",
+                f";@if exist C:\Windows\System3 ( goto :{label123} ) else ( goto :{good_label} )",
                 f";@if %cd% == %cd% ( goto :{good_label} ) else ( goto :{label123} )",
-                f"@;if chcp leq 1 ( goto :{label123} ) else ( goto :{good_label} )",
+                f";@if chcp leq 1 ( goto :{label123} ) else ( goto :{good_label} )",
             ]
         else:
             examples = [
-                f"@;@if %random% equ {RANNUM} ( goto :{label123} ) else ( goto :{good_label} )",
+                f";@if %random% equ {RANNUM} ( goto :{label123} ) else ( goto :{good_label} )",
                 f";@if not 0 neq 0 ( goto :{good_label} ) else ( goto :{label123} )",
                 f";@if exist C:\Windows\System32 ( goto :{good_label} ) else ( goto :{label123} )",
-                f";if not %cd% == %cd% ( goto :{label123} ) else ( goto :{good_label} )",
+                f";@if not %cd% == %cd% ( goto :{label123} ) else ( goto :{good_label} )",
                 f";@if 0 equ 0 ( goto :{good_label} ) else ( goto :{label123} )",
-                f";if exist C:\Windows\System3 ( goto :{label123} ) else ( goto :{good_label} )",
+                f";@if exist C:\Windows\System3 ( goto :{label123} ) else ( goto :{good_label} )",
                 f";@if %cd% == %cd% ( goto :{good_label} ) else ( goto :{label123} )",
-                f"@;if chcp leq 1 ( goto :{label123} ) else ( goto :{good_label} )",
+                f";@if chcp leq 1 ( goto :{label123} ) else ( goto :{good_label} )",
                 f";@if not defined KDOT ( goto :EOF ) else ( goto :{good_label} )",
-                f"@;@@if not defined f ( goto :EOF ) else ( goto :{good_label} )",
+                f";@if not defined f ( goto :EOF ) else ( goto :{good_label} )",
             ]
         if echo_weird:
             random_maybe = random.choice([True, False])
