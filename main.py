@@ -39,6 +39,7 @@ try:
     auto_update = settings["auto_update"]
     echo_weird = settings["echo_weird"]
     anti_vm = settings["anti_vm"]
+    for_loop = settings["for_loop"]
 except:
     print(
         "Your settings.json file has been update! Please redownload somalifuscator and try again"
@@ -990,9 +991,10 @@ class Main:
                 for line in data:
                     progress.update(task1andhalf, advance=100 / len(data))
                     random_bool = random.choice([True, False])
-                    # random_bool_2 = random.choice([True, False])
-                    # if random_bool_2 and not line.startswith(":"):
-                    #    line = self.ran3(line=line)
+                    if for_loop:
+                        random_bool_2 = random.choice([True, False])
+                        if random_bool_2 and not line.startswith(":"):
+                            line = self.ran3(line=line)
                     if line.startswith("::"):
                         f.write(line)
                         continue
