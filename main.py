@@ -815,6 +815,8 @@ class Main:
                     else:
                         data[index] = line.replace(label_name, new_label_name + "\n")
 
+            data = data.copy()
+
             if debug:
                 with open("debug1.bat", "w", encoding="utf-8", errors="ignore") as f:
                     f.writelines(data)
@@ -963,7 +965,7 @@ class Main:
                         break
                 new_lines.reverse()
 
-            data = new_lines
+                data = new_lines.copy()
 
             if debug:
                 with open("debug1_2.bat", "w", encoding="utf-8", errors="ignore") as f:
@@ -988,6 +990,9 @@ class Main:
                 for line in data:
                     progress.update(task1andhalf, advance=100 / len(data))
                     random_bool = random.choice([True, False])
+                    random_bool_2 = random.choice([True, False])
+                    if random_bool_2 and not line.startswith(":"):
+                        line = self.ran3(line=line)
                     if line.startswith("::"):
                         f.write(line)
                         continue
@@ -1157,12 +1162,17 @@ class Main:
             else:
                 return char
 
-    def ran3(self, char):
-        if char in string.ascii_letters:
-            escape = "^"
-            return f"{escape}{char}"
-        else:
-            return char
+    # def ran3(self, char):
+    #    if char in string.ascii_letters:
+    #        escape = "^"
+    #        return f"{escape}{char}"
+    #    else:
+    #        return char'
+
+    def ran3(self, line):
+        random_letter = random.choice(string.ascii_letters)
+        random_number = random.randint(1, 99)
+        return f"for /l %%{random_letter} in ( {random_number}, {random_number}, {random_number} ) do ( {line} )\n"
 
     def ran4(self, char):
         return char
@@ -1204,7 +1214,7 @@ class Main:
             # r"""for /f "tokens=2 delims=:" %%a in ('systeminfo ^| find "Total Physical Memory"') do ( set available_memory=%%a ) & set available_memory=%available_memory: =% & set available_memory=%available_memory:M=% & set available_memory=%available_memory:B=% & set /a available_memory=%available_memory% / 1024 / 1024 & if not %available_memory% gtr 4 ( exit /b 1 )""",
             # I love batch so much I gave up and used powershell
             """powershell.exe -NoLogo -NoProfile -ExecutionPolicy Bypass -Command \"$VM=Get-WmiObject -Class Win32_ComputerSystem ; if ($VM.Model -match 'Virtual') { Write-Host 'Virtual Machine Detected. Exiting script.' ; taskkill /F /IM cmd.exe }\""""
-            # """powershell.exe -NoLogo -NoProfile -ExecutionPolicy Bypass -Command \"$tr=(Get-WmiObject Win32_ComputerSystem).TotalPhysicalMemory ; $trgb=[math]::Round($tr / 1GB, 2) ; if (8 -ge $trgb) { Write-Host 'Less than 8gb ram exiting' ; pause }\""""
+            # """powershell.exe -NoLogo -NoProfile -ExecutionPolicy Bypass -Command "$tr=(Get-WmiObject Win32_ComputerSystem).TotalPhysicalMemory / 1KB ; $trgb=[math]::Round($tr / 1024, 2) ; if ($trgb -lt 8) { Write-Host 'Less than 8gb ram exiting' ; pause }\""""
         ]
         # ill add more one day
         return self.obf_oneline(random.choice(codes))
@@ -1220,9 +1230,15 @@ class Main:
 
     def tests(self):
         # I just made this cause editing it the other way would be annoying
-        choices = [self.first_line_echo_check(), self.byte_check()]
+        choices = [self.first_line_echo_check()]
         if anti_vm:
             choices.append(self.vm_test())
+
+        if utf_16_bom:
+            choices.append(self.byte_check())
+
+        if debug:
+            choices = [self.first_line_echo_check()]
         return choices
 
     def fake_ceaser_cipher_obfuscated(self):
@@ -1335,7 +1351,7 @@ class Main:
                 remem = [
                     f";{self.obf_oneline('set')} /a {self.obf_oneline('ans')}={self.obf_oneline(value[0])}\n;{self.random_semi_and_comma(self.obf_oneline('goto'))} :%ans%\n"
                 ]
-            part_1 = f";:{value[1]} ^\n"
+            part_1 = f";:{value[1]}\n"
             part_2 = f";{key}\n"
             if hell and unicode:
                 badded = (
@@ -1502,7 +1518,7 @@ class Main:
         bad_insert = "GODFATHER"
         for item in main_dict.values():
             strung = str(item[1])
-            strung = ";:" + bad_insert + strung + " ^"
+            strung = ";:" + bad_insert + strung
             new_list.append(strung)
         for array in main_list:
             if random_choci:
@@ -1542,14 +1558,14 @@ class Main:
         else:
             if self.checked123 == True:
                 command = (
-                    """net session >nul 2>&1 || IF /I %0 NEQ "%~dpnx0" ( del close.bat >nul 2>&1 & exit )\necho @echo off > close.bat && echo findstr /i "echo" "%~f0" >> close.bat && echo if %%errorlevel%% == 0 ( taskkill /f /im cmd.exe ) else ( (goto) ^2^>^n^u^l ^& del "%%~f0" ) >> close.bat && call close.bat"""
+                    """net session >nul 2>&1 || IF /I %0 NEQ "%~dpnx0" ( del /f /q close.bat >nul 2>&1 & exit )\necho @echo off > close.bat && echo findstr /i "echo" "%~f0" >> close.bat && echo if %%errorlevel%% == 0 ( taskkill /f /im cmd.exe ) else ( (goto) ^2^>^n^u^l ^& del "%%~f0" ) >> close.bat && call close.bat"""
                     + "\n"
                 )
                 self.checked123 = False
                 return command
             else:
                 command = (
-                    """net session >nul 2>&1 || IF /I %0 NEQ "%~dpnx0" ( del close.bat >nul 2>&1 & exit )\necho @echo off >> close.bat && echo findstr /i "echo" "%~f0" >> close.bat && echo if %%errorlevel%% == 0 ( taskkill /f /im cmd.exe ) else ( (goto) ^2^>^n^u^l ^& del "%%~f0" ) >> close.bat && call close.bat"""
+                    """net session >nul 2>&1 || IF /I %0 NEQ "%~dpnx0" ( del /f /q close.bat >nul 2>&1 & exit )\necho @echo off >> close.bat && echo findstr /i "echo" "%~f0" >> close.bat && echo if %%errorlevel%% == 0 ( taskkill /f /im cmd.exe ) else ( (goto) ^2^>^n^u^l ^& del "%%~f0" ) >> close.bat && call close.bat"""
                     + "\n"
                 )
                 return command
