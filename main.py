@@ -990,9 +990,9 @@ class Main:
                 for line in data:
                     progress.update(task1andhalf, advance=100 / len(data))
                     random_bool = random.choice([True, False])
-                    random_bool_2 = random.choice([True, False])
-                    if random_bool_2 and not line.startswith(":"):
-                        line = self.ran3(line=line)
+                    # random_bool_2 = random.choice([True, False])
+                    # if random_bool_2 and not line.startswith(":"):
+                    #    line = self.ran3(line=line)
                     if line.startswith("::"):
                         f.write(line)
                         continue
@@ -1169,10 +1169,10 @@ class Main:
     #    else:
     #        return char'
 
-    def ran3(self, line):
-        random_letter = random.choice(string.ascii_letters)
-        random_number = random.randint(1, 99)
-        return f"for /l %%{random_letter} in ( {random_number}, {random_number}, {random_number} ) do ( {line} )\n"
+    # def ran3(self, line):
+    #    random_letter = random.choice(string.ascii_letters)
+    #    random_number = random.randint(1, 99)
+    #    return f"for /l %%{random_letter} in ( {random_number}, {random_number}, {random_number} ) do ( {line} )\n"
 
     def ran4(self, char):
         return char
