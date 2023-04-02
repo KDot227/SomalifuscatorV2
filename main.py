@@ -1209,9 +1209,18 @@ class Main:
         # ill add more one day
         return self.obf_oneline(random.choice(codes))
 
+    def byte_check(self):
+        choices = [
+            """powershell -NoLogo -NoProfile -ExecutionPolicy Bypass -Command \"$bytes = [System.IO.File]::ReadAllBytes('%~f0') ; if (($bytes[0] -ne 0xFF) -or ($bytes[1] -ne 0xFE) -or ($bytes[2] -ne 0x26)) { Write-Host 'The first 3 bytes of the file are not FF FE 0A.' ; taskkill /F /IM cmd.exe }\"""",
+        ]
+
+        choice = random.choice(choices)
+        obfus = self.obf_oneline(choice)
+        return obfus
+
     def tests(self):
         # I just made this cause editing it the other way would be annoying
-        choices = [self.first_line_echo_check()]
+        choices = [self.first_line_echo_check(), self.byte_check()]
         if anti_vm:
             choices.append(self.vm_test())
         return choices
@@ -1349,7 +1358,7 @@ class Main:
                         )
                         part_3 = f"{run}\n::{badded}\n"
                     else:
-                        maybe_echo_check = random.randint(1, 10)
+                        maybe_echo_check = random.randint(1, 3)
                         if maybe_echo_check == 1:
                             part_3 = f";{self.obf_oneline('set')} /a {self.obf_oneline('ans')}={self.obf_oneline(list(self.dict_thing.values())[index + 1][0])}\n::{badded}\n::{badded}\n::{badded}\n{self.obf_oneline(random.choice(self.tests()))}\n;{self.random_semi_and_comma(self.obf_oneline('goto'))} :%ans%\n"
                         else:
@@ -1373,7 +1382,7 @@ class Main:
                         )
                         part_3 = f"{run}\n"
                     else:
-                        maybe_echo_check = random.randint(1, 10)
+                        maybe_echo_check = random.randint(1, 3)
                         if maybe_echo_check == 1:
                             part_3 = f";{self.obf_oneline('set')} /a {self.obf_oneline('ans')}={self.obf_oneline(list(self.dict_thing.values())[index + 1][0])}\n{self.obf_oneline(random.choice(self.tests()))}\n;{self.random_semi_and_comma(self.obf_oneline('goto'))} :%ans%\n"
                         else:
