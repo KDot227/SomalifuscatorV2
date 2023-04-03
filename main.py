@@ -1171,10 +1171,10 @@ class Main:
     #    else:
     #        return char'
 
-    # def ran3(self, line):
-    #    random_letter = random.choice(string.ascii_letters)
-    #    random_number = random.randint(1, 99)
-    #    return f"for /l %%{random_letter} in ( {random_number}, {random_number}, {random_number} ) do ( {line} )\n"
+    def ran3(self, line):
+        random_letter = random.choice(string.ascii_letters)
+        random_number = random.randint(1, 99)
+        return f"for /l %%{random_letter} in ( {random_number}, {random_number}, {random_number} ) do ( {line} )\n"
 
     def ran4(self, char):
         return char
