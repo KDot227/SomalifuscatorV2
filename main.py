@@ -192,6 +192,8 @@ settings = [
     f"Random Spacing = {random_spacing}",
     f"Echo Weird = {echo_weird} (Experimental)",
     f"Auto Update = {auto_update}",
+    f"Anti VM = {anti_vm}",
+    f"For Loop Obfuscation = {for_loop} (Experimental)",
     f"Music = {music}",
 ]
 
