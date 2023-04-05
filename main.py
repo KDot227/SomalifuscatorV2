@@ -40,6 +40,7 @@ try:
     echo_weird = settings["echo_weird"]
     anti_vm = settings["anti_vm"]
     for_loop = settings["for_loop"]
+    scramble_labels = settings["scramble_labels"]
 except:
     print(
         "Your settings.json file has been update! Please redownload somalifuscator and try again"
@@ -194,6 +195,7 @@ settings = [
     f"Auto Update = {auto_update}",
     f"Anti VM = {anti_vm}",
     f"For Loop Obfuscation = {for_loop} (Experimental)",
+    f"Scramble Labels = {scramble_labels} (Experimental)",
     f"Music = {music}",
 ]
 
@@ -806,19 +808,22 @@ class Main:
 
             checked_labels = {}
 
-            for index, line in enumerate(data):
-                if line.startswith(":") and not line.startswith("::"):
-                    label_name = line.split(":")[1]
-                    random_string = self.make_random_string((8, 9))
-                    checked_labels[label_name] = random_string
-
-            for label_name, new_label_name in checked_labels.items():
+            if scramble_labels:
                 for index, line in enumerate(data):
                     if line.startswith(":") and not line.startswith("::"):
-                        if line.split(":")[1] == label_name:
-                            data[index] = f":{new_label_name}\n"
-                    else:
-                        data[index] = line.replace(label_name, new_label_name + "\n")
+                        label_name = line.split(":")[1]
+                        random_string = self.make_random_string((8, 9))
+                        checked_labels[label_name] = random_string
+
+                for label_name, new_label_name in checked_labels.items():
+                    for index, line in enumerate(data):
+                        if line.startswith(":") and not line.startswith("::"):
+                            if line.split(":")[1] == label_name:
+                                data[index] = f":{new_label_name}\n"
+                        else:
+                            data[index] = line.replace(
+                                label_name, new_label_name + "\n"
+                            )
 
             data = data.copy()
 
