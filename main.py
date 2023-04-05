@@ -802,6 +802,8 @@ class Main:
                     new_lines.append(line + "\n")
                 i += 1
 
+            data = new_lines.copy()
+
             checked_labels = {}
 
             for index, line in enumerate(data):
@@ -1440,27 +1442,27 @@ class Main:
         label123 = bad_label
         if self.rep_num < 5:
             examples = [
-                f";@if %random% equ {RANNUM} ( goto :{label123} ) else ( goto :{good_label} )",
-                f";@if not 0 neq 0 ( goto :{good_label} ) else ( goto :{label123} )",
-                f";@if exist C:\Windows\System32 ( goto :{good_label} ) else ( goto :{label123} )",
-                f";@if not %cd% == %cd% ( goto :{label123} ) else ( goto :{good_label} )",
-                f";@if 0 equ 0 ( goto :{good_label} ) else ( goto :{label123} )",
-                f";@if exist C:\Windows\System3 ( goto :{label123} ) else ( goto :{good_label} )",
-                f";@if %cd% == %cd% ( goto :{good_label} ) else ( goto :{label123} )",
-                f";@if chcp leq 1 ( goto :{label123} ) else ( goto :{good_label} )",
+                f"if %random% equ {RANNUM} ( goto :{label123} ) else ( goto :{good_label} )",
+                f"if not 0 neq 0 ( goto :{good_label} ) else ( goto :{label123} )",
+                f"if exist C:\Windows\System32 ( goto :{good_label} ) else ( goto :{label123} )",
+                f"if not %cd% == %cd% ( goto :{label123} ) else ( goto :{good_label} )",
+                f"if 0 equ 0 ( goto :{good_label} ) else ( goto :{label123} )",
+                f"if exist C:\Windows\System3 ( goto :{label123} ) else ( goto :{good_label} )",
+                f"if %cd% == %cd% ( goto :{good_label} ) else ( goto :{label123} )",
+                f"if chcp leq 1 ( goto :{label123} ) else ( goto :{good_label} )",
             ]
         else:
             examples = [
-                f";@if %random% equ {RANNUM} ( goto :{label123} ) else ( goto :{good_label} )",
-                f";@if not 0 neq 0 ( goto :{good_label} ) else ( goto :{label123} )",
-                f";@if exist C:\Windows\System32 ( goto :{good_label} ) else ( goto :{label123} )",
-                f";@if not %cd% == %cd% ( goto :{label123} ) else ( goto :{good_label} )",
-                f";@if 0 equ 0 ( goto :{good_label} ) else ( goto :{label123} )",
-                f";@if exist C:\Windows\System3 ( goto :{label123} ) else ( goto :{good_label} )",
-                f";@if %cd% == %cd% ( goto :{good_label} ) else ( goto :{label123} )",
-                f";@if chcp leq 1 ( goto :{label123} ) else ( goto :{good_label} )",
-                f";@if not defined KDOT ( goto :EOF ) else ( goto :{good_label} )",
-                f";@if not defined f ( goto :EOF ) else ( goto :{good_label} )",
+                f"if %random% equ {RANNUM} ( goto :{label123} ) else ( goto :{good_label} )",
+                f"if not 0 neq 0 ( goto :{good_label} ) else ( goto :{label123} )",
+                f"if exist C:\Windows\System32 ( goto :{good_label} ) else ( goto :{label123} )",
+                f"if not %cd% == %cd% ( goto :{label123} ) else ( goto :{good_label} )",
+                f"if 0 equ 0 ( goto :{good_label} ) else ( goto :{label123} )",
+                f"if exist C:\Windows\System3 ( goto :{label123} ) else ( goto :{good_label} )",
+                f"if %cd% == %cd% ( goto :{good_label} ) else ( goto :{label123} )",
+                f"if chcp leq 1 ( goto :{label123} ) else ( goto :{good_label} )",
+                f"if not defined KDOT ( goto :EOF ) else ( goto :{good_label} )",
+                f"if not defined f ( goto :EOF ) else ( goto :{good_label} )",
             ]
         if echo_weird:
             random_maybe = random.choice([True, False])
