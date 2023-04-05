@@ -42,12 +42,6 @@ Here are a couple of cool things Somalifuscator (ultimate mode) does to make it 
 * When you use something such as [this](https://github.com/DissectMalware/batch_deobfuscator) it can't get past this first layer. If you give it a chance and take that layer off it can't even interpret the code because of all the unicode. ON TOP OF THAT even if you have all other settings disabled it STILL won't be able to deobfuscate all the way. This is why Somalifuscator is the best batch obfuscator to ever be made.
 * In the end I'm not saying it's impossible to deobfuscate since technically every obfuscation is deobfuscateable. I'm just saying that this obfuscation is the best chance you have to prevent the inevitable deobfuscation
 
-<h3 align="center">
-  BUILT IN VARIABLES HAVE A FIX!!!
-</h3>
-
-The only obfuscation mode that supports built in variables is level 3, 4, 5, ultimate, embed and exe. idk why you would use mode 1 over ultimate but it's up to u.
-
 <h2 align="center">
   Why make this?
 </h2>
@@ -59,8 +53,6 @@ Long story short baum made [this](https://github.com/baum1810/batchobfuscator) a
 </h2>
 
 Not only is the Obfuscator very fast but it's also very customizable. If you know python code well enough nothing is stopping you from going into the code and changing some of the randint values to occur more frequently making your code more obfuscated and harder to read.
-
-Another thing is that after using modes such as ultimate, you can then use other modes such as level 5 or level 4 to make your code more secure/obfuscated
 
 <h2 align="center">
   Cool map thing I drew
