@@ -806,24 +806,18 @@ class Main:
 
             data = new_lines.copy()
 
-            checked_labels = {}
-
             if scramble_labels:
-                for index, line in enumerate(data):
-                    if line.startswith(":") and not line.startswith("::"):
-                        label_name = line.split(":")[1]
-                        random_string = self.make_random_string((8, 9))
-                        checked_labels[label_name] = random_string
+                unique_labels = set(re.findall(r":\w+", " ".join(data)))
 
-                for label_name, new_label_name in checked_labels.items():
-                    for index, line in enumerate(data):
-                        if line.startswith(":") and not line.startswith("::"):
-                            if line.split(":")[1] == label_name:
-                                data[index] = f":{new_label_name}\n"
-                        else:
-                            data[index] = line.replace(
-                                label_name, new_label_name + "\n"
-                            )
+                label_mappings = {}
+
+                for label in unique_labels:
+                    random_string = self.make_random_string((8, 9))
+                    label_mappings[label] = ":" + random_string
+
+                for i in range(len(data)):
+                    for label in label_mappings:
+                        data[i] = data[i].replace(label, label_mappings[label])
 
             data = data.copy()
 
