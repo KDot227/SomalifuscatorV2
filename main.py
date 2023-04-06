@@ -4,6 +4,7 @@
 import os
 import time
 import json
+import argparse
 import threading
 from tkinter import Tk
 from tkinter import filedialog as kdot2
@@ -232,7 +233,41 @@ class AutoUpdate:
 
 
 class Main:
-    def __init__(self):
+    def __init__(self, mode=None, file=None):
+        if mode:
+            self.level = mode
+            self.file = file
+            self.down = False
+            self.rep_num = 0
+            self.level = self.level.lower()
+            self.level_dict = {
+                "1": self.level1,
+                "2": self.level2,
+                "3": self.level3,
+                "4": self.level4,
+                "5": self.level5,
+                "clean": self.clean,
+                "all": self.all,
+                "fud": self.fud,
+                "ultimate": self.ultimate,
+                "embed": self.embed,
+                "exe": self.bat2exe,
+                "exe2": self.bat2exe2,
+                "oneline": self.oneline,
+                "exe2bat": self.exe2bat,
+                "py2bat": self.py2bat,
+            }
+            pick = self.level_dict.get(self.level)
+            if pick is not None:
+                self.mixer()
+                os.system("cls" if os.name == "nt" else "clear")
+                pick()
+                os._exit(0)
+            else:
+                print("Invalid option")
+                time.sleep(3)
+                os._exit(1)
+
         # if u on linux kys
         # nvm I'm on linux now I gotta fix this
         os.system("cls" if os.name == "nt" else "clear")
@@ -1980,6 +2015,10 @@ exit /b 0
 
 
 if __name__ == "__main__":
+    argparse = argparse.ArgumentParser()
+    argparse.add_argument("-f", "--file", help="Auto update")
+    argparse.add_argument("-m", "--mode", help="Mode")
+    args = argparse.parse_args()
     threads = []
     if music:
         threads.append(Music)
@@ -1988,7 +2027,7 @@ if __name__ == "__main__":
     if not threads == []:
         for thread in threads:
             threading.Thread(target=thread).start()
-    Main()
+    Main(args.mode, args.file)
     print("Done!")
     input()
     os._exit(0)
