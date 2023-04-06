@@ -1,5 +1,4 @@
 @echo off
-
 cd /d "%~dp0"
 
 color 0a
@@ -38,8 +37,13 @@ if not %errorlevel% == 0 (
     exit /b 1
 )
 
-python -m pip install -r requirements.txt
-python -m main
+if "%~1"=="" (
+    python -m pip install -r requirements.txt
+    python -m main
+) else (
+    python -m pip install -r requirements.txt
+    python -m main -f %~1 -m %~2
+)
 
 pause
 exit /b 0
