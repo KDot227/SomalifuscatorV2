@@ -175,7 +175,7 @@ options = (
 [exe2] Second method for Bat2Exe (usually low detections but may increase over time)
 [COMING SOON] [exe3] Third method for Bat2Exe (100% fud)
 [ONELINE] I did it
-[exe2bat] Converts exe to bat (EXPERIMENTAL)
+[exe2bat] Converts exe to bat (EXPERIMENTAL) (NOTE THIS IS NOT A DECOMPILER. IT EMBEDS THE EXE IN THE BAT FILE)
 [py2bat] Converts python file to bat (Note you cant use things like getting the execution path cause that might break but idk ur choice)
 
 [?] (If you want to use built in variables such as %~dp0 etc wrap them in percent signes then run the clean mode afterwards. You DONT have to do this if your using ultimate)
