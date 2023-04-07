@@ -1274,7 +1274,7 @@ class Main:
         if anti_vm:
             choices.append(self.vm_test())
 
-        if utf_16_bom:
+        if utf_16_bom and not self.level == "exe2bat":
             choices.append(self.byte_check())
 
         if debug:
@@ -1327,7 +1327,6 @@ class Main:
         ans2 = eval(problem23)
 
         while ans < 0:
-
             operators = ["+", "-"]
             opp1 = random.choice(operators)
             opp2 = random.choice(operators)
