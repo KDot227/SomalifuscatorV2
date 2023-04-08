@@ -42,6 +42,39 @@ Here are a couple of cool things Somalifuscator (ultimate mode) does to make it 
 * When you use something such as [this](https://github.com/DissectMalware/batch_deobfuscator) it can't get past this first layer. If you give it a chance and take that layer off it can't even interpret the code because of all the unicode. ON TOP OF THAT even if you have all other settings disabled it STILL won't be able to deobfuscate all the way. This is why Somalifuscator is the best batch obfuscator to ever be made.
 * In the end I'm not saying it's impossible to deobfuscate since technically every obfuscation is deobfuscateable. I'm just saying that this obfuscation is the best chance you have to prevent the inevitable deobfuscation
 
+<h1 align="center">
+  Features
+</h1>
+
+<details>
+  <summary>Anti VM</summary>
+  Literially checks if the current computer is a VM and if it is it exits
+</details>
+<details>
+  <summary>Anti Echo</summary>
+  Looks for any variation of the word ECHO. If it's found it exits. Also some of the other settings make it very very hard to echo commands and understand output
+</details>
+<details>
+  <summary>Anti Byte Change</summary>
+  Checks to make sure the first 3 bytes are obfuscated asf
+</details>
+<details>
+  <summary>Environment variable obfuscation</summary>
+  Uses built in Windows Environment Variables to help obfuscate code
+</details>
+<details>
+  <summary>Built in var support</summary>
+  I went through the dedication to list out nearly every built in var + make a regex that can find them all for multiple instances.
+</details>
+<details>
+  <summary>Errorlevel continuation</summary>
+  Using errorlevel won't break the code since using goto and labels dont establish an error level unless the label can't be found (which it always should be able to be found)
+</details>
+<details>
+  <summary>Hot asf</summary>
+  ngl from what I've seen, it's the best in the world and hopefully it stays that way
+</details>
+
 <h2 align="center">
   Why make this?
 </h2>
