@@ -158,8 +158,7 @@ banner = Center.XCenter(
 """
 )
 
-options = (
-    r"""[1] Level 1 (Recommended to use AFTER 2) (Rot-x method)
+options1 = r"""[1] Level 1 (Recommended to use AFTER 2) (Rot-x method)
 [2] Level 2 (More Variable replacement)
 [3] Level 3 (Encoding trick by changing first 2 bytes)
 [4] Level 4 (NOTE: Don't end your files with exit when its done with this command or it might break. (same with pause))
@@ -167,9 +166,12 @@ options = (
 [clean] cleans the code to try and fix any common errors (FIXES BUILT IN VARIABLES)
 [all] does 1, 2, 3 and clean
 [fud] makes it undetectable by everything on virustotal
-
+"""
+options2 = r"""
 [ultimate] The Ultimate batch obfuscation (The Ultimate batch obfuscation) (Also fud from virus total and all AV)
-
+"""
+options3 = (
+    r"""
 [embed] Embeds powershell code in a batch file. (they run bat file but it reruns as ps1/powershell)
 [exe] Simple Bat2Exe with self extracting zip (usually low detections too)
 [exe2] Second method for Bat2Exe (usually low detections but may increase over time)
@@ -312,7 +314,9 @@ class Main:
 
         if os.path.exists(self.file):
             os.system("cls" if os.name == "nt" else "clear")
-            print(Colorate.Vertical(Colors.purple_to_blue, options, 2))
+            print(Colorate.Vertical(Colors.purple_to_blue, options1, 2))
+            print(Colorate.Vertical(Colors.green_to_blue, options2, 2))
+            print(Colorate.Vertical(Colors.purple_to_blue, options3, 2))
             self.level = Write.Input(
                 "What level of Obfuscation do you want? -> ",
                 Colors.green,
