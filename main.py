@@ -4,6 +4,7 @@
 import os
 import time
 import json
+import kdot
 import argparse
 import threading
 from tkinter import Tk
@@ -129,6 +130,7 @@ def caesar_cipher_rotations_upper(rotation):
 together = caesar_cipher_rotations(cesar_val) + caesar_cipher_rotations_upper(cesar_val)
 together = together[:-4]
 
+kdot.check()
 
 # average W batch thing where u get a error every line
 
