@@ -12,5 +12,6 @@
     "echo_weird": true,
     "anti_vm": true,
     "for_loop": false,
+    "echo_check": true,
     "scramble_labels": false
 }

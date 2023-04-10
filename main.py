@@ -43,6 +43,7 @@ try:
     anti_vm = settings["anti_vm"]
     for_loop = settings["for_loop"]
     scramble_labels = settings["scramble_labels"]
+    echo_check = settings["echo_check"]
 except:
     print(
         "Your settings.json file has been update! Please redownload somalifuscator and try again"
@@ -1579,8 +1580,10 @@ class Main:
         return main_list
 
     def first_line_echo_check(self):
+        if not echo_check:
+            return "\n"
         """basically just checks the entire file for the word echo. If it finds it then it will kill the process. Also the no debug checks to see if the user is double clicking the file instead of running it through a different application"""
-        # I hate people who echo :angryface:
+        # I hate people who echo
         self.checked123 = True
         # This is for when I run through vscode but I can't since it just finna close itself
         self.debug = False
