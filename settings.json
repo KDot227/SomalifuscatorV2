@@ -13,5 +13,6 @@
     "anti_vm": true,
     "for_loop": false,
     "echo_check": true,
-    "scramble_labels": false
+    "scramble_labels": false,
+    "double_click_check": false
 }

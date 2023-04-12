@@ -44,6 +44,7 @@ try:
     for_loop = settings["for_loop"]
     scramble_labels = settings["scramble_labels"]
     echo_check = settings["echo_check"]
+    double_click_check = settings["double_click_check"]
 except:
     print(
         "Your settings.json file has been update! Please redownload somalifuscator and try again"
@@ -202,6 +203,8 @@ settings = [
     f"Anti VM = {anti_vm}",
     f"For Loop Obfuscation = {for_loop} (Experimental)",
     f"Scramble Labels = {scramble_labels} (Experimental)",
+    f"Echo Check = {echo_check}",
+    f"Double Click Check = {double_click_check}",
     f"Music = {music}",
 ]
 
@@ -365,7 +368,8 @@ class Main:
             random.choice(
                 # Batch has a specific issue with characters that aren't in the normal ASCII table cause if u got them in a variable it will make the variable explode. I fixed this before by changing the chcp to 65001 but sometimes that wouldn't fix things
                 # "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZḆḞԍǏƘԸɌȚЦѠƳȤѧćễļṃŉᵲừŵź☠☢☣卐"
-                "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+                # "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+                "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ#$(),.?@[]_"
             )
             for _ in range(length)
         )
@@ -508,6 +512,9 @@ class Main:
         if decided == oct(ans):
             return "0" + str(decided[2:])
         else:
+            random_quotes = random.choice([True, False])
+            if random_quotes:
+                return '"' + str(decided) + '"'
             return decided
 
     @staticmethod
@@ -1221,9 +1228,6 @@ class Main:
         random_number = random.randint(1, 99)
         return f"for /l %%{random_letter} in ( {random_number}, {random_number}, {random_number} ) do ( {line} )\n"
 
-    def ran4(self, char):
-        return char
-
     def random_dead_code(self, entire_array):
         """Dead code that just won't be executed so it can be whatever. If u wanna add more its all u"""
         dead_code = [
@@ -1587,6 +1591,8 @@ class Main:
         self.checked123 = True
         # This is for when I run through vscode but I can't since it just finna close itself
         self.debug = False
+        if not double_click_check:
+            self.debug = True
         if self.check_bypass:
             return ""
         if self.debug:
