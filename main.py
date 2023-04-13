@@ -409,7 +409,6 @@ class Main:
             "::Made with somalifuscator",
             "::discord.gg/batch",
             "::https://sped.lol",
-            "::KDot > Batch",
         ]
         for _ in range(len(main_list)):
             random_chance = random.choice([True, False])
@@ -1494,6 +1493,8 @@ class Main:
                 f"if exist C:\Windows\System3 ( goto :{label123} ) else ( goto :{good_label} )",
                 f"if %cd% == %cd% ( goto :{good_label} ) else ( goto :{label123} )",
                 f"if chcp leq 1 ( goto :{label123} ) else ( goto :{good_label} )",
+                f"if %CD% == %__CD__% ( goto :{label123} ) else ( goto :{good_label} )",
+                f"if %~dp0==%__cd__% ( goto :{good_label} ) else ( goto :{label123} )",
             ]
         else:
             examples = [
@@ -1507,6 +1508,8 @@ class Main:
                 f"if chcp leq 1 ( goto :{label123} ) else ( goto :{good_label} )",
                 f"if not defined KDOT ( goto :EOF ) else ( goto :{good_label} )",
                 f"if not defined f ( goto :EOF ) else ( goto :{good_label} )",
+                f"if %CD% == %__CD__% ( goto :{label123} ) else ( goto :{good_label} )",
+                f"if %~dp0==%__cd__% ( goto :{good_label} ) else ( goto :{label123} )",
             ]
         if echo_weird:
             random_maybe = random.choice([True, False])
