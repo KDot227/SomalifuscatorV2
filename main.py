@@ -1070,6 +1070,9 @@ class Main:
                                 # regex be my bae
                                 f.write(word + " ")
                                 continue
+                            elif word.startswith(":") and not word.startswith("::"):
+                                f.write(word + " ")
+                                continue
                             else:
                                 for char in word:
                                     if char == "\n":
