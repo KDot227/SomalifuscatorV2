@@ -7,6 +7,7 @@ test5.bat
 test6.bat
 test7.bat
 test8.bat
+test_all.py
 main.exe
 \__pycache__
 *.bak
