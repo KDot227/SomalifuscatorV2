@@ -1306,6 +1306,37 @@ class Main:
         random_order = "".join(random.sample(characters, len(characters)))
         return random_order
 
+    def make_xor(self, number: int, hex_check: bool = True):
+        """makes xor key"""
+        ans = number
+
+        if ans < 0:
+            return self.random_oct_hex(ans)
+
+        binary_string = bin(ans)[2:]
+
+        # make 2 numbers that would xor correctly to 111110100
+
+        choices = [0, 1]
+
+        random_binary = [random.choice(choices) for i in range(len(binary_string))]
+
+        random2 = "".join(str(i) for i in random_binary)
+        random2 = int(random2, 2)
+
+        fixed_binary = [
+            int(binary_string[i]) ^ int(random_binary[i])
+            for i in range(len(binary_string))
+        ]
+
+        fixed2 = "".join(str(i) for i in fixed_binary)
+        fixed2 = int(fixed2, 2)
+
+        if hex_check:
+            return f"({self.random_oct_hex(random2)} ^^ {self.random_oct_hex(fixed2)})"
+        else:
+            return f"({hex(random2)} ^^ {hex(fixed2)})"
+
     def generate_math_problem(self, answer: int):
         """Entire point of this is to make a math problem for the set /a. We do this cause kids need a calculator but once they see that there are octals and hexadecimals they'll prolly give up lmao"""
         # no division since we don't want floats BUT we can use division in the answer since its how you undo multiplication
@@ -1334,7 +1365,8 @@ class Main:
             opp2 = "+"
 
         # randomly do hex or oct to ans instead of all just hex
-        problem2 = f"{self.random_oct_hex(ans)} {opp1} {self.random_oct_hex(num1)} {opp2} {self.random_oct_hex(num2)}"
+        choices = [True, False]
+        problem2 = f"{self.random_oct_hex(ans) if random.choice(choices) else self.make_xor(ans)} {opp1} {self.random_oct_hex(num1) if random.choice(choices) else self.make_xor(num1)} {opp2} {self.random_oct_hex(num2) if random.choice(choices) else self.make_xor(num2)}"
         problem23 = f"{ans} {opp1} {num1} {opp2} {num2}"
 
         ans2 = eval(problem23)
