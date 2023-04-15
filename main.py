@@ -506,14 +506,16 @@ class Main:
 
     @staticmethod
     def random_oct_hex(ans: int):
-        choices = [hex(ans), oct(ans)]
+        choices = [hex(ans), oct(ans), ans]
         decided = random.choice(choices)
         if decided == oct(ans):
             return "0" + str(decided[2:])
-        else:
+        elif decided == hex(ans):
             random_quotes = random.choice([True, False])
             if random_quotes:
                 return '"' + str(decided) + '"'
+            return decided
+        else:
             return decided
 
     @staticmethod
