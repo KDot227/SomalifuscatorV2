@@ -45,5 +45,4 @@ if "%~1"=="" (
     python -m main -f %~1 -m %~2
 )
 
-pause
 exit /b 0
