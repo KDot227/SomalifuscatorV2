@@ -2083,5 +2083,5 @@ if __name__ == "__main__":
             threading.Thread(target=thread).start()
     Main(args.mode, args.file)
     print("Done!")
-    input()
+    time.sleep(3)
     os._exit(0)
