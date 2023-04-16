@@ -14,5 +14,6 @@
     "for_loop": false,
     "echo_check": true,
     "scramble_labels": false,
-    "double_click_check": true
+    "double_click_check": true,
+    "recursive_xor": true
 }

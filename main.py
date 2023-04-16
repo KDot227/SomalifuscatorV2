@@ -45,6 +45,7 @@ try:
     scramble_labels = settings["scramble_labels"]
     echo_check = settings["echo_check"]
     double_click_check = settings["double_click_check"]
+    recursive_xor = settings["recursive_xor"]
 except:
     print(
         "Your settings.json file has been update! Please redownload somalifuscator and try again"
@@ -205,6 +206,7 @@ settings = [
     f"Scramble Labels = {scramble_labels} (Experimental)",
     f"Echo Check = {echo_check}",
     f"Double Click Check = {double_click_check}",
+    f"Recursive Xor = {recursive_xor}",
     f"Music = {music}",
 ]
 
@@ -1317,8 +1319,6 @@ class Main:
 
         binary_string = bin(ans)[2:]
 
-        # make 2 numbers that would xor correctly to 111110100
-
         choices = [0, 1]
 
         random_binary = [random.choice(choices) for i in range(len(binary_string))]
@@ -1335,7 +1335,18 @@ class Main:
         fixed2 = int(fixed2, 2)
 
         if hex_check:
-            return f"({self.random_oct_hex(random2)} ^^ {self.random_oct_hex(fixed2)})"
+            random_tf = random.randint(1, 3)
+            if not recursive_xor:
+                random_tf = 2
+            try:
+                if random_tf != 1:
+                    return f"({self.random_oct_hex(random2)} ^^ {self.random_oct_hex(fixed2)})"
+                else:
+                    return f"({self.make_xor(random2)} ^^ {self.make_xor(fixed2)})"
+            except RecursionError:
+                return (
+                    f"({self.random_oct_hex(random2)} ^^ {self.random_oct_hex(fixed2)})"
+                )
         else:
             return f"({hex(random2)} ^^ {hex(fixed2)})"
 

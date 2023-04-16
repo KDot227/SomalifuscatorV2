@@ -71,6 +71,11 @@ Here are a couple of cool things Somalifuscator (ultimate mode) does to make it 
   Using errorlevel won't break the code since using goto and labels dont establish an error level unless the label can't be found (which it always should be able to be found)
 </details>
 <details>
+  <summary>Bitwise Opperations (Xor, Or, And)</summary>
+  I figured out how you can do bitwise opperations in batch and i'm abusing it.
+  Only XOR is used right now since I can't get Or and And to work correctly with each other
+</details>
+<details>
   <summary>Hot asf</summary>
   ngl from what I've seen, it's the best in the world and hopefully it stays that way
 </details>
