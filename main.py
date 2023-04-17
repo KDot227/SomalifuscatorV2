@@ -1435,14 +1435,21 @@ class Main:
         main_list = []
 
         for index, item in enumerate(original_lines):
+            echo_check123 = True
+            # check if %errorlevel% is in the line and if it is then set echo_check123 to false
+            if r"%errorlevel%" in item.lower():
+                echo_check123 = False
             t = self.generate_math_problem(answer=random.randint(100000, 10000000))
             self.dict_thing[item] = [
                 t[0],
                 t[1],
                 index,
+                echo_check123,
             ]
 
         # I use ; infront of everything cause it gets rid of syntax highlight on vscode and notepad++ lmao
+
+        # NOTE everything in this for loop is the most confusing and worse coding I have ever done in my life. I am sorry for whoever is trying to read, imrpove or just understand what is going on especially if you have no prior knowledge of batch
         for index, (key, value) in enumerate(self.dict_thing.items()):
             if index == 0:
                 remem = [
@@ -1472,7 +1479,7 @@ class Main:
                         part_3 = f"{run}\n::{badded}\n"
                     else:
                         maybe_echo_check = random.randint(1, 3)
-                        if maybe_echo_check == 1:
+                        if maybe_echo_check == 1 and not value[3]:
                             part_3 = f";{self.obf_oneline('set')} /a {self.obf_oneline('ans')}={self.obf_oneline(list(self.dict_thing.values())[index + 1][0])}\n::{badded}\n::{badded}\n::{badded}\n{self.obf_oneline(random.choice(self.tests()))}\n;{self.random_semi_and_comma(self.obf_oneline('goto'))} :%ans%\n"
                         else:
                             part_3 = f";{self.obf_oneline('set')} /a {self.obf_oneline('ans')}={self.obf_oneline(list(self.dict_thing.values())[index + 1][0])}\n::{badded}\n::{badded}\n::{badded}\n;{self.random_semi_and_comma(self.obf_oneline('goto'))} :%ans%\n"
@@ -1496,7 +1503,7 @@ class Main:
                         part_3 = f"{run}\n"
                     else:
                         maybe_echo_check = random.randint(1, 3)
-                        if maybe_echo_check == 1:
+                        if maybe_echo_check == 1 and not value[3]:
                             part_3 = f";{self.obf_oneline('set')} /a {self.obf_oneline('ans')}={self.obf_oneline(list(self.dict_thing.values())[index + 1][0])}\n{self.obf_oneline(random.choice(self.tests()))}\n;{self.random_semi_and_comma(self.obf_oneline('goto'))} :%ans%\n"
                         else:
                             part_3 = f";{self.obf_oneline('set')} /a {self.obf_oneline('ans')}={self.obf_oneline(list(self.dict_thing.values())[index + 1][0])}\n;{self.random_semi_and_comma(self.obf_oneline('goto'))} :%ans%\n"
@@ -1507,11 +1514,11 @@ class Main:
 
         random.shuffle(main_list)
 
-        main_list = self.bad_labels_and_dead_code(main_list)
-
         main_list = self.random_inserts(main_list)
 
         main_list = self.random_dead_code(main_list)
+
+        main_list = self.bad_labels_and_dead_code(main_list)
 
         if random_spacing:
             main_list = self.more_dead_comments(main_list)
@@ -1621,17 +1628,20 @@ class Main:
             strung = str(item[1])
             strung = ";:" + bad_insert + strung
             new_list.append(strung)
-        for array in main_list:
-            if random_choci:
-                random_chance = randint(1, 3)
-                if random_chance == 5:
-                    random_label = random.choice(new_list)
-                    random_place = randint(0, len(array))
-                    array.insert(random_place, random_label)
+        for index, array in enumerate(main_list):
+            # if next word contains %errorlevel% in lowercase in current itteration then skip
+            if r"%errorlevel%" in array[0].lower():
+                pass
             else:
-                doskey = f"doskey {random.choice(doskey_options)}={random.choice(doskey_options)}"
-                # we gotta place at zero or else we get bad output for errorlevel checking
-                array.insert(0, self.obf_oneline(doskey))
+                if random_choci:
+                    random_chance = randint(1, 3)
+                    if random_chance == 5:
+                        random_label = random.choice(new_list)
+                        random_place = randint(0, len(array))
+                        array.insert(random_place, random_label)
+                else:
+                    doskey = f"doskey {random.choice(doskey_options)}={random.choice(doskey_options)}"
+                    array.append(self.obf_oneline(doskey))
         return main_list
 
     def first_line_echo_check(self):
