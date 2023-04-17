@@ -816,19 +816,11 @@ class Main:
                 line = data[i].strip()
 
                 if line.endswith("("):
-                    while not line.endswith(")") and not line.endswith(") else"):
+                    while not line.endswith(")"):
                         i += 1
-                        # make sure entire length of the string is not over 8100 chars
-                        if i < 6 and len(line) > 8100:
-                            next_line = data[i].strip()
-                            # Add '&' between lines cause it can't just do stuff like allat
-                            line += " & " + next_line
-                        else:
-                            # if it aint gonna be like that we gotta just say screw the entire idea with nesting and move to labels (like good coders (jk this is batch))
-                            random_label = self.make_random_string((10, 12))
-                            out_label = self.make_random_string((10, 12))
-                            while random_label == out_label:
-                                out_label = self.make_random_string((10, 12))
+                        next_line = data[i].strip()
+                        # Add '&' between lines cause it can't just do stuff like allat
+                        line += " & " + next_line
 
                     line = line.replace("\n", " ").replace("\r", "")
                     line = " ".join(line.split())
