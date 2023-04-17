@@ -4,5 +4,4 @@ Pillow
 pystyle
 requests
 rich
-pygame
 kdot

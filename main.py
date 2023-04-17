@@ -6,7 +6,6 @@ import time
 import json
 import kdot
 import argparse
-import threading
 from tkinter import Tk
 from tkinter import filedialog as kdot2
 
@@ -65,7 +64,6 @@ try:
     from zipfile import ZipFile
     from random import randint
     from ctypes import windll
-    from pygame import mixer
     from pystyle import *
     import subprocess
     import colorama
@@ -813,35 +811,53 @@ class Main:
             # basic parsing of the file and changing things that need to be changed
 
             new_lines = []
-            i = 0
-            while i < len(data):
-                line = data[i].strip()
+            # lines_and_corresponding_labels = {}
+            # i = 0
+            # while i < len(data):
+            #    line = data[i].strip()
+            #
+            #    if line.endswith("("):
+            #        while not line.endswith(")") and not line.endswith(") else"):
+            #            i += 1
+            #            # make sure entire length of the string is not over 8100 chars
+            #            if i < 6 and len(line) > 8100:
+            #                next_line = data[i].strip()
+            #                # Add '&' between lines cause it can't just do stuff like allat
+            #                line += " & " + next_line
+            #            else:
+            #                # if it aint gonna be like that we gotta just say screw the entire idea with nesting and move to labels (like good coders (jk this is batch))
+            #                random_label = self.make_random_string((10, 12))
+            #                out_label = self.make_random_string((10, 12))
+            #                while random_label == out_label:
+            #                    out_label = self.make_random_string((10, 12))
+            #
+            #        line = line.replace("\n", " ").replace("\r", "")
+            #        line = " ".join(line.split())
+            #
+            #        # regex cause im a RE tard
+            #        # that was funny asf ngl
+            #        matches = re.findall(r"\((.*?)\)", line)
+            #        for match in matches:
+            #            if match.startswith(" &"):
+            #                modified_match = match[2:-2]
+            #                line = line.replace(match, modified_match)
+            #            else:
+            #                modified_match = match
+            #
+            #    if line:
+            #        new_lines.append(line + "\n")
+            #    i += 1
+            #
+            # data = new_lines.copy()
 
-                if line.endswith("("):
-                    while not line.endswith(")"):
-                        i += 1
-                        next_line = data[i].strip()
-                        # Add '&' between lines cause it can't just do stuff like allat
-                        line += " & " + next_line
-
-                    line = line.replace("\n", " ").replace("\r", "")
-                    line = " ".join(line.split())
-
-                    # regex cause im a RE tard
-                    # that was funny asf ngl
-                    matches = re.findall(r"\((.*?)\)", line)
-                    for match in matches:
-                        if match.startswith(" &"):
-                            modified_match = match[2:-2]
-                            line = line.replace(match, modified_match)
-                        else:
-                            modified_match = match
-
-                if line:
-                    new_lines.append(line + "\n")
-                i += 1
-
-            data = new_lines.copy()
+            #lines_and_corresponding_labels = {}
+#
+            #for index, line in enumerate(data):
+            #    if line.startswith("if ") or line.startswith("for "):
+            #        while not line.endswith(")") and not line.endswith(") else"):
+            #            pass
+            #    else:
+            #        lines_and_corresponding_labels[index] == line
 
             if scramble_labels:
                 unique_labels = set(re.findall(r":\w+", " ".join(data)))
@@ -1607,7 +1623,6 @@ class Main:
             "cd",
             "",
         ]
-        random_choci = random.choice(types)
         bad_insert = "GODFATHER"
         for item in main_dict.values():
             strung = str(item[1])
@@ -1618,6 +1633,7 @@ class Main:
             if r"%errorlevel%" in array[0].lower():
                 pass
             else:
+                random_choci = random.choice(types)
                 if random_choci:
                     random_chance = randint(1, 3)
                     if random_chance == 5:
