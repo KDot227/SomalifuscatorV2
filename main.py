@@ -93,21 +93,6 @@ __author__ = "K.Dot#4044 and Godfather"
 cesar_val = randint(1, 13)
 
 
-def Music():
-    """Plays music in the background."""
-    current_dir = os.path.dirname(os.path.realpath(__file__))
-    song_dir = current_dir + "/assets/music/"
-    random_song = random.choice(os.listdir(song_dir))
-
-    song = song_dir + random_song
-
-    mixer.init()
-    mixer.music.load(song)
-    mixer.music.play()
-    while mixer.music.get_busy():
-        pass
-
-
 def caesar_cipher_rotations(rotation):
     """Generates the Caesar cipher for a given rotation value."""
     alphabet = list("abcdefghijklmnopqrstuvwxyz")
@@ -1628,7 +1613,7 @@ class Main:
             strung = str(item[1])
             strung = ";:" + bad_insert + strung
             new_list.append(strung)
-        for index, array in enumerate(main_list):
+        for array in main_list:
             # if next word contains %errorlevel% in lowercase in current itteration then skip
             if r"%errorlevel%" in array[0].lower():
                 pass
@@ -2094,14 +2079,8 @@ if __name__ == "__main__":
     argparse.add_argument("-f", "--file", help="Auto update")
     argparse.add_argument("-m", "--mode", help="Mode")
     args = argparse.parse_args()
-    threads = []
-    if music:
-        threads.append(Music)
     if auto_update:
-        threads.append(AutoUpdate)
-    if not threads == []:
-        for thread in threads:
-            threading.Thread(target=thread).start()
+        AutoUpdate()
     Main(args.mode, args.file)
     print("Done!")
     time.sleep(3)
