@@ -34,7 +34,6 @@ try:
     eicar = settings["eicar"]
     unicode = settings["unicode"]
     utf_16_bom = settings["utf_16_bom"]
-    music = settings["music"]
     ads = settings["ads"]
     random_spacing = settings["random_spacing"]
     auto_update = settings["auto_update"]
@@ -190,7 +189,6 @@ settings = [
     f"Echo Check = {echo_check}",
     f"Double Click Check = {double_click_check}",
     f"Recursive Xor = {recursive_xor}",
-    f"Music = {music}",
 ]
 
 
@@ -1412,11 +1410,28 @@ class Main:
         original_lines = codeed
 
         for index, line in enumerate(original_lines):
-            random_number = random.randint(1, 4)
-            if random_number == 1:
-                # add a label that doesn't do anything
-                label = f":{self.make_random_label_no_working()}\n"
-                original_lines.insert(index, label)
+            # not sure if echo really makes a difference but batch does some weird things sometimes
+            echo_check123 = False
+            try:
+                if r"%errorlevel%" in original_lines[index - 1].lower():
+                    echo_check123 = True
+            except IndexError:
+                pass
+            # This should never have an index error since it's the current itteration in the list
+            # if it does get an error then u got other issues. Also at that point dont make an issue just pray to god (or whoever or dont pray idc) and restart ur pc
+            if r"%errorlevel%" in line.lower():
+                echo_check123 = True
+            try:
+                if r"%errorlevel%" in original_lines[index + 1].lower():
+                    echo_check123 = True
+            except IndexError:
+                pass
+            if not echo_check123:
+                random_number = random.randint(1, 4)
+                if random_number == 1:
+                    # add a label that doesn't do anything
+                    label = f":{self.make_random_label_no_working()}\n"
+                    original_lines.insert(index, label)
 
         original_lines = [
             item for item in original_lines if item not in [";", "\n", ";\n"]
@@ -1427,10 +1442,22 @@ class Main:
         main_list = []
 
         for index, item in enumerate(original_lines):
-            echo_check123 = True
-            # check if %errorlevel% is in the line and if it is then set echo_check123 to false
+            echo_check123 = False
+            # check if %errorlevel% is in the previous line and the current line and next line and if it is then set it to True
+            try:
+                if r"%errorlevel%" in original_lines[index - 1].lower():
+                    echo_check123 = True
+            except IndexError:
+                pass
+            # This should never have an index error since it's the current itteration in the list
+            # if it does get an error then u got other issues. Also at that point dont make an issue just pray to god (or whoever or dont pray idc) and restart ur pc
             if r"%errorlevel%" in item.lower():
-                echo_check123 = False
+                echo_check123 = True
+            try:
+                if r"%errorlevel%" in original_lines[index + 1].lower():
+                    echo_check123 = True
+            except IndexError:
+                pass
             t = self.generate_math_problem(answer=random.randint(100000, 10000000))
             self.dict_thing[item] = [
                 t[0],
@@ -1496,6 +1523,7 @@ class Main:
                     else:
                         maybe_echo_check = random.randint(1, 3)
                         if maybe_echo_check == 1 and not value[3]:
+                            print(value[3])
                             part_3 = f";{self.obf_oneline('set')} /a {self.obf_oneline('ans')}={self.obf_oneline(list(self.dict_thing.values())[index + 1][0])}\n{self.obf_oneline(random.choice(self.tests()))}\n;{self.random_semi_and_comma(self.obf_oneline('goto'))} :%ans%\n"
                         else:
                             part_3 = f";{self.obf_oneline('set')} /a {self.obf_oneline('ans')}={self.obf_oneline(list(self.dict_thing.values())[index + 1][0])}\n;{self.random_semi_and_comma(self.obf_oneline('goto'))} :%ans%\n"
@@ -1895,6 +1923,7 @@ exit /b """
         os.rename(f"{file}", f"{self.file}.level5.bat")
 
     def bat2exe(self):
+        """The insperation for this was either from a github repo (90% sure) or a stackoverflow comment. Either way credit to the person who discovered this method. (NOTE: I also had to edit this a bit to work better with somalifuscator)"""
         code = r"""[Version]
 Class=IEXPRESS
 SEDVersion=3

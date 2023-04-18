@@ -5,7 +5,6 @@
     "eicar": true,
     "unicode": true,
     "utf_16_bom": true,
-    "music": false,
     "ads": false,
     "random_spacing": false,
     "auto_update": true,
