@@ -188,7 +188,7 @@ settings = [
     f"Scramble Labels = {scramble_labels} (Experimental)",
     f"Echo Check = {echo_check}",
     f"Double Click Check = {double_click_check}",
-    f"Recursive Xor = {recursive_xor}",
+    f"Recursive Xor = {recursive_xor} (Experimental) might not work with long strings",
 ]
 
 
@@ -1707,7 +1707,8 @@ class Main:
 
     def anti_check_error(self, code):
         """This just checks to see if the first byte of the file is the utf-16 BOM. If it is then it clears screen otherwise it exits."""
-        strung = ">nul 2>&1 && exit >nul 2>&1 || cls \n@%nobruh%e%nobruh%c%nobruh%h%nobruh%o o%nobruh%f%nobruh%f%nobruh%\n"
+        strung = ">nul 2>&1 && exit >nul 2>&1 || cls \n@echo off\n"
+        strung = self.obf_oneline(strung)
         code.insert(0, strung)
 
         # There is a 99% chance I could have just used .encode() but im just lazy like that if u gotta problem wit it make a pr
