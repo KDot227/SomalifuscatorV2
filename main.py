@@ -188,7 +188,7 @@ settings = [
     f"Scramble Labels = {scramble_labels} (Experimental)",
     f"Echo Check = {echo_check}",
     f"Double Click Check = {double_click_check}",
-    f"Recursive Xor = {recursive_xor} (Experimental) might not work with long strings",
+    f"Recursive Xor = {recursive_xor} (Experimental)",
 ]
 
 
@@ -1032,10 +1032,10 @@ class Main:
                         if random_bool_2 and not line.startswith(":"):
                             line = self.ran3(line=line)
                     if line.startswith("::"):
-                        f.write(line)
+                        f.write(line + "\n")
                         continue
                     elif line.startswith(":"):
-                        f.write(line)
+                        f.write(line + "\n")
                         continue
                     else:
                         if random_bool == True:
@@ -1045,7 +1045,9 @@ class Main:
                             )
                             f.write(random_symbols)
                         for word in line.split():
-                            if any(env_var in word for env_var in env_vars):
+                            if any(
+                                env_var.lower() in word.lower() for env_var in env_vars
+                            ):
                                 f.write(word + " ")
                                 continue
                             elif word.startswith("%") or word.startswith("!"):
