@@ -839,15 +839,6 @@ class Main:
 
             data = new_lines.copy()
 
-            # lines_and_corresponding_labels = {}
-
-            # for index, line in enumerate(data):
-            #    if line.startswith("if ") or line.startswith("for "):
-            #        while not line.endswith(")") and not line.endswith(") else"):
-            #            pass
-            #    else:
-            #        lines_and_corresponding_labels[index] == line
-
             if scramble_labels:
                 unique_labels = set(re.findall(r":\w+", " ".join(data)))
 
