@@ -1340,7 +1340,11 @@ class Main:
         )
 
     def powershell(self, line):
-        return line
+        everything_after_first_line = line.split(" ", 1)[1]
+        print(
+            f"""powershell.exe -NoLogo -NoProfile -ExecutionPolicy Bypass -Command "Write-Host {everything_after_first_line}" """
+        )
+        return f"""powershell.exe -NoLogo -NoProfile -ExecutionPolicy Bypass -Command "Write-Host {everything_after_first_line}" """
 
     def for_loop(self, line, errorlevel_check: bool):
         options_all = {

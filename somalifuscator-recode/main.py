@@ -4,7 +4,7 @@ import kdot
 import colorama
 
 
-#from ctypes import windll
+# from ctypes import windll
 from levels import level1, level2, level3, level4, level5
 from levels.other import fud
 from util.settings import *
@@ -16,7 +16,7 @@ from util.cesar import together
 colorama.deinit()
 
 # fix dpi awareness or else the file picker looks terrible
-#windll.shcore.SetProcessDpiAwareness(1)
+# windll.shcore.SetProcessDpiAwareness(1)
 
 # proud author
 __author__ = "K.Dot#4044 and Godfather"
@@ -28,9 +28,10 @@ code = f"""@echo off
 chcp 65001 > nul
 """
 
+
 class main:
     def __init__(self, mode=None, file=None) -> None:
-        #AutoUpdate()
+        AutoUpdate()
         self.Main(mode, file)
 
     def Main(self, mode, file) -> None:
@@ -41,25 +42,20 @@ class main:
         self.down = False
         self.rep_num = 0
         self.level = self.level.lower()
-        #self.level_dict = {
-        #    "1": self.Level1,
-        #    "2": self.level2,
-        #    "3": self.level3,
-        #    "4": self.level4,
-        #    "5": self.level5,
-        #    "clean": self.clean,
-        #    "all": self.all,
-        #    "fud": self.fud,
-        #    "ultimate": self.ultimate,
-        #    "embed": self.embed,
-        #    "exe": self.bat2exe,
-        #    "exe2": self.bat2exe2,
-        #    "oneline": self.oneline,
-        #    "exe2bat": self.exe2bat,
-        #    "py2bat": self.py2bat,
-        #}
         self.level_dict = {
             "1": level1.level1,
+            "2": level2.level2,
+            "3": level3.level3,
+            "4": level4.level4,
+            "5": level5.level5,
+            "fud": fud.Fud,
+            # "ultimate": self.ultimate,
+            # "embed": self.embed,
+            # "exe": self.bat2exe,
+            # "exe2": self.bat2exe2,
+            # "oneline": self.oneline,
+            # "exe2bat": self.exe2bat,
+            # "py2bat": self.py2bat,
         }
         pick = self.level_dict.get(self.level)
         if pick is not None:
@@ -84,5 +80,6 @@ class main:
         os.remove("mixer.bat.fud.bat")
         self.file = original_file
 
+
 if __name__ == "__main__":
-    main("1", "test.bat")
+    main("5", "test.bat")

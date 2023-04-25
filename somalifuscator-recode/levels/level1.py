@@ -5,12 +5,14 @@ from util.cesar import caesar_cipher_rotation, caesar_cipher_rotation_UPPER
 
 from rich.progress import track
 
+
 class level1:
-    def __init__(self, file, code_new) -> None:
+    def __init__(self, file, code_new, *args, **kwargs) -> None:
+        super().__init__()
         self.file = file
         self.code_new = code_new
         self.main()
-    
+
     def main(self):
         carrot = False
         var = False
