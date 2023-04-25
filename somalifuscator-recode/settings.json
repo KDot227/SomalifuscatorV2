@@ -1,0 +1,18 @@
+{
+    "chinese": true,
+    "pogdog": true,
+    "hell": true,
+    "eicar": true,
+    "unicode": true,
+    "utf_16_bom": true,
+    "ads": false,
+    "random_spacing": false,
+    "auto_update": true,
+    "echo_weird": true,
+    "anti_vm": true,
+    "for_loop": false,
+    "echo_check": true,
+    "scramble_labels": false,
+    "double_click_check": true,
+    "recursive_xor": true
+}
