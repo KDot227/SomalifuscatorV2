@@ -4,7 +4,7 @@ import kdot
 import colorama
 
 
-# from ctypes import windll
+from ctypes import windll
 from levels import level1, level2, level3, level4, level5
 from levels.other import fud
 from util.settings import *
@@ -16,7 +16,7 @@ from util.cesar import together
 colorama.deinit()
 
 # fix dpi awareness or else the file picker looks terrible
-# windll.shcore.SetProcessDpiAwareness(1)
+windll.shcore.SetProcessDpiAwareness(1)
 
 # proud author
 __author__ = "K.Dot#4044 and Godfather"
@@ -49,13 +49,13 @@ class main:
             "4": level4.level4,
             "5": level5.level5,
             "fud": fud.Fud,
-            # "ultimate": self.ultimate,
-            # "embed": self.embed,
-            # "exe": self.bat2exe,
-            # "exe2": self.bat2exe2,
-            # "oneline": self.oneline,
-            # "exe2bat": self.exe2bat,
-            # "py2bat": self.py2bat,
+            "ultimate": self.ultimate,
+            "embed": self.embed,
+            "exe": self.bat2exe,
+            "exe2": self.bat2exe2,
+            "oneline": self.oneline,
+            "exe2bat": self.exe2bat,
+            "py2bat": self.py2bat,
         }
         pick = self.level_dict.get(self.level)
         if pick is not None:

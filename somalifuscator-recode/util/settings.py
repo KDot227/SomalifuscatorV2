@@ -1,14 +1,16 @@
 import json, time, os, string
 
+
 class Settings:
     def __init__(self, settings_file: str) -> None:
         self.settings_file = settings_file
-    
+
     def get_settings(self) -> dict:
         with open(self.settings_file, "r") as f:
             settings = f.read()
         return json.loads(settings)
-    
+
+
 settings = Settings("settings.json").get_settings()
 
 try:
@@ -28,6 +30,7 @@ try:
     echo_check = settings["echo_check"]
     double_click_check = settings["double_click_check"]
     recursive_xor = settings["recursive_xor"]
+    debug = settings["debug"]
 except:
     print(
         "Your settings.json file has been update! Please redownload somalifuscator and try again"
@@ -52,6 +55,7 @@ settings2 = [
     f"Echo Check = {echo_check}",
     f"Double Click Check = {double_click_check}",
     f"Recursive Xor = {recursive_xor} (Experimental)",
+    f"Debug = {debug}",
 ]
 
 if chinese:

@@ -2,19 +2,32 @@ import os, random, re
 
 from rich.progress import Progress
 from util.settings import *
+from util.cesar import *
+from util.common import *
+from levels.ultimate.modules.gen_obf import *
+from levels.ultimate.modules.rans import *
+from levels.ultimate.modules.scrambler import *
+from levels.ultimate.modules.anti_things import *
 
 
 class Ultimate:
     def __init__(
-        self, file, utf_16=True, check_bypass=False, debug=False, *args, **kwargs
+        self,
+        file,
+        code_new,
+        utf_16=True,
+        check_bypass=False,
+        *args,
+        **kwargs,
     ) -> None:
         self.file = file
         self.utf_16 = utf_16
         self.check_bypass = check_bypass
-        self.debug = False
+        debug = False
+        self.code_new = code_new
 
     def main(self) -> None:
-        if self.debug:
+        if debug:
             self.check_bypass = True
             utf_16 = False
         # progress bar things
@@ -81,7 +94,7 @@ class Ultimate:
                 label_mappings = {}
 
                 for label in unique_labels:
-                    random_string = self.make_random_string((8, 9))
+                    random_string = make_random_string((8, 9))
                     label_mappings[label] = ":" + random_string
 
                 for i in range(len(data)):
@@ -90,7 +103,7 @@ class Ultimate:
 
             data = data.copy()
 
-            if self.self.debug:
+            if debug:
                 with open("debug1.bat", "w", encoding="utf-8", errors="ignore") as f:
                     f.writelines(data)
 
@@ -240,7 +253,7 @@ class Ultimate:
             #
             #    data = new_lines.copy()
 
-            if self.debug:
+            if debug:
                 with open("debug1_2.bat", "w", encoding="utf-8", errors="ignore") as f:
                     f.writelines(data)
 
@@ -259,13 +272,13 @@ class Ultimate:
                 #    "pause": self.pause,
                 #    "exit": self.exit,
                 # }
-                f.write(self.random_capitalization("::Made by K.Dot and Godfather\n"))
+                f.write(random_capitalization("::Made by K.Dot and Godfather\n"))
                 f.write(self.code_new)
                 characters = (
                     "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
                 )
                 random_order = "".join(random.sample(characters, len(characters)))
-                f.write(self.obf_oneline(f"set KDOT={random_order}\n"))
+                f.write(obf_oneline(f"set KDOT={random_order}\n"))
                 # for line in track(
                 #    data, description="[bold green]Obfuscating", total=len(data)
                 # ):
@@ -328,7 +341,7 @@ class Ultimate:
                                 f.write(word + " ")
                                 continue
                             elif word.startswith("%") or word.startswith("!"):
-                                f.write(self.random_capitalization(word) + " ")
+                                f.write(random_capitalization(word) + " ")
                                 continue
                             elif re.match(regex_bat, word):
                                 # regex be my bae
@@ -347,8 +360,8 @@ class Ultimate:
                                         continue
                                     else:
                                         random_obf = [
-                                            self.ran1(char),
-                                            self.ran2(
+                                            ran1(char),
+                                            ran2(
                                                 char, random_order, carrot=carrot_case
                                             ),
                                         ]
@@ -360,11 +373,11 @@ class Ultimate:
                 f"{self.file}.ultimate.bat", "r", encoding="utf-8", errors="ignore"
             ) as f:
                 news = f.readlines()
-            if self.debug:
+            if debug:
                 with open("debug2.bat", "w", encoding="utf-8", errors="ignore") as f:
                     f.writelines(news)
-            news.insert(2, self.obf_oneline(self.first_line_echo_check()))
-            messed_up = self.scrambler(news)
+            news.insert(2, obf_oneline(first_line_echo_check()))
+            messed_up = scrambler(news)
             progress.update(task2, advance=100)
             with open(
                 f"{self.file}.ultimate.bat", "w", encoding="utf-8", errors="ignore"
@@ -372,7 +385,7 @@ class Ultimate:
                 for array in messed_up:
                     for thing in array:
                         f.write(thing.strip() + "\n")
-            if self.debug:
+            if debug:
                 with open("debug3.bat", "w", encoding="utf-8", errors="ignore") as f:
                     for array in messed_up:
                         for thing in array:
@@ -390,14 +403,14 @@ class Ultimate:
                             "echo", r"%GODFATHER%e%GODFATHER%c%GODFATHER%h%GODFATHER%o"
                         )
                     if not data[i].startswith(";") or not data[i].startswith("; "):
-                        new = self.random_semi_and_comma(data[i])
+                        new = random_semi_and_comma(data[i])
                         data[i] = new
-            if self.debug:
+            if debug:
                 with open("debug4.bat", "w", encoding="utf-8", errors="ignore") as f:
                     f.writelines(data)
             progress.update(task4, advance=100)
             if utf_16_bom and utf_16:
-                out_hex = self.anti_check_error(code=data)
+                out_hex = anti_check_error(code=data)
                 with open(f"{self.file}.ultimate.bat", "wb") as f:
                     for i in out_hex:
                         f.write(bytes.fromhex(i))
