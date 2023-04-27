@@ -7,9 +7,10 @@ from levels.ultimate.modules.misc import *
 import random
 
 
-def scrambler(codeed):
+def scrambler(codeed, level):
     """This absolutely beautiful function takes the code, puts it into a nested array of goto values that all point to each other then obfuscates tf outta it."""
     original_lines = codeed
+    rep_num = 10
 
     for index, line in enumerate(original_lines):
         # not sure if echo really makes a difference but batch does some weird things sometimes
@@ -89,13 +90,16 @@ def scrambler(codeed):
                     while random_working_value[1] == dead:
                         random_working_value = random.choice(list(dict_thing.values()))
                     run = deadcodes(
-                        good_label=str(dead), bad_label=random_working_value[1]
+                        good_label=str(dead),
+                        bad_label=random_working_value[1],
+                        rep_num=rep_num,
                     )
+                    rep_num += 1
                     part_3 = f"{run}\n::{badded}\n"
                 else:
                     maybe_echo_check = random.randint(1, 3)
                     if maybe_echo_check == 1 and not value[3]:
-                        part_3 = f";{obf_oneline('set')} /a {obf_oneline('ans')}={obf_oneline(list(dict_thing.values())[index + 1][0])}\n::{badded}\n::{badded}\n::{badded}\n{obf_oneline(random.choice(tests()))}\n;{random_semi_and_comma(obf_oneline('goto'))} :%ans%\n"
+                        part_3 = f";{obf_oneline('set')} /a {obf_oneline('ans')}={obf_oneline(list(dict_thing.values())[index + 1][0])}\n::{badded}\n::{badded}\n::{badded}\n{obf_oneline(random.choice(tests(level)))}\n;{random_semi_and_comma(obf_oneline('goto'))} :%ans%\n"
                     else:
                         part_3 = f";{obf_oneline('set')} /a {obf_oneline('ans')}={obf_oneline(list(dict_thing.values())[index + 1][0])}\n::{badded}\n::{badded}\n::{badded}\n;{random_semi_and_comma(obf_oneline('goto'))} :%ans%\n"
             except Exception:
@@ -109,34 +113,41 @@ def scrambler(codeed):
                     while random_working_value[1] == dead:
                         random_working_value = random.choice(list(dict_thing.values()))
                     run = deadcodes(
-                        good_label=str(dead), bad_label=random_working_value[1]
+                        good_label=str(dead),
+                        bad_label=random_working_value[1],
+                        rep_num=rep_num,
                     )
+                    rep_num += 1
                     part_3 = f"{run}\n"
                 else:
                     maybe_echo_check = random.randint(1, 3)
                     if maybe_echo_check == 1 and not value[3]:
                         print(value[3])
-                        part_3 = f";{obf_oneline('set')} /a {obf_oneline('ans')}={obf_oneline(list(dict_thing.values())[index + 1][0])}\n{obf_oneline(random.choice(tests()))}\n;{random_semi_and_comma(obf_oneline('goto'))} :%ans%\n"
+                        part_3 = f";{obf_oneline('set')} /a {obf_oneline('ans')}={obf_oneline(list(dict_thing.values())[index + 1][0])}\n{obf_oneline(random.choice(tests(level)))}\n;{random_semi_and_comma(obf_oneline('goto'))} :%ans%\n"
                     else:
                         part_3 = f";{obf_oneline('set')} /a {obf_oneline('ans')}={obf_oneline(list(dict_thing.values())[index + 1][0])}\n;{random_semi_and_comma(obf_oneline('goto'))} :%ans%\n"
             except Exception:
                 part_3 = f";{random_semi_and_comma(obf_oneline('goto'))} :EOF\n"
 
+        # with open("out2.bat", "w", encoding="utf8", errors="ignore") as f:
+        #    f.write(part_1 + part_2 + part_3)
+        # input()
+
         main_list.append([part_1, part_2, part_3])
 
     random.shuffle(main_list)
 
-    main_list = random_inserts(main_list)
+    # main_list = random_inserts(main_list)
 
-    main_list = random_dead_code(main_list)
+    # main_list = random_dead_code(main_list)
 
-    main_list = bad_labels_and_dead_code(main_list)
+    # main_list = bad_labels_and_dead_code(main_list, dict_thing)
 
-    if random_spacing:
-        main_list = more_dead_comments(main_list)
+    # if random_spacing:
+    #    main_list = more_dead_comments(main_list)
 
-    if pogdog_fun:
-        main_list = pogdog(main_list)
+    # if pogdog_fun:
+    #    main_list = pogdog(main_list)
 
     # pointer that points to first line of the actual code.
     main_list.insert(0, remem)

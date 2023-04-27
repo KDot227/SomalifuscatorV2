@@ -17,14 +17,16 @@ class Ultimate:
         code_new,
         utf_16=True,
         check_bypass=False,
+        level="ultimate",
         *args,
         **kwargs,
     ) -> None:
         self.file = file
         self.utf_16 = utf_16
         self.check_bypass = check_bypass
-        debug = False
         self.code_new = code_new
+        self.level = level
+        self.main()
 
     def main(self) -> None:
         if debug:
@@ -377,7 +379,7 @@ class Ultimate:
                 with open("debug2.bat", "w", encoding="utf-8", errors="ignore") as f:
                     f.writelines(news)
             news.insert(2, obf_oneline(first_line_echo_check()))
-            messed_up = scrambler(news)
+            messed_up = scrambler(news, level=self.level)
             progress.update(task2, advance=100)
             with open(
                 f"{self.file}.ultimate.bat", "w", encoding="utf-8", errors="ignore"
@@ -409,7 +411,7 @@ class Ultimate:
                 with open("debug4.bat", "w", encoding="utf-8", errors="ignore") as f:
                     f.writelines(data)
             progress.update(task4, advance=100)
-            if utf_16_bom and utf_16:
+            if utf_16_bom and self.utf_16:
                 out_hex = anti_check_error(code=data)
                 with open(f"{self.file}.ultimate.bat", "wb") as f:
                     for i in out_hex:

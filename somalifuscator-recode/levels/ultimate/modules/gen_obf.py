@@ -1,8 +1,9 @@
 from util.settings import *
+from util.common import random_capitalization
 import random
 
 
-def obf_oneline(self, line):
+def obf_oneline(line):
     final_string = ""
     for word in line.split(" "):
         if word.startswith("%"):
@@ -65,15 +66,11 @@ def obf_oneline(self, line):
                         if new == psmodule_path:
                             index = new.index(char)
                             new = corosponding[list_of_all.index(new)]
-                            final_string += (
-                                f"%{self.random_capitalization(new)}:~{index},1%"
-                            )
+                            final_string += f"%{random_capitalization(new)}:~{index},1%"
                         else:
                             index = new.index(char)
                             new = corosponding[list_of_all.index(new)]
-                            final_string += (
-                                f"%{self.random_capitalization(new)}:~{index},1%"
-                            )
+                            final_string += f"%{random_capitalization(new)}:~{index},1%"
                 else:
                     if unicode:
                         final_string += f"%‮%{char}%‮%"

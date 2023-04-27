@@ -67,8 +67,8 @@ def deadcodes(good_label, bad_label, rep_num):
             f"if exist C:\Windows\System3 ( goto :{label123} ) else ( goto :{good_label} )",
             f"if %cd% == %cd% ( goto :{good_label} ) else ( goto :{label123} )",
             f"if chcp leq 1 ( goto :{label123} ) else ( goto :{good_label} )",
-            f"if not defined KDOT ( goto :EOF ) else ( goto :{good_label} )",
-            f"if not defined f ( goto :EOF ) else ( goto :{good_label} )",
+            # f"if not defined KDOT ( goto :EOF ) else ( goto :{good_label} )",
+            # f"if not defined f ( goto :EOF ) else ( goto :{good_label} )",
             f"if %CD% == %__CD__% ( goto :{label123} ) else ( goto :{good_label} )",
             f"if %~dp0==%__cd__% ( goto :{good_label} ) else ( goto :{label123} )",
         ]
