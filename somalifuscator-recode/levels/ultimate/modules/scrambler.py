@@ -137,17 +137,17 @@ def scrambler(codeed, level):
 
     random.shuffle(main_list)
 
-    # main_list = random_inserts(main_list)
+    main_list = random_inserts(main_list)
 
-    # main_list = random_dead_code(main_list)
+    main_list = random_dead_code(main_list)
 
-    # main_list = bad_labels_and_dead_code(main_list, dict_thing)
+    main_list = bad_labels_and_dead_code(main_list, dict_thing)
 
-    # if random_spacing:
-    #    main_list = more_dead_comments(main_list)
+    if random_spacing:
+        main_list = more_dead_comments(main_list)
 
-    # if pogdog_fun:
-    #    main_list = pogdog(main_list)
+    if pogdog_fun:
+        main_list = pogdog(main_list)
 
     # pointer that points to first line of the actual code.
     main_list.insert(0, remem)
