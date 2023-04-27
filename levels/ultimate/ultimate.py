@@ -1,4 +1,4 @@
-import os, random, re
+import os, random, re, inspect
 
 from rich.progress import Progress
 from util.settings import *

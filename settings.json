@@ -13,7 +13,7 @@
     "for_loop": false,
     "echo_check": true,
     "scramble_labels": false,
-    "double_click_check": true,
+    "double_click_check": false,
     "recursive_xor": true,
     "debug": false
 }

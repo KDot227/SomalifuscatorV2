@@ -4,7 +4,7 @@ import os
 class bat2exe:
     def __init__(self, file, *args, **kwargs) -> None:
         self.file = file
-        self.main()
+        self.bat2exe()
 
     def bat2exe(self):
         """The insperation for this was either from a github repo (90% sure) or a stackoverflow comment. Either way credit to the person who discovered this method. (NOTE: I also had to edit this a bit to work better with somalifuscator)"""

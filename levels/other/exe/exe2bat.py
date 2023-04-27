@@ -6,8 +6,9 @@ from pystyle import *
 
 
 class exe2bat:
-    def __init__(self, file, *args, **kwargs) -> None:
+    def __init__(self, file, code_new, *args, **kwargs) -> None:
         self.file = file
+        self.code_new = code_new
         self.main()
 
     def main(self):
@@ -27,15 +28,17 @@ exit
         subprocess.run(to_subprocess)
         with open("test.txt", "rb") as f:
             data = f.read()
-        with open("mixer.bat", "w") as f:
-            f.write(code)
-        self.file = "mixer.bat"
-        ultimate.Ultimate(utf_16=False, check_bypass=True)
-        with open("mixer.bat.ultimate.bat", "rb") as f:
-            insides = f.read()
-        os.remove("mixer.bat.ultimate.bat")
-        with open("mixer.bat.ultimate.bat", "wb") as f:
-            f.write(insides + b"\n" + data)
+        # with open("mixer.bat", "w") as f:
+        #    f.write(code)
+        # self.file = "mixer.bat"
+        # ultimate.Ultimate(self.file, self.code_new, utf_16=False, check_bypass=True)
+        # with open("mixer.bat.ultimate.bat", "rb") as f:
+        #    insides = f.read()
+        # os.remove("mixer.bat.ultimate.bat")
+        # with open("mixer.bat.ultimate.bat", "wb") as f:
+        #    f.write(insides + b"\n" + data)
         os.remove("test.txt")
-        os.remove("mixer.bat")
-        os.rename("mixer.bat.ultimate.bat", "bat2exe.bat")
+        # os.remove("mixer.bat")
+        # os.rename("mixer.bat.ultimate.bat", "bat2exe.bat")
+        with open("bat2exe.bat", "wb") as f:
+            f.write(code.encode() + "\n".encode() + data)

@@ -4,7 +4,7 @@ from pystyle import *
 
 
 class bat2exe2:
-    def __init__(self) -> None:
+    def __init__(self, *args, **kwargs) -> None:
         self.main()
 
     def main(self) -> None:

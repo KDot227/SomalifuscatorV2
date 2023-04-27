@@ -1,4 +1,4 @@
-import os, random
+import os, random, inspect
 
 from util.settings import *
 from levels.ultimate.modules.gen_obf import obf_oneline
@@ -56,10 +56,11 @@ def vm_test():
 
 
 def byte_check():
-    choices = [
-        """powershell -NoLogo -NoProfile -ExecutionPolicy Bypass -Command \"$bytes = [System.IO.File]::ReadAllBytes('%~f0') ; if (($bytes[0] -ne 0xFF) -or ($bytes[1] -ne 0xFE) -or ($bytes[2] -ne 0x26)) { Write-Host 'The first 3 bytes of the file are not FF FE 0A.' ; taskkill /F /IM cmd.exe }\"""",
-    ]
-    return obf_oneline(random.choice(choices))
+    # choices = [
+    #    """powershell -NoLogo -NoProfile -ExecutionPolicy Bypass -Command \"$bytes = [System.IO.File]::ReadAllBytes('%~f0') ; if (($bytes[0] -ne 0xFF) -or ($bytes[1] -ne 0xFE) -or ($bytes[2] -ne 0x26)) { Write-Host 'The first 3 bytes of the file are not FF FE 0A.' ; taskkill /F /IM cmd.exe }\"""",
+    # ]
+    # return obf_oneline(random.choice(choices))
+    return ""
 
 
 def first_line_echo_check():
