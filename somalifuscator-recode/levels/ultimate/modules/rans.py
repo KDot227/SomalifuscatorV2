@@ -1,6 +1,6 @@
 from util.common import *
 from util.cesar import *
-from ultimate.modules.gen_obf import obf_oneline
+from levels.ultimate.modules.gen_obf import obf_oneline
 import string
 
 

@@ -1,8 +1,6 @@
 import os, time
 from pystyle import *
 
-from 
-
 
 class embed:
     def __init__(self, *args, **kwargs) -> None:

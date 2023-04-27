@@ -1,8 +1,9 @@
 from util.settings import *
-from anti_things import *
 from util.common import *
 from levels.ultimate.modules.anti_things import *
 from levels.ultimate.modules.dead_stuff import *
+from levels.ultimate.modules.math_stuff import *
+from levels.ultimate.modules.misc import *
 import random
 
 

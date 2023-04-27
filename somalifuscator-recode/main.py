@@ -1,4 +1,4 @@
-import time, os, tkinter, random, string
+import time, os, tkinter
 
 import kdot
 import colorama
@@ -6,6 +6,10 @@ import colorama
 
 from ctypes import windll
 from levels import level1, level2, level3, level4, level5
+from levels.other.embed import embed
+from levels.other.exe import exe2bat, bat2exe, bat2exe2
+from levels.other.oneline import oneline
+from levels.ultimate import ultimate
 from levels.other import fud
 from util.settings import *
 from util.update import AutoUpdate
@@ -49,13 +53,12 @@ class main:
             "4": level4.level4,
             "5": level5.level5,
             "fud": fud.Fud,
-            "ultimate": self.ultimate,
-            "embed": self.embed,
-            "exe": self.bat2exe,
-            "exe2": self.bat2exe2,
-            "oneline": self.oneline,
-            "exe2bat": self.exe2bat,
-            "py2bat": self.py2bat,
+            "ultimate": ultimate.Ultimate,
+            # "embed": embed.embed,
+            "exe": bat2exe.bat2exe,
+            "exe2": bat2exe2.bat2exe2,
+            # "oneline": oneline.oneline,
+            "exe2bat": exe2bat.exe2bat,
         }
         pick = self.level_dict.get(self.level)
         if pick is not None:
@@ -82,4 +85,4 @@ class main:
 
 
 if __name__ == "__main__":
-    main("5", "test.bat")
+    main("ultimate", "test.bat")
