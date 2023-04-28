@@ -1272,38 +1272,32 @@ class Main:
             if char in i:
                 new_lists.append(i)
 
-        # random_posotive_negative = random.choice([True, False])
+        random_posotive_negative = random.choice([True, False])
         if len(new_lists) > 0:
             if char == " ":
                 return char
             new = random.choice(new_lists)
             if char in new:
-                # if random_posotive_negative:
-                #    if new == psmodule_path:
-                #        index = new.index(char)
-                #        new = corosponding[list_of_all.index(new)]
-                #        return f"{self.random_single_carrot(carrot)}%{self.random_capitalization(new)}:~{index},1%"
-                #    else:
-                #        # index = new.index(char)
-                #        # new = corosponding[list_of_all.index(new)]
-                #        # length = len(new)
-                #        # neg_index = length - index
-                #        index = new.index(char)
-                #        new = corosponding[list_of_all.index(new)]
-                #        negative_index = index - len(new)
-                #        print(
-                #            f"{self.random_single_carrot(carrot)}%{self.random_capitalization(new)}:~{negative_index},1% {char}"
-                #        )
-                #        return f"{self.random_single_carrot(carrot)}%{self.random_capitalization(new)}:~{negative_index},1%"
-                # else:
-                if new == psmodule_path:
-                    index = new.index(char)
-                    new = corosponding[list_of_all.index(new)]
-                    return f"{self.random_single_carrot(carrot)}%{self.random_capitalization(new)}:~{index},1%"
+                if random_posotive_negative:
+                    if new == psmodule_path:
+                        index = new.index(char)
+                        new2 = corosponding[list_of_all.index(new)]
+                        negative_index = index - len(new)
+                        return f"{self.random_single_carrot(carrot)}%{self.random_capitalization(new2)}:~{index},1%"
+                    else:
+                        index = new.index(char)
+                        new2 = corosponding[list_of_all.index(new)]
+                        negative_index = index - len(new)
+                        return f"{self.random_single_carrot(carrot)}%{self.random_capitalization(new2)}:~{negative_index},1%"
                 else:
-                    index = new.index(char)
-                    new = corosponding[list_of_all.index(new)]
-                    return f"{self.random_single_carrot(carrot)}%{self.random_capitalization(new)}:~{index},1%"
+                    if new == psmodule_path:
+                        index = new.index(char)
+                        new = corosponding[list_of_all.index(new)]
+                        return f"{self.random_single_carrot(carrot)}%{self.random_capitalization(new)}:~{index},1%"
+                    else:
+                        index = new.index(char)
+                        new = corosponding[list_of_all.index(new)]
+                        return f"{self.random_single_carrot(carrot)}%{self.random_capitalization(new)}:~{index},1%"
         else:
             if char in string.ascii_letters:
                 var = f"{self.random_single_carrot(carrot)}%{self.random_capitalization('KDOT')}:~{random_order.index(char)},1%"
