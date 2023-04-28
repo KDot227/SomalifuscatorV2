@@ -44,6 +44,7 @@ try:
     echo_check = settings["echo_check"]
     double_click_check = settings["double_click_check"]
     recursive_xor = settings["recursive_xor"]
+    carrots_var = settings["carrots_var"]
 except:
     print(
         "Your settings.json file has been update! Please redownload somalifuscator and try again"
@@ -185,6 +186,7 @@ settings = [
     f"Echo Check = {echo_check}",
     f"Double Click Check = {double_click_check}",
     f"Recursive Xor = {recursive_xor} (Experimental)",
+    f"Carrot Bypass = {carrots_var} (Experimental)",
 ]
 
 
@@ -484,6 +486,8 @@ class Main:
 
     @staticmethod
     def random_single_carrot(carrot):
+        if not carrots_var:
+            return ""
         if not carrot:
             return ""
         ran = random.choice([True, False])
