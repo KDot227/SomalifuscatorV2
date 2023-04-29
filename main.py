@@ -57,6 +57,7 @@ debug = False
 
 try:
     from rich.progress import Progress, track
+    from rich.traceback import install
     from zipfile import ZipFile
     from random import randint
     from ctypes import windll
@@ -74,6 +75,8 @@ except Exception as e:
     )
     time.sleep(5)
     os._exit(1)
+
+install(show_locals=True)
 
 # fix colorama
 colorama.deinit()
@@ -228,6 +231,7 @@ class Main:
             self.file = file
             self.down = False
             self.rep_num = 0
+            self.ran_through = 0
             self.level = self.level.lower()
             self.level_dict = {
                 "1": self.level1,
@@ -1400,9 +1404,10 @@ class Main:
             if not recursive_xor:
                 random_tf = 2
             try:
-                if random_tf != 1:
+                if random_tf != 1 and not self.rep_num <= 2:
                     return f"({self.random_oct_hex(random2)} ^^ {self.random_oct_hex(fixed2)})"
                 else:
+                    self.rep_num += 1
                     return f"({self.make_xor(random2)} ^^ {self.make_xor(fixed2)})"
             except RecursionError:
                 return (
@@ -1441,6 +1446,7 @@ class Main:
         # randomly do hex or oct to ans instead of all just hex
         choices = [True, False]
         problem2 = f"{self.random_oct_hex(ans) if random.choice(choices) else self.make_xor(ans)} {opp1} {self.random_oct_hex(num1) if random.choice(choices) else self.make_xor(num1)} {opp2} {self.random_oct_hex(num2) if random.choice(choices) else self.make_xor(num2)}"
+        self.rep_num = 0
         problem23 = f"{ans} {opp1} {num1} {opp2} {num2}"
 
         ans2 = eval(problem23)
