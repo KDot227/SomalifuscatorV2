@@ -32,7 +32,9 @@ if not exist "%python_path%" (
 
 python --version
 if not %errorlevel% == 0 (
-    echo Python is not installed or not added to path. Please install the newest version of python and add it to path!
+    echo Python is most likely installed but NOT added to path. Please follow this video to fix
+    timeout /t 3 /nobreak
+    start https://www.youtube.com/watch?v=4bUOrMj88Pc&ab_channel=LearningLad
     pause
     exit /b 1
 )

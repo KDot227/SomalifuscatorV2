@@ -979,39 +979,39 @@ class Main:
                 if env_var in data:
                     self.used_env_vars.append(env_var)
 
-            # if ads:
-            #    lines = data.copy()
-            #    new_lines = []
-            #    maybe = False
-            #
-            #    for line in lines:
-            #        line = line.lower()
-            #        # basic checks
-            #        if (
-            #            line.startswith("echo")
-            #            and not line.startswith("echo @")
-            #            and ("&" not in line or "^&" in line)
-            #        ):
-            #            maybe = True
-            #            new_lines.append(
-            #                line.strip()
-            #                + " > somali.txt:kdot & more < somali.txt:kdot\n"
-            #            )
-            #        else:
-            #            new_lines.append(line)
-            #
-            #    new_lines.reverse()
-            #    for index, line in enumerate(new_lines):
-            #        if (
-            #            line.startswith("echo")
-            #            and not line.startswith("echo @")
-            #            and maybe
-            #        ):
-            #            new_lines[index] = line.strip() + " & del somali.txt\n"
-            #            break
-            #    new_lines.reverse()
-            #
-            #    data = new_lines.copy()
+            if ads:
+                lines = data.copy()
+                new_lines = []
+                maybe = False
+
+                for line in lines:
+                    line = line.lower()
+                    # basic checks
+                    if (
+                        line.startswith("echo")
+                        and not line.startswith("echo @")
+                        and ("&" not in line or "^&" in line)
+                    ):
+                        maybe = True
+                        new_lines.append(
+                            line.strip()
+                            + " > somali.txt:kdot & more < somali.txt:kdot\n"
+                        )
+                    else:
+                        new_lines.append(line)
+
+                new_lines.reverse()
+                for index, line in enumerate(new_lines):
+                    if (
+                        line.startswith("echo")
+                        and not line.startswith("echo @")
+                        and maybe
+                    ):
+                        new_lines[index] = line.strip() + " & del somali.txt\n"
+                        break
+                new_lines.reverse()
+
+                data = new_lines.copy()
 
             if debug:
                 with open("debug1_2.bat", "w", encoding="utf-8", errors="ignore") as f:
@@ -1028,9 +1028,6 @@ class Main:
                 )
                 random_order = "".join(random.sample(characters, len(characters)))
                 f.write(self.obf_oneline(f"set KDOT={random_order}\n"))
-                # for line in track(
-                #    data, description="[bold green]Obfuscating", total=len(data)
-                # ):
                 # This regex is basically tryna get variables that are set to a value. For example if someone has set "starttime=%time%"
                 regex_bat = re.compile(r"\w+=[^=]*%\w+%\b|\w+=[^=]*%\w+%\B")
                 for line in data:
