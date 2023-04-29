@@ -1021,17 +1021,6 @@ class Main:
             with open(
                 f"{self.file}.ultimate.bat", "a+", encoding="utf-8", errors="ignore"
             ) as f:
-                # self.potential_values = {
-                #    "echo": self.echo,
-                #    "set": self.set_,
-                #    "setlocal": self.setlocal,
-                #    "if": self.if_,
-                #    "for": self.for_,
-                #    "goto": self.goto,
-                #    "call": self.call,
-                #    "pause": self.pause,
-                #    "exit": self.exit,
-                # }
                 f.write(self.random_capitalization("::Made by K.Dot and Godfather\n"))
                 f.write(self.code_new)
                 characters = (
@@ -1044,23 +1033,9 @@ class Main:
                 # ):
                 # This regex is basically tryna get variables that are set to a value. For example if someone has set "starttime=%time%"
                 regex_bat = re.compile(r"\w+=[^=]*%\w+%\b|\w+=[^=]*%\w+%\B")
-                for index, line in enumerate(data):
+                for line in data:
                     progress.update(task1andhalf, advance=100 / len(data))
                     random_bool = random.choice([True, False])
-                    # first_word = line.split()[0]
-                    # error_level_next = False
-                    # try:
-                    #    if r"%errorlevel%" in data[index - 1].lower():
-                    #        error_level_next = True
-                    # except IndexError:
-                    #    pass
-                    # if r"%errorlevel%" in line.lower():
-                    #    error_level_next = True
-                    # try:
-                    #    if r"%errorlevel%" in data[index + 1].lower():
-                    #        error_level_next = True
-                    # except IndexError:
-                    #    pass
                     bad_words = ["set", "&", "nul", ">"]
                     # why do some of these break? no idea lmao
                     carrot_case = (
@@ -1079,13 +1054,6 @@ class Main:
                         f.write(line + "\n")
                         continue
                         # TODO add label obf
-                    # elif first_word in self.potential_values:
-                    #    output_obf = self.potential_values[first_word](
-                    #        line, error_level_next
-                    #    )
-                    #    print("worked")
-                    #    f.write(output_obf + "\n")
-                    #    continue
                     else:
                         if random_bool == True:
                             symbols = [";", ",", " ", "     "]
@@ -1316,81 +1284,6 @@ class Main:
         random_letter = random.choice(string.ascii_letters)
         random_number = random.randint(1, 99)
         return f"for /l %%{random_letter} in ( {random_number}, {random_number}, {random_number} ) do ( {line} )\n"
-
-    def echo(self, line: str, errorlevel_state: bool) -> str:
-        choices = {
-            "for_loop": self.for_loop,
-            "mshta": self.mshta,
-            "powershell": self.powershell,
-        }
-        if not errorlevel_state:
-            pick = random.choice(list(choices.keys()))
-            return choices.get(pick)(line)
-        else:
-            return self.obf_oneline(line)
-
-    def mshta(self, line):
-        line = line.split(" ", 1)[1]
-        chars = [ord(c) for c in line]
-        chars = " & ".join([f"Chr({c})" for c in chars])
-        return self.obf_oneline(
-            f'mshta vbscript:execute("CreateObject(""Scripting.FileSystemObject"").GetStandardStream(1).Write({chars}):Close")|more'
-        )
-
-    def powershell(self, line):
-        everything_after_first_line = line.split(" ", 1)[1]
-        print(
-            f"""powershell.exe -NoLogo -NoProfile -ExecutionPolicy Bypass -Command "Write-Host {everything_after_first_line}" """
-        )
-        return f"""powershell.exe -NoLogo -NoProfile -ExecutionPolicy Bypass -Command "Write-Host {everything_after_first_line}" """
-
-    def for_loop(self, line, errorlevel_check: bool):
-        options_all = {
-            ".cdxml": ".cdxml=Microsoft.PowerShellCmdletDefinitionXML.1",
-            ".cmd": ".cmd=cmdfile",
-            ".ps1xml": ".ps1xml=Microsoft.PowerShellXMLData.1",
-            ".psc1": ".psc1=Microsoft.PowerShellConsole.1",
-        }
-        types = [
-            "findstr",
-            "assoc",
-        ]
-        # for loop base = for /f "tokens=1,2 delims= " %%a in ('assoc .cdxml') do (echo %%a)
-        # delimiters go to the first occurrence of any part of the dilimiter then but before that part and not including.
-        # for example for /f "tokens=1 delims=she" %%a in ('assoc .cdxml') do (echo %%a) will output .cdxml=Micro since the first occurence of the dilimiter is s
-        # tokens get each chunk of each line that is being seperated by the delimiters
-
-        random_type = random.choice(types)
-        if random_type == "assoc":
-            tokens = "1,2"
-            out = f'{self.random_carrots("for", obf=True, commas=True)} /f '
-        else:
-            out = f'{self.random_carrots("for", obf=True, commas=True)} /f '
-
-    def set_(self, line: str) -> str:
-        # all of these are finished im just too lazy to upload. (basically all except like half lmao)
-        return line
-
-    def setlocal(self, line: str) -> str:
-        return line
-
-    def if_(self, line: str) -> str:
-        return line
-
-    def for_(self, line: str) -> str:
-        return line
-
-    def goto(self, line: str) -> str:
-        return line
-
-    def call(self, line: str) -> str:
-        return line
-
-    def pause(self, line: str) -> str:
-        return line
-
-    def exit(self, line: str) -> str:
-        return line
 
     def random_carrots(self, string1: str, obf: bool, commas: bool):
         carrot = "^"
