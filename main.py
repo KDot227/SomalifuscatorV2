@@ -343,18 +343,20 @@ class Main:
             Main()
 
     @staticmethod
-    def make_random_string(length_nums=(5, 7)):
+    def make_random_string(length_nums=(5, 7), special_chars=True):
         length = random.randint(*length_nums)
+        no_spec = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+        spec = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ#$(),.?@[]_"
+        choice_list = spec if special_chars else no_spec
         stringed = "".join(
             random.choice(
                 # Batch has a specific issue with characters that aren't in the normal ASCII table cause if u got them in a variable it will make the variable explode. I fixed this before by changing the chcp to 65001 but sometimes that wouldn't fix things
                 # "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZḆḞԍǏƘԸɌȚЦѠƳȤѧćễļṃŉᵲừŵź☠☢☣卐"
                 # "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
-                "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ#$(),.?@[]_"
+                choice_list
             )
             for _ in range(length)
         )
-        # yes this has happened to me before and echo check terms it
         while "echo" in stringed.lower():
             stringed = "".join(
                 random.choice(
@@ -1734,6 +1736,9 @@ class Main:
         return main_list
 
     def first_line_echo_check(self):
+        random_bat_name = self.random_capitalization(
+            self.make_random_string((5, 6), False)
+        )
         if not echo_check:
             return "\n"
         """basically just checks the entire file for the word echo. If it finds it then it will kill the process. Also the no debug checks to see if the user is double clicking the file instead of running it through a different application"""
@@ -1748,28 +1753,28 @@ class Main:
         if self.debug:
             if self.checked123 == True:
                 command = (
-                    r'echo @echo off > close.bat && echo findstr /i "echo" "%~f0" >> close.bat && echo if %%errorlevel%% == 0 ( taskkill /f /im cmd.exe ) else ( ( goto ) ^2^>^n^u^l ^& del "%%~f0" ) >> close.bat && call close.bat'
+                    rf'echo @echo off > kdot{random_bat_name}.bat && echo findstr /i "echo" "%~f0" >> kdot{random_bat_name}.bat && echo if %%errorlevel%% == 0 ( taskkill /f /im cmd.exe ) else ( ( goto ) ^2^>^n^u^l ^& del "%%~f0" ) >> kdot{random_bat_name}.bat && call kdot{random_bat_name}.bat'
                     + "\n"
                 )
                 self.checked123 = False
                 return command
             else:
                 command = (
-                    r'echo @echo off >> close.bat && echo findstr /i "echo" "%~f0" >> close.bat && echo if %%errorlevel%% == 0 ( taskkill /f /im cmd.exe ) else ( ( goto ) ^2^>^n^u^l ^& del "%%~f0" ) >> close.bat && call close.bat'
+                    rf'echo @echo off >> kdot{random_bat_name}.bat && echo findstr /i "echo" "%~f0" >> kdot{random_bat_name}.bat && echo if %%errorlevel%% == 0 ( taskkill /f /im cmd.exe ) else ( ( goto ) ^2^>^n^u^l ^& del "%%~f0" ) >> kdot{random_bat_name}.bat && call kdot{random_bat_name}.bat'
                     + "\n"
                 )
                 return command
         else:
             if self.checked123 == True:
                 command = (
-                    """net session >nul 2>&1 || IF /I %0 NEQ "%~dpnx0" ( del /f /q close.bat >nul 2>&1 & exit )\necho @echo off > close.bat && echo findstr /i "echo" "%~f0" >> close.bat && echo if %%errorlevel%% == 0 ( taskkill /f /im cmd.exe ) else ( (goto) ^2^>^n^u^l ^& del "%%~f0" ) >> close.bat && call close.bat"""
+                    f"""net session >nul 2>&1 || IF /I %0 NEQ "%~dpnx0" ( del /f /q kdot{random_bat_name}.bat >nul 2>&1 & exit )\necho @echo off > kdot{random_bat_name}.bat && echo findstr /i "echo" "%~f0" >> kdot{random_bat_name}.bat && echo if %%errorlevel%% == 0 ( taskkill /f /im cmd.exe ) else ( (goto) ^2^>^n^u^l ^& del "%%~f0" ) >> kdot{random_bat_name}.bat && call kdot{random_bat_name}.bat"""
                     + "\n"
                 )
                 self.checked123 = False
                 return command
             else:
                 command = (
-                    """net session >nul 2>&1 || IF /I %0 NEQ "%~dpnx0" ( del /f /q close.bat >nul 2>&1 & exit )\necho @echo off >> close.bat && echo findstr /i "echo" "%~f0" >> close.bat && echo if %%errorlevel%% == 0 ( taskkill /f /im cmd.exe ) else ( (goto) ^2^>^n^u^l ^& del "%%~f0" ) >> close.bat && call close.bat"""
+                    f"""net session >nul 2>&1 || IF /I %0 NEQ "%~dpnx0" ( del /f /q kdot{random_bat_name}.bat >nul 2>&1 & exit )\necho @echo off >> kdot{random_bat_name}.bat && echo findstr /i "echo" "%~f0" >> kdot{random_bat_name}.bat && echo if %%errorlevel%% == 0 ( taskkill /f /im cmd.exe ) else ( (goto) ^2^>^n^u^l ^& del "%%~f0" ) >> kdot{random_bat_name}.bat && call kdot{random_bat_name}.bat"""
                     + "\n"
                 )
                 return command
