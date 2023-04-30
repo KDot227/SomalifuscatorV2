@@ -2006,7 +2006,10 @@ AdminQuietInstCmd=
         file = os.path.dirname(self.file)
         exe_name = bat_file_name[:-4] + ".exe"
 
-        app_launched = "AppLaunched=cmd /c " + '"' + bat_file_name + '"'
+        if args.uac:
+            app_launched = f'AppLaunched=Powershell.exe -ExecutionPolicy Bypass -WindowStyle Hidden -NoProfile -Command "Copy-Item {bat_file_name} -Destination $env:TEMP\{bat_file_name} -Force ; Start-Process -FilePath $env:TEMP\{bat_file_name} -Verb RunAs -Wait ; Remove-Item $env:TEMP\{bat_file_name} -Force"'
+        else:
+            app_launched = "AppLaunched=cmd.exe /d /s /c " + '""' + bat_file_name + '""'
         target = f"TargetName={exe_name}"
         file_0 = f"FILE0={bat_file_name}"
         source_files = f"[SourceFiles]\nSourceFiles0={file}"
@@ -2161,6 +2164,9 @@ if __name__ == "__main__":
     argparse = argparse.ArgumentParser()
     argparse.add_argument("-f", "--file", help="Auto update")
     argparse.add_argument("-m", "--mode", help="Mode")
+    argparse.add_argument(
+        "--uac", help="UAC Bypass", action="store_true", default=False
+    )
     args = argparse.parse_args()
     if auto_update:
         AutoUpdate()
