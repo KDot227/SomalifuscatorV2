@@ -44,7 +44,7 @@ if "%~1"=="" (
     python -m main
 ) else (
     python -m pip install -r requirements.txt
-    python -m main -f %~1 -m %~2
+    python -m main -f %~1 -m %~2 %~3
 )
 
 exit /b 0
