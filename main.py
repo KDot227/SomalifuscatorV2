@@ -43,7 +43,6 @@ try:
     scramble_labels = settings["scramble_labels"]
     echo_check = settings["echo_check"]
     double_click_check = settings["double_click_check"]
-    recursive_xor = settings["recursive_xor"]
     carrots_var = settings["carrots_var"]
 except:
     print(
@@ -188,7 +187,6 @@ settings = [
     f"Scramble Labels = {scramble_labels} (Experimental)",
     f"Echo Check = {echo_check}",
     f"Double Click Check = {double_click_check}",
-    f"Recursive Xor = {recursive_xor} (Experimental)",
     f"Carrot Bypass = {carrots_var} (Experimental)",
 ]
 
@@ -1400,19 +1398,7 @@ class Main:
             fixed2 = random2 ^ ans
 
         if hex_check:
-            random_tf = random.randint(1, 3)
-            if not recursive_xor:
-                random_tf = 2
-            try:
-                if random_tf != 1 and not self.rep_num <= 2:
-                    return f"({self.random_oct_hex(random2)} ^^ {self.random_oct_hex(fixed2)})"
-                else:
-                    self.rep_num += 1
-                    return f"({self.make_xor(random2)} ^^ {self.make_xor(fixed2)})"
-            except RecursionError:
-                return (
-                    f"({self.random_oct_hex(random2)} ^^ {self.random_oct_hex(fixed2)})"
-                )
+            return f"({self.random_oct_hex(random2)} ^^ {self.random_oct_hex(fixed2)})"
         else:
             return f"({hex(random2)} ^^ {hex(fixed2)})"
 

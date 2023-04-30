@@ -14,6 +14,5 @@
     "echo_check": true,
     "scramble_labels": false,
     "double_click_check": false,
-    "recursive_xor": true,
     "carrots_var": false
 }
