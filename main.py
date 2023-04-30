@@ -2022,14 +2022,15 @@ FriendlyName=-
 PostInstallCmd=<None>
 AdminQuietInstCmd=
 """
-        current_dir = os.getcwd()
         bat_file_name = os.path.basename(self.file)
+        # get file path without name of file
+        file = os.path.dirname(self.file)
         exe_name = bat_file_name[:-4] + ".exe"
 
         app_launched = "AppLaunched=cmd /c " + '"' + bat_file_name + '"'
         target = f"TargetName={exe_name}"
         file_0 = f"FILE0={bat_file_name}"
-        source_files = f"[SourceFiles]\nSourceFiles0={current_dir}"
+        source_files = f"[SourceFiles]\nSourceFiles0={file}"
         extra = f"[SourceFiles0]\n%FILE0%="
 
         to_write = [app_launched, target, file_0, source_files, extra]
