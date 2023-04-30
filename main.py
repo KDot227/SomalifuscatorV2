@@ -1176,14 +1176,7 @@ class Main:
         driver_stuff = r"C:\Windows\System32\Drivers\DriverData"
         comspec = r"C:\WINDOWS\system32\cmd.exe"
         pathext = r".COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC"
-        session_name = r"Console"
-        program_data = r"C:\ProgramData"
-        alluserprofile = r"C:\ProgramData"
-        ProgramW6432 = r"C:\Program Files"
-        SystemDrive = r"C:"
-        SystemRoot = r"C:\WINDOWS"
-        windir = r"C:\WINDOWS"
-        # not adding the comspec exploit yet
+        ## not adding the comspec exploit yet
         ComSpec = r"C:\WINDOWS\system32\cmd.exe"
         CommonProgramFiles = r"C:\Program Files\Common Files"
         CommonProgramFiles_x86 = r"C:\Program Files (x86)\Common Files"
@@ -1199,13 +1192,6 @@ class Main:
             driver_stuff,
             comspec,
             pathext,
-            session_name,
-            program_data,
-            alluserprofile,
-            ProgramW6432,
-            SystemDrive,
-            SystemRoot,
-            windir,
             ComSpec,
             CommonProgramFiles,
             CommonProgramFiles_x86,
@@ -1222,13 +1208,6 @@ class Main:
             "DRIVERDATA",
             "COMSPEC",
             "PATHEXT",
-            "SESSIONNAME",
-            "PROGRAMDATA",
-            "ALLUSERPROFILE",
-            "PROGRAMW6432",
-            "SYSTEMDRIVE",
-            "SYSTEMROOT",
-            "WINDIR",
             "COMSPEC",
             "COMMONPROGRAMFILES",
             "COMMONPROGRAMFILES(X86)",
@@ -1241,7 +1220,7 @@ class Main:
             if char in i:
                 new_lists.append(i)
 
-        random_posotive_negative = random.choice([True, False])
+        random_posotive_negative = False
         if len(new_lists) > 0:
             if char == " ":
                 return char
