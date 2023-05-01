@@ -52,7 +52,7 @@ except:
     os._exit(1)
 
 global debug
-debug = False
+debug = True
 
 try:
     from rich.progress import Progress, track
@@ -1174,10 +1174,7 @@ class Main:
         program_2 = r"C:\Program Files (x86)"
         psmodule_path = r"C:\Program Files\WindowsPowerShell\Modules;C:\WINDOWS\system32\WindowsPowerShell\v1.0\Modules"
         driver_stuff = r"C:\Windows\System32\Drivers\DriverData"
-        comspec = r"C:\WINDOWS\system32\cmd.exe"
         pathext = r".COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC"
-        ## not adding the comspec exploit yet
-        ComSpec = r"C:\WINDOWS\system32\cmd.exe"
         CommonProgramFiles = r"C:\Program Files\Common Files"
         CommonProgramFiles_x86 = r"C:\Program Files (x86)\Common Files"
         CommonProgramW6432 = r"C:\Program Files\Common Files"
@@ -1190,9 +1187,7 @@ class Main:
             program_2,
             psmodule_path,
             driver_stuff,
-            comspec,
             pathext,
-            ComSpec,
             CommonProgramFiles,
             CommonProgramFiles_x86,
             CommonProgramW6432,
@@ -1206,9 +1201,7 @@ class Main:
             "PROGRAMFILES(X86)",
             "PSMODULEPATH",
             "DRIVERDATA",
-            "COMSPEC",
             "PATHEXT",
-            "COMSPEC",
             "COMMONPROGRAMFILES",
             "COMMONPROGRAMFILES(X86)",
             "COMMONPROGRAMW6432",
