@@ -299,8 +299,6 @@ class Main:
                 filetypes=(("Batch files", "*.bat"), ("All files", "*.*")),
             )
 
-        root.destroy()
-
         if os.path.exists(self.file):
             os.system("cls" if os.name == "nt" else "clear")
             print(Colorate.Vertical(Colors.purple_to_blue, options1, 2))
@@ -427,7 +425,6 @@ class Main:
                     program_2 = r"C:\Program Files (x86)"
                     psmodule_path = r"C:\Program Files\WindowsPowerShell\Modules;C:\WINDOWS\system32\WindowsPowerShell\v1.0\Modules"
                     driver_stuff = r"C:\Windows\System32\Drivers\DriverData"
-                    comspec = r"C:\WINDOWS\system32\cmd.exe"
                     pathext = r".COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC"
 
                     list_of_all = [
@@ -437,7 +434,6 @@ class Main:
                         program_2,
                         psmodule_path,
                         driver_stuff,
-                        comspec,
                         pathext,
                     ]
 
@@ -448,7 +444,6 @@ class Main:
                         "PROGRAMFILES(X86)",
                         "PSMODULEPATH",
                         "DRIVERDATA",
-                        "COMSPEC",
                         "PATHEXT",
                     ]
 
