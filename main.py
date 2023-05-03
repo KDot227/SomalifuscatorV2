@@ -52,7 +52,7 @@ except:
     os._exit(1)
 
 global debug
-debug = True
+debug = False
 
 try:
     from rich.progress import Progress, track
