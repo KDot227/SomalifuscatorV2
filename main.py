@@ -1064,7 +1064,11 @@ class Main:
                             ):
                                 f.write(word + " ")
                                 continue
-                            elif word.startswith("%") or word.startswith("!"):
+                            elif (
+                                word.startswith(r"%")
+                                or word.startswith(r"!")
+                                or word.startswith(r"%%")
+                            ):
                                 f.write(self.random_capitalization(word) + " ")
                                 continue
                             elif re.match(regex_bat, word):
