@@ -5,6 +5,7 @@ import os
 import time
 import json
 import kdot
+import shutil
 import argparse
 from tkinter import Tk
 from tkinter import filedialog as kdot2
@@ -1989,6 +1990,7 @@ FriendlyName=-
 PostInstallCmd=<None>
 AdminQuietInstCmd=
 """
+        os.mkdir("build")
         bat_file_name = os.path.basename(self.file)
         # get file path without name of file
         file = os.path.dirname(self.file)
@@ -2004,13 +2006,18 @@ AdminQuietInstCmd=
         extra = f"[SourceFiles0]\n%FILE0%="
 
         to_write = [app_launched, target, file_0, source_files, extra]
-        with open("setup.sed", "a+") as f:
+        with open("build\\setup.sed", "a+") as f:
             f.write(code)
             for item in to_write:
                 f.write(item + "\n")
+        original_dir = os.getcwd()
+        shutil.copy(self.file, "build")
+        os.chdir("build")
         os.system("iexpress /n /q /m setup.sed")
-        os.remove("setup.sed")
-        print(f"Exe file saved as {exe_name}")
+        shutil.move(exe_name, original_dir)
+        os.chdir(original_dir)
+        shutil.rmtree("build")
+        print(f"Created {exe_name}")
 
     def bat2exe2(self):
         warning = Write.Input(
