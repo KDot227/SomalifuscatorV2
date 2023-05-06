@@ -1360,14 +1360,8 @@ class Main:
         random2 = "".join(str(i) for i in random_binary)
         random2 = int(random2, 2)
 
-        max_fixed = int("1" * len(binary_string), 2)
         # me asf when xor dont wanna be bae
         fixed2 = random2 ^ ans
-        while fixed2 > max_fixed:
-            random_binary = [random.choice(choices) for i in range(len(binary_string))]
-            random2 = "".join(str(i) for i in random_binary)
-            random2 = int(random2, 2)
-            fixed2 = random2 ^ ans
 
         if hex_check:
             return f"({self.random_oct_hex(random2)} ^^ {self.random_oct_hex(fixed2)})"
