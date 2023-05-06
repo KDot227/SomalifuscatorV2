@@ -1,4 +1,5 @@
 {
+    "NOTE READ": "THESE OPTIONS ARE ONLY FOR ULTIMATE",
     "chinese": true,
     "pogdog": true,
     "hell": true,
@@ -14,5 +15,6 @@
     "echo_check": true,
     "scramble_labels": false,
     "double_click_check": true,
-    "carrots_var": false
+    "carrots_var": false,
+    "debug": false
 }

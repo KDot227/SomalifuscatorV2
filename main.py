@@ -45,15 +45,13 @@ try:
     echo_check = settings["echo_check"]
     double_click_check = settings["double_click_check"]
     carrots_var = settings["carrots_var"]
+    debug = settings["debug"]
 except:
     print(
         "Your settings.json file has been update! Please redownload somalifuscator and try again"
     )
     time.sleep(30)
     os._exit(1)
-
-global debug
-debug = False
 
 try:
     from rich.progress import Progress, track
@@ -76,6 +74,7 @@ except Exception as e:
     time.sleep(5)
     os._exit(1)
 
+# this the hottest thing ive ever seen in my life
 install(show_locals=True)
 
 # fix colorama
@@ -189,6 +188,7 @@ settings = [
     f"Echo Check = {echo_check}",
     f"Double Click Check = {double_click_check}",
     f"Carrot Bypass = {carrots_var} (Experimental)",
+    f"Debug = {debug}",
 ]
 
 
