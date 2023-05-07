@@ -1057,7 +1057,7 @@ class Main:
                             elif (
                                 word.startswith(r"%")
                                 or word.startswith(r"!")
-                                or word.startswith(r"%%")
+                                or r"%%" in word
                             ):
                                 f.write(self.random_capitalization(word) + " ")
                                 continue
