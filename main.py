@@ -193,7 +193,7 @@ settings = [
 
 
 class AutoUpdate:
-    def __init__(self):
+    def __init__(self) -> None:
         self.code = (
             "https://raw.githubusercontent.com/KDot227/Somalifuscator/main/main.py"
         )
@@ -203,18 +203,24 @@ class AutoUpdate:
             username = os.getlogin()
             if username == "this1":
                 self.bypass = True
-            self.update()
         except OSError:
             self.bypass = True
+        self.update()
 
-    def update(self):
+    def update(self) -> None:
         if not self.bypass:
             print("Checking for updates...")
             code = requests.get(self.code, timeout=10).text
             with open(__file__, "r", encoding="utf-8", errors="ignore") as f:
                 main_code = f.read()
             if code != main_code:
-                print("Updating...")
+                check = Write.Input(
+                    "There is an update! Would you like to update? (y/n) -> ",
+                    Colors.green,
+                    interval=0.05,
+                )
+                if not check.lower() == "y":
+                    return
                 with open(__file__, "w", encoding="utf-8", errors="ignore") as f:
                     f.write(code)
                 os.startfile(__file__)
