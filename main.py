@@ -1219,27 +1219,32 @@ class Main:
                 return char
             new = random.choice(new_lists)
             if char in new:
-                # if random_posotive_negative:
-                #    if new == psmodule_path:
-                #        index = new.index(char)
-                #        new2 = corosponding[list_of_all.index(new)]
-                #        negative_index = index - len(new)
-                #        return f"{self.random_single_carrot(carrot)}%{self.random_capitalization(new2)}:~{index},1%"
-                #    else:
-                #        index = new.index(char)
-                #        new2 = corosponding[list_of_all.index(new)]
-                #        negative_index = index - len(new)
-                #        return f"{self.random_single_carrot(carrot)}%{self.random_capitalization(new2)}:~{negative_index},1%"
-                # else:
-                if new == psmodule_path:
-                    index = new.index(char)
-                    new = corosponding[list_of_all.index(new)]
-                    return f"{self.random_single_carrot(carrot)}%{self.random_capitalization(new)}:~{index},1%"
+                if random_posotive_negative:
+                    if new == psmodule_path:
+                        index = new.index(char)
+                        new2 = corosponding[list_of_all.index(new)]
+                        negative_index = index - len(new)
+                        return f"{self.random_single_carrot(carrot)}%{self.random_capitalization(new2)}:~{index},1%"
+                    else:
+                        index = new.index(char)
+                        new2 = corosponding[list_of_all.index(new)]
+                        negative_index = index - len(new)
+                        return f"{self.random_single_carrot(carrot)}%{self.random_capitalization(new2)}:~{negative_index},1%"
                 else:
-                    index = new.index(char)
-                    new = corosponding[list_of_all.index(new)]
-                    return f"{self.random_single_carrot(carrot)}%{self.random_capitalization(new)}:~{index},1%"
-        return self.ran1(char)
+                    if new == psmodule_path:
+                        index = new.index(char)
+                        new = corosponding[list_of_all.index(new)]
+                        return f"{self.random_single_carrot(carrot)}%{self.random_capitalization(new)}:~{index},1%"
+                    else:
+                        index = new.index(char)
+                        new = corosponding[list_of_all.index(new)]
+                        return f"{self.random_single_carrot(carrot)}%{self.random_capitalization(new)}:~{index},1%"
+        else:
+            if char in string.ascii_letters:
+                var = f"{self.random_single_carrot(carrot)}%{self.random_capitalization('KDOT')}:~{random_order.index(char)},1%"
+                return var
+            else:
+                return char
 
     # def ran3(self, char):
     #    if char in string.ascii_letters:
@@ -1317,8 +1322,8 @@ class Main:
     def tests(self):
         # I just made this cause editing it the other way would be annoying
         choices = [self.first_line_echo_check()]
-        if anti_vm:
-            choices.append(self.vm_test())
+        #if anti_vm:
+        #    choices.append(self.vm_test())
 
         if utf_16_bom and not self.level == "exe2bat":
             choices.append(self.byte_check())
