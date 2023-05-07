@@ -807,6 +807,15 @@ class Main:
 
             # basic parsing of the file and changing things that need to be changed
 
+            for index, line in enumerate(data):
+                ammount_of_indents = len(re.findall("^ *", line)[0])
+                if ammount_of_indents >= 12:
+                    print(
+                        "You have more than 12 spaces for 1 indent. Please don't use more than 4 and chain your indents into 1 line."
+                    )
+                    time.sleep(5)
+                    os._exit(1)
+
             new_lines = []
             i = 0
             while i < len(data):
@@ -844,7 +853,7 @@ class Main:
                 label_mappings = {}
 
                 for label in unique_labels:
-                    random_string = self.make_random_string((8, 9))
+                    random_string = self.make_random_string((8, 9), False)
                     label_mappings[label] = ":" + random_string
 
                 for i in range(len(data)):
@@ -1117,9 +1126,7 @@ class Main:
                 data.insert(0, "@echo off\n")
                 for i in range(len(data)):
                     if "echo" in data[i]:
-                        data[i] = data[i].replace(
-                            "echo", r"%GODFATHER%e%GODFATHER%c%GODFATHER%h%GODFATHER%o"
-                        )
+                        data[i] = data[i].replace("echo", self.obf_oneline("echo"))
                     if not data[i].startswith(";") or not data[i].startswith("; "):
                         new = self.random_semi_and_comma(data[i])
                         data[i] = new
