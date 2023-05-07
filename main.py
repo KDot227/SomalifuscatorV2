@@ -1205,6 +1205,8 @@ class Main:
             if char == " ":
                 return char
             new = random.choice(new_lists)
+            if char not in string.ascii_letters:
+                return char
             if char in new:
                 if random_posotive_negative:
                     index = new.index(char)
@@ -1216,11 +1218,7 @@ class Main:
                     new = corosponding[list_of_all.index(new)]
                     return f"{self.random_single_carrot(carrot)}%{self.random_capitalization(new)}:~{index},1%"
         else:
-            if char in string.ascii_letters:
-                var = f"{self.random_single_carrot(carrot)}%{self.random_capitalization('KDOT')}:~{random_order.index(char)},1%"
-                return var
-            else:
-                return char
+            return self.ran1(char)
 
     # def ran3(self, char):
     #    if char in string.ascii_letters:
@@ -1574,7 +1572,6 @@ class Main:
                 f"if %cd% == %cd% ( goto :{good_label} ) else ( goto :{label123} )",
                 f"if chcp leq 1 ( goto :{label123} ) else ( goto :{good_label} )",
                 f"if %CD% == %__CD__% ( goto :{label123} ) else ( goto :{good_label} )",
-                f"if %~dp0==%__cd__% ( goto :{good_label} ) else ( goto :{label123} )",
             ]
         else:
             examples = [
@@ -1589,7 +1586,6 @@ class Main:
                 f"if not defined KDOT ( goto :EOF ) else ( goto :{good_label} )",
                 f"if not defined f ( goto :EOF ) else ( goto :{good_label} )",
                 f"if %CD% == %__CD__% ( goto :{label123} ) else ( goto :{good_label} )",
-                f"if %~dp0==%__cd__% ( goto :{good_label} ) else ( goto :{label123} )",
             ]
         if echo_weird:
             random_maybe = random.choice([True, False])
