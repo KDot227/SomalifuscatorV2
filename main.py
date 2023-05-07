@@ -1172,7 +1172,6 @@ class Main:
         weird = r"C:\Program Files (x86)\Common Files"
         program_1 = r"C:\Program Files"
         program_2 = r"C:\Program Files (x86)"
-        psmodule_path = r"C:\Program Files\WindowsPowerShell\Modules;C:\WINDOWS\system32\WindowsPowerShell\v1.0\Modules"
         driver_stuff = r"C:\Windows\System32\Drivers\DriverData"
         pathext = r".COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC"
         CommonProgramFiles = r"C:\Program Files\Common Files"
@@ -1185,7 +1184,6 @@ class Main:
             weird,
             program_1,
             program_2,
-            psmodule_path,
             driver_stuff,
             pathext,
             CommonProgramFiles,
@@ -1199,7 +1197,6 @@ class Main:
             "COMMONPROGRAMFILES(X86)",
             "PROGRAMFILES",
             "PROGRAMFILES(X86)",
-            "PSMODULEPATH",
             "DRIVERDATA",
             "PATHEXT",
             "COMMONPROGRAMFILES",
@@ -1220,25 +1217,14 @@ class Main:
             new = random.choice(new_lists)
             if char in new:
                 if random_posotive_negative:
-                    if new == psmodule_path:
-                        index = new.index(char)
-                        new2 = corosponding[list_of_all.index(new)]
-                        negative_index = index - len(new)
-                        return f"{self.random_single_carrot(carrot)}%{self.random_capitalization(new2)}:~{index},1%"
-                    else:
-                        index = new.index(char)
-                        new2 = corosponding[list_of_all.index(new)]
-                        negative_index = index - len(new)
-                        return f"{self.random_single_carrot(carrot)}%{self.random_capitalization(new2)}:~{negative_index},1%"
+                    index = new.index(char)
+                    new2 = corosponding[list_of_all.index(new)]
+                    negative_index = index - len(new)
+                    return f"{self.random_single_carrot(carrot)}%{self.random_capitalization(new2)}:~{negative_index},1%"
                 else:
-                    if new == psmodule_path:
-                        index = new.index(char)
-                        new = corosponding[list_of_all.index(new)]
-                        return f"{self.random_single_carrot(carrot)}%{self.random_capitalization(new)}:~{index},1%"
-                    else:
-                        index = new.index(char)
-                        new = corosponding[list_of_all.index(new)]
-                        return f"{self.random_single_carrot(carrot)}%{self.random_capitalization(new)}:~{index},1%"
+                    index = new.index(char)
+                    new = corosponding[list_of_all.index(new)]
+                    return f"{self.random_single_carrot(carrot)}%{self.random_capitalization(new)}:~{index},1%"
         else:
             if char in string.ascii_letters:
                 var = f"{self.random_single_carrot(carrot)}%{self.random_capitalization('KDOT')}:~{random_order.index(char)},1%"
