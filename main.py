@@ -1309,8 +1309,8 @@ class Main:
     def tests(self):
         # I just made this cause editing it the other way would be annoying
         choices = [self.first_line_echo_check()]
-        # if anti_vm:
-        #    choices.append(self.vm_test())
+        if anti_vm:
+            choices.append(self.vm_test())
 
         if utf_16_bom and not self.level == "exe2bat":
             choices.append(self.byte_check())
