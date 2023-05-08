@@ -153,6 +153,14 @@ No image provided
 No image but it embeds powershell files (ps1 files) at the end of the batch script and when ran the batch script will rerun with powershell which runs the powershell. (I will eventually add Jscript/Wscript and maybe full support for Vbs)
 
 <h1 align="center">
+  Donate 😄
+</h1>
+
+btc = bc1qm9g6l82mcsryfuzlvps29fmcfwx7244kuxxkay \
+ltc = ltc1qzywkdqyzj0x6p97mh3uhmwhl0v94fa5363nx3j \
+eth = 0x6be64aC1eC6616866323CdD094B8834066A95854
+
+<h1 align="center">
   If you like this repo please give it a star ⭐
 </h1>
 
