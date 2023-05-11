@@ -13,6 +13,7 @@ from tkinter import filedialog as kdot2
 
 try:
     from ctypes import windll
+
     # fix dpi awareness or else the file picker looks terrible
     windll.shcore.SetProcessDpiAwareness(1)
 except:
@@ -166,8 +167,6 @@ options1 = r"""[1] Level 1 (Recommended to use AFTER 2) (Rot-x method)
 [3] Level 3 (Encoding trick by changing first 2 bytes)
 [4] Level 4 (NOTE: Don't end your files with exit when its done with this command or it might break. (same with pause))
 [5] Level 5 (NOTE: THIS WAS NOT MADE BY ME IT WAS MADE BY https://www.dostips.com/forum/memberlist.php?mode=viewprofile&u=2258 W mans btw) (If u really wanna be mean use Ultimate first lmao)
-[clean] cleans the code to try and fix any common errors (FIXES BUILT IN VARIABLES)
-[all] does 1, 2, 3 and clean
 [fud] makes it undetectable by everything on virustotal
 """
 options2 = r"""
@@ -183,7 +182,7 @@ options3 = (
 [exe2bat] Converts exe to bat (EXPERIMENTAL) (NOTE THIS IS NOT A DECOMPILER. IT EMBEDS THE EXE IN THE BAT FILE)
 [py2bat] Converts python file to bat (Note you cant use things like getting the execution path cause that might break but idk ur choice)
 
-[?] (If you want to use built in variables such as %~dp0 etc wrap them in percent signes then run the clean mode afterwards. You DONT have to do this if your using ultimate)
+NOTE IF SOMETHING ISN'T WORKING IT'S PROBABLY YOUR FAULT
 """
     + "\n\n"
 )
@@ -251,7 +250,6 @@ class Main:
         if mode:
             self.level = mode
             self.file = file
-            self.down = False
             self.rep_num = 0
             self.ran_through = 0
             self.level = self.level.lower()
@@ -261,8 +259,6 @@ class Main:
                 "3": self.level3,
                 "4": self.level4,
                 "5": self.level5,
-                "clean": self.clean,
-                "all": self.all,
                 "fud": self.fud,
                 "ultimate": self.ultimate,
                 "embed": self.embed,
@@ -290,7 +286,6 @@ class Main:
         self.carrot = False
         self.label = False
         # This is so the fud mode doesn't show the first time it's ran
-        self.down = False
         self.rep_num = 0
         for setting in settings:
             setting_name, setting_value = setting.split("=")
@@ -316,7 +311,7 @@ class Main:
         time.sleep(1)
 
         self.file = ""
-        
+
         if os.name == "nt":
             while not os.path.exists(self.file):
                 self.file = kdot2.askopenfilename(
@@ -344,8 +339,6 @@ class Main:
                 "3": self.level3,
                 "4": self.level4,
                 "5": self.level5,
-                "clean": self.clean,
-                "all": self.all,
                 "fud": self.fud,
                 "ultimate": self.ultimate,
                 "embed": self.embed,
@@ -564,16 +557,14 @@ class Main:
 
     def mixer(self):
         log.info("Running Mixer")
-        original_file = self.file
-        with open("mixer.bat", "w") as f:
-            f.write(code)
-        self.file = "mixer.bat"
-        self.fud()
-        with open("mixer.bat.fud.bat", "r", encoding="utf-8", errors="ignore") as f:
-            self.code_new = f.read()
-        os.remove("mixer.bat")
-        os.remove("mixer.bat.fud.bat")
-        self.file = original_file
+        array_code = []
+        new_code = ""
+        code2 = code.split("\n")
+        for line in code2:
+            array_code.append(self.obf_oneline(line) + "\n")
+        for line in array_code:
+            new_code += line
+        self.code_new = new_code
 
     def level1(self):
         carrot = False
@@ -690,50 +681,6 @@ class Main:
             for i in out_hex:
                 f.write(bytes.fromhex(i))
 
-    def clean(self):
-        with open(self.file, "r", encoding="utf-8", errors="ignore") as f:
-            contents = f.read()
-        with open(
-            f"{self.file}.cleaned.bat", "a+", encoding="utf-8", errors="ignore"
-        ) as f:
-            # if there are any others that people use please make a pr and add them.
-            batch_vars = [
-                "%~dp0",
-                "%~f0",
-                "%~n0",
-                "%~x0",
-                "%~dpnx0",
-            ]
-            batch_vars_to_replace = [
-                r"%~dp0%",
-                r"%~f0%",
-                r"%~n0%",
-                r"%~x0%",
-                r"%~dpnx0%",
-            ]
-            for i in range(len(batch_vars)):
-                contents = contents.replace(batch_vars_to_replace[i], batch_vars[i])
-            f.write(contents)
-
-    def all(self):
-        names = []
-        self.level2()
-        self.file = f"{self.file}.level2.bat"
-        names.append(self.file)
-        self.level1()
-        self.file = f"{self.file}.level1.bat"
-        names.append(self.file)
-        self.clean()
-        self.file = f"{self.file}.cleaned.bat"
-        names.append(self.file)
-        self.level3()
-        os.rename(f"{self.file}.level3.bat", "FINAL.bat")
-        for name in names:
-            os.remove(name)
-        print("FINAL.bat is the finished product!")
-        time.sleep(5)
-        os._exit(0)
-
     def fud(self):
         carrot = False
         var = False
@@ -746,59 +693,32 @@ class Main:
         with open(f"{self.file}.fud.bat", "a+", encoding="utf-8", errors="ignore") as f:
             f.write(self.random_capitalization("::Made by K.Dot and Godfather\n"))
             # this is so I don't have to see the status bar when using mixer
-            if self.down == False:
-                for line in data:
-                    if line.startswith(":") and not line.startswith("::"):
-                        f.write(line)
-                        continue
-                    for char in line:
-                        if char == ">":
+            for line in track(
+                data, description="[bold green]Obfuscating", total=len(data)
+            ):
+                if line.startswith(":") and not line.startswith("::"):
+                    f.write(line)
+                    continue
+                for char in line:
+                    if char == ">":
+                        f.write(char)
+                    elif char == "^":
+                        f.write(char)
+                        carrot = True
+                    elif carrot == True:
+                        f.write(char)
+                        carrot = False
+                    else:
+                        if char == "%":
+                            var = not var
                             f.write(char)
-                        elif char == "^":
+                        elif var == True:
                             f.write(char)
-                            carrot = True
-                        elif carrot == True:
+                        elif "\n" in char:
                             f.write(char)
-                            carrot = False
                         else:
-                            if char == "%":
-                                var = not var
-                                f.write(char)
-                            elif var == True:
-                                f.write(char)
-                            elif "\n" in char:
-                                f.write(char)
-                            else:
-                                random = self.make_random_string()
-                                f.write(f"{char}%{random}%")
-            else:
-                for line in track(
-                    data, description="[bold green]Obfuscating", total=len(data)
-                ):
-                    if line.startswith(":") and not line.startswith("::"):
-                        f.write(line)
-                        continue
-                    for char in line:
-                        if char == ">":
-                            f.write(char)
-                        elif char == "^":
-                            f.write(char)
-                            carrot = True
-                        elif carrot == True:
-                            f.write(char)
-                            carrot = False
-                        else:
-                            if char == "%":
-                                var = not var
-                                f.write(char)
-                            elif var == True:
-                                f.write(char)
-                            elif "\n" in char:
-                                f.write(char)
-                            else:
-                                random = self.make_random_string()
-                                f.write(f"{char}%{random}%")
-        self.down = not self.down
+                            random = self.make_random_string()
+                            f.write(f"{char}%{random}%")
 
     def ultimate(self, utf_16=True, check_bypass=False) -> None:
         self.check_bypass = check_bypass
