@@ -6,6 +6,7 @@ import time
 import json
 import kdot
 import shutil
+import logging
 import argparse
 from tkinter import Tk
 from tkinter import filedialog as kdot2
@@ -55,6 +56,7 @@ except:
 
 try:
     from rich.progress import Progress, track
+    from rich.logging import RichHandler
     from rich.traceback import install
     from zipfile import ZipFile
     from random import randint
@@ -76,6 +78,17 @@ except Exception as e:
 
 # this the hottest thing ive ever seen in my life
 install(show_locals=True)
+
+# the other hottest thing ive ever seen in my life
+FORMAT = "%(message)s"
+logging.basicConfig(
+    level="NOTSET", format=FORMAT, handlers=[RichHandler(show_time=False)]
+)
+
+log = logging.getLogger("rich")
+
+if not debug:
+    log.setLevel(logging.INFO)
 
 # fix colorama
 colorama.deinit()
@@ -385,11 +398,10 @@ class Main:
         length = random.choice([9, 11])
         return "".join(random.choice(chinese_characters) for _ in range(length))
 
-    @staticmethod
-    def fake_ceaser_cipher():
-        together = caesar_cipher_rotations(cesar_val) + caesar_cipher_rotations_upper(
-            cesar_val
-        )
+    def fake_ceaser_cipher(self):
+        together = caesar_cipher_rotations(
+            self.cesar_val
+        ) + caesar_cipher_rotations_upper(self.cesar_val)
         together = together[:-4]
         return together
 
@@ -482,8 +494,6 @@ class Main:
 
     @staticmethod
     def random_single_carrot(carrot):
-        if not carrots_var:
-            return ""
         if not carrot:
             return ""
         ran = random.choice([True, False])
@@ -530,7 +540,7 @@ class Main:
         """Returns the Caesar cipher rotation for a given letter and rotation value."""
         alphabet = list("abcdefghijklmnopqrstuvwxyz")
         letter_index = alphabet.index(letter.lower())
-        rotated_alphabet = alphabet[cesar_val:] + alphabet[:cesar_val]
+        rotated_alphabet = alphabet[self.cesar_val :] + alphabet[: self.cesar_val]
         rotated_letter = rotated_alphabet[letter_index]
 
         return rotated_letter
@@ -539,7 +549,7 @@ class Main:
         """Returns the Caesar cipher rotation for a given letter and rotation value."""
         alphabet = list("ABCDEFGHIJKLMNOPQRSTUVWXYZ")
         letter_index = alphabet.index(letter.upper())
-        rotated_alphabet = alphabet[cesar_val:] + alphabet[:cesar_val]
+        rotated_alphabet = alphabet[self.cesar_val :] + alphabet[: self.cesar_val]
         rotated_letter = rotated_alphabet[letter_index]
 
         return rotated_letter
@@ -800,11 +810,14 @@ class Main:
             )
             try:
                 os.remove(f"{self.file}.ultimate.bat")
+                log.info("Removed old file")
             except:
+                log.warning("No file to remove")
                 pass
             # cool thing
             # mshta vbscript:execute("CreateObject(""Scripting.FileSystemObject"").GetStandardStream(1).Write(Chr(89) & Chr(111)& Chr(117) & Chr(114) & Chr(32) & Chr(109) & Chr(97) & Chr(109) & Chr(97) & Chr(32) ):Close")|more
             # ultimate mode
+            self.cesar_val = cesar_val
             with open(self.file, "r", encoding="utf-8", errors="ignore") as f:
                 data = f.readlines()
 
@@ -850,10 +863,11 @@ class Main:
                 if line:
                     new_lines.append(line + "\n")
                 i += 1
-
+            log.info("Formated lines")
             data = new_lines.copy()
 
             if scramble_labels:
+                log.info("Scrambeling labels")
                 unique_labels = set(re.findall(r":\w+", " ".join(data)))
 
                 label_mappings = {}
@@ -869,6 +883,7 @@ class Main:
             data = data.copy()
 
             if debug:
+                log.debug("Writing debug1.bat")
                 with open("debug1.bat", "w", encoding="utf-8", errors="ignore") as f:
                     f.writelines(data)
 
@@ -982,9 +997,11 @@ class Main:
 
             for env_var in env_vars:
                 if env_var in data:
+                    log.info(f"Found env var: {env_var}")
                     self.used_env_vars.append(env_var)
 
             if ads:
+                log.debug("Adding ADS")
                 lines = data.copy()
                 new_lines = []
                 maybe = False
@@ -1015,10 +1032,11 @@ class Main:
                         new_lines[index] = line.strip() + " & del somali.txt\n"
                         break
                 new_lines.reverse()
-
+                log.debug("Added ADS")
                 data = new_lines.copy()
 
             if debug:
+                log.debug("Writing debug2.bat")
                 with open("debug1_2.bat", "w", encoding="utf-8", errors="ignore") as f:
                     f.writelines(data)
 
@@ -1035,7 +1053,26 @@ class Main:
                 f.write(self.obf_oneline(f"set KDOT={random_order}\n"))
                 # This regex is basically tryna get variables that are set to a value. For example if someone has set "starttime=%time%"
                 regex_bat = re.compile(r"\w+=[^=]*%\w+%\b|\w+=[^=]*%\w+%\B")
-                for line in data:
+                for index, line in enumerate(data):
+                    log.debug(f"Processing line {index}")
+                    echo_check123 = False
+                    try:
+                        if r"%errorlevel%" in data[index - 1].lower():
+                            echo_check123 = True
+                    except IndexError:
+                        pass
+                    if r"%errorlevel%" in line.lower():
+                        echo_check123 = True
+                    try:
+                        if r"%errorlevel%" in data[index + 1].lower():
+                            echo_check123 = True
+                    except IndexError:
+                        pass
+                    log.debug(f"Echo check: {echo_check123}")
+                    random_change_code = random.choice(range(1, 5))
+                    if random_change_code == 1 and not echo_check123:
+                        log.debug("Random change code True")
+                        f.write(self.random_swap())
                     progress.update(task1andhalf, advance=100 / len(data))
                     random_bool = random.choice([True, False])
                     bad_words = ["set", "&", "nul", ">"]
@@ -1045,14 +1082,18 @@ class Main:
                         if any(word in line.lower() for word in bad_words)
                         else True
                     )
+                    log.debug(f"Carrot case: {carrot_case}")
                     if for_loop:
                         random_bool_2 = random.choice([True, False])
                         if random_bool_2 and not line.startswith(":"):
+                            log.debug("For loop True")
                             line = self.ran3(line=line)
                     if line.startswith("::"):
+                        log.debug("Comment True")
                         f.write(line + "\n")
                         continue
                     elif line.startswith(":"):
+                        log.debug("Label True")
                         f.write(line + "\n")
                         continue
                         # TODO add label obf
@@ -1063,10 +1104,11 @@ class Main:
                                 random.choice(symbols) for _ in range(randint(3, 7))
                             )
                             f.write(random_symbols)
-                        for word in line.split():
+                        for index2, word in enumerate(line.split()):
                             if any(
                                 env_var.lower() in word.lower() for env_var in env_vars
                             ):
+                                log.debug("Env var True")
                                 f.write(word + " ")
                                 continue
                             elif (
@@ -1074,13 +1116,16 @@ class Main:
                                 or word.startswith(r"!")
                                 or r"%%" in word
                             ):
+                                log.debug("var True")
                                 f.write(self.random_capitalization(word) + " ")
                                 continue
                             elif re.match(regex_bat, word):
                                 # regex be my bae
+                                log.debug("regex True")
                                 f.write(word + " ")
                                 continue
                             elif word.startswith(":") and not word.startswith("::"):
+                                log.debug("label True")
                                 f.write(word + " ")
                                 continue
                             else:
@@ -1094,9 +1139,7 @@ class Main:
                                     else:
                                         random_obf = [
                                             self.ran1(char),
-                                            self.ran2(
-                                                char, random_order, carrot=carrot_case
-                                            ),
+                                            self.ran2(char, carrot_case),
                                         ]
                                         f.write(f"{random.choice(random_obf)}")
                                 f.write(" ")
@@ -1107,9 +1150,12 @@ class Main:
             ) as f:
                 news = f.readlines()
             if debug:
+                log.debug("Writing debug2.bat")
                 with open("debug2.bat", "w", encoding="utf-8", errors="ignore") as f:
                     f.writelines(news)
+            log.info("Adding echo check")
             news.insert(2, self.obf_oneline(self.first_line_echo_check()))
+            log.info("Scrambling")
             messed_up = self.scrambler(news)
             progress.update(task2, advance=100)
             with open(
@@ -1119,6 +1165,7 @@ class Main:
                     for thing in array:
                         f.write(thing.strip() + "\n")
             if debug:
+                log.debug("Writing debug3.bat")
                 with open("debug3.bat", "w", encoding="utf-8", errors="ignore") as f:
                     for array in messed_up:
                         for thing in array:
@@ -1127,6 +1174,7 @@ class Main:
             with open(
                 f"{self.file}.ultimate.bat", "r", encoding="utf-8", errors="ignore"
             ) as f:
+                log.debug("Replacing all instances of echo")
                 data = f.readlines()
                 # add echo off to the first line
                 data.insert(0, "@echo off\n")
@@ -1137,6 +1185,7 @@ class Main:
                         new = self.random_semi_and_comma(data[i])
                         data[i] = new
             if debug:
+                log.debug("Writing debug4.bat")
                 with open("debug4.bat", "w", encoding="utf-8", errors="ignore") as f:
                     f.writelines(data)
             progress.update(task4, advance=100)
@@ -1169,7 +1218,7 @@ class Main:
         else:
             return f"{char}%{randomed}%"
 
-    def ran2(self, char, random_order, carrot: bool):
+    def ran2(self, char, carrot: bool):
         # fasho could have used dict for this but idc its already done
         public = r"C:\Users\Public"
         weird = r"C:\Program Files (x86)\Common Files"
@@ -1180,7 +1229,6 @@ class Main:
         CommonProgramFiles = r"C:\Program Files\Common Files"
         CommonProgramFiles_x86 = r"C:\Program Files (x86)\Common Files"
         CommonProgramW6432 = r"C:\Program Files\Common Files"
-        DriverData = r"C:\Windows\System32\Drivers\DriverData"
 
         list_of_all = [
             public,
@@ -1192,7 +1240,6 @@ class Main:
             CommonProgramFiles,
             CommonProgramFiles_x86,
             CommonProgramW6432,
-            DriverData,
         ]
 
         corosponding = [
@@ -1244,6 +1291,15 @@ class Main:
         random_letter = random.choice(string.ascii_letters)
         random_number = random.randint(1, 99)
         return f"for /l %%{random_letter} in ( {random_number}, {random_number}, {random_number} ) do ( {line} )\n"
+
+    def random_swap(self):
+        self.cesar_val = random.randint(1, 13)
+        together = caesar_cipher_rotations(
+            self.cesar_val
+        ) + caesar_cipher_rotations_upper(self.cesar_val)
+        together = together[:-4]
+        together = together + "\n"
+        return self.obf_oneline(together)
 
     def random_carrots(self, string1: str, obf: bool, commas: bool):
         carrot = "^"
@@ -1425,6 +1481,7 @@ class Main:
         """This absolutely beautiful function takes the code, puts it into a nested array of goto values that all point to each other then obfuscates tf outta it."""
         original_lines = codeed
 
+        log.debug("Adding fake labels to code")
         for index, line in enumerate(original_lines):
             # not sure if echo really makes a difference but batch does some weird things sometimes
             echo_check123 = False
@@ -1449,6 +1506,7 @@ class Main:
                     label = f":{self.make_random_label_no_working()}\n"
                     original_lines.insert(index, label)
 
+        log.debug("Removing bad lines")
         original_lines = [
             item for item in original_lines if item not in [";", "\n", ";\n"]
         ]
@@ -1474,6 +1532,7 @@ class Main:
                     echo_check123 = True
             except IndexError:
                 pass
+            log.debug(f"PRE Scrambling line {index}")
             t = self.generate_math_problem(answer=random.randint(100000, 10000000))
             self.dict_thing[item] = [
                 t[0],
@@ -1486,6 +1545,7 @@ class Main:
 
         # NOTE everything in this for loop is the most confusing and worse coding I have ever done in my life. I am sorry for whoever is trying to read, imrpove or just understand what is going on especially if you have no prior knowledge of batch
         for index, (key, value) in enumerate(self.dict_thing.items()):
+            log.debug(f"Scrambling line {index}")
             if index == 0:
                 remem = [
                     f";{self.obf_oneline('set')} /a {self.obf_oneline('ans')}={self.obf_oneline(value[0])}\n;{self.random_semi_and_comma(self.obf_oneline('goto'))} :%ans%\n"
@@ -1548,21 +1608,28 @@ class Main:
 
             main_list.append([part_1, part_2, part_3])
 
+        log.info("Shuffling lines")
         random.shuffle(main_list)
 
+        log.info("Adding random comments and spacing")
         main_list = self.random_inserts(main_list)
 
+        log.info("Adding random dead code")
         main_list = self.random_dead_code(main_list)
 
+        log.info("Adding bad labels and dead code")
         main_list = self.bad_labels_and_dead_code(main_list)
 
         if random_spacing:
+            log.info("Adding more dead comments and random spacing")
             main_list = self.more_dead_comments(main_list)
 
         if pogdog_fun:
+            log.info("Adding pogdog fun")
             main_list = self.pogdog(main_list)
 
         # pointer that points to first line of the actual code.
+        log.info("Adding pointer")
         main_list.insert(0, remem)
 
         return main_list
@@ -2150,5 +2217,5 @@ if __name__ == "__main__":
         AutoUpdate()
     Main(args.mode, args.file)
     print("Done!")
-    time.sleep(3)
+    time.sleep(300)
     os._exit(0)
