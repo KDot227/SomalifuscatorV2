@@ -13,3 +13,9 @@ test_all.py
 main.exe
 \__pycache__
 *.bak
+debug1_2.bat
+debug1.bat
+debug2.bat
+debug3.bat
+debug4.bat
+*.bat.*

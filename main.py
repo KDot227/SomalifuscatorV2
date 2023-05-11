@@ -11,17 +11,25 @@ import argparse
 from tkinter import Tk
 from tkinter import filedialog as kdot2
 
+try:
+    from ctypes import windll
+    # fix dpi awareness or else the file picker looks terrible
+    windll.shcore.SetProcessDpiAwareness(1)
+except:
+    pass
+
 # hide the tkinter window
 # I love stack overflow
-root = Tk()
-root.withdraw()
+if os.name == "nt":
+    root = Tk()
+    root.withdraw()
 
-root.overrideredirect(True)
-root.geometry("0x0+0+0")
+    root.overrideredirect(True)
+    root.geometry("0x0+0+0")
 
-root.deiconify()
-root.lift()
-root.focus_force()
+    root.deiconify()
+    root.lift()
+    root.focus_force()
 
 current_dir = os.path.dirname(os.path.realpath(__file__))
 settings_path = current_dir + "/settings.json"
@@ -60,7 +68,6 @@ try:
     from rich.traceback import install
     from zipfile import ZipFile
     from random import randint
-    from ctypes import windll
     from pystyle import *
     import subprocess
     import colorama
@@ -92,9 +99,6 @@ if not debug:
 
 # fix colorama
 colorama.deinit()
-
-# fix dpi awareness or else the file picker looks terrible
-windll.shcore.SetProcessDpiAwareness(1)
 
 # proud author
 __author__ = "K.Dot#4044 and Godfather"
@@ -312,12 +316,16 @@ class Main:
         time.sleep(1)
 
         self.file = ""
-
-        while not os.path.exists(self.file):
-            self.file = kdot2.askopenfilename(
-                title="Select a file to obfuscate",
-                filetypes=(("Batch files", "*.bat"), ("All files", "*.*")),
-            )
+        
+        if os.name == "nt":
+            while not os.path.exists(self.file):
+                self.file = kdot2.askopenfilename(
+                    title="Select a file to obfuscate",
+                    filetypes=(("Batch files", "*.bat"), ("All files", "*.*")),
+                )
+        else:
+            while not os.path.exists(self.file):
+                self.file = Write.Input("Enter the path to the file -> ", Colors.green)
 
         if os.path.exists(self.file):
             os.system("cls" if os.name == "nt" else "clear")
@@ -555,6 +563,7 @@ class Main:
         return rotated_letter
 
     def mixer(self):
+        log.info("Running Mixer")
         original_file = self.file
         with open("mixer.bat", "w") as f:
             f.write(code)
@@ -1412,6 +1421,7 @@ class Main:
             return f"({hex(random2)} ^^ {hex(fixed2)})"
 
     def generate_math_problem(self, answer: int):
+        log.debug("Making problem. Answer is: " + str(answer))
         """Entire point of this is to make a math problem for the set /a. We do this cause kids need a calculator but once they see that there are octals and hexadecimals they'll prolly give up lmao"""
         # no division since we don't want floats BUT we can use division in the answer since its how you undo multiplication
         # but im not gonna do this cause it still makes floats and im slow
@@ -2206,6 +2216,7 @@ exit /b 0
 
 
 if __name__ == "__main__":
+    log.info("I hate Godfather")
     argparse = argparse.ArgumentParser()
     argparse.add_argument("-f", "--file", help="Auto update")
     argparse.add_argument("-m", "--mode", help="Mode")
