@@ -421,8 +421,14 @@ class Main:
                 )
         return main_list
 
-    def obf_oneline(self, line):
+    def obf_oneline(self, line: str, simple: bool = False):
         final_string = ""
+        if simple:
+            for word in line.split(" "):
+                final_string += (
+                    f"%{self.make_random_string()}%{word}%{self.make_random_string()}% "
+                )
+            return final_string
         for word in line.split(" "):
             if word.startswith("%"):
                 final_string += word + " "
@@ -561,7 +567,7 @@ class Main:
         new_code = ""
         code2 = code.split("\n")
         for line in code2:
-            array_code.append(self.obf_oneline(line) + "\n")
+            array_code.append(self.obf_oneline(line, simple=True) + "\n")
         for line in array_code:
             new_code += line
         self.code_new = new_code
@@ -1539,24 +1545,24 @@ class Main:
             main_list.append([part_1, part_2, part_3])
 
         log.info("Shuffling lines")
-        random.shuffle(main_list)
+        # random.shuffle(main_list)
 
         log.info("Adding random comments and spacing")
-        main_list = self.random_inserts(main_list)
+        # main_list = self.random_inserts(main_list)
 
         log.info("Adding random dead code")
-        main_list = self.random_dead_code(main_list)
+        # main_list = self.random_dead_code(main_list)
 
         log.info("Adding bad labels and dead code")
-        main_list = self.bad_labels_and_dead_code(main_list)
+        # main_list = self.bad_labels_and_dead_code(main_list)
 
-        if random_spacing:
-            log.info("Adding more dead comments and random spacing")
-            main_list = self.more_dead_comments(main_list)
+        # if random_spacing:
+        #    log.info("Adding more dead comments and random spacing")
+        #    main_list = self.more_dead_comments(main_list)
 
-        if pogdog_fun:
-            log.info("Adding pogdog fun")
-            main_list = self.pogdog(main_list)
+        # if pogdog_fun:
+        #    log.info("Adding pogdog fun")
+        #    main_list = self.pogdog(main_list)
 
         # pointer that points to first line of the actual code.
         log.info("Adding pointer")
