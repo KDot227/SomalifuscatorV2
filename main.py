@@ -1205,11 +1205,11 @@ class Main:
                     index = new.index(char)
                     new2 = corosponding[list_of_all.index(new)]
                     negative_index = index - len(new)
-                    return f"{self.random_single_carrot(carrot)}%{self.random_capitalization(new2)}:~{negative_index},1%"
+                    return f"%{self.random_capitalization(new2)}:~{negative_index},1%"
                 else:
                     index = new.index(char)
                     new = corosponding[list_of_all.index(new)]
-                    return f"{self.random_single_carrot(carrot)}%{self.random_capitalization(new)}:~{index},1%"
+                    return f"%{self.random_capitalization(new)}:~{index},1%"
         else:
             return self.ran1(char)
 
