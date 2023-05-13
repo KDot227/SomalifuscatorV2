@@ -1199,10 +1199,12 @@ class Main:
         ]
 
         new_lists = []
+        char_counter = 0
 
         for i in list_of_all:
             if char in i:
                 new_lists.append(i)
+                char_counter += i.count(char)
 
         random_posotive_negative = False
         if len(new_lists) > 0:
@@ -1213,14 +1215,18 @@ class Main:
                 return char
             if char in new:
                 if random_posotive_negative:
-                    index = new.index(char)
+                    random_index = random.choice(
+                        [i for i, letter in enumerate(new) if letter == char]
+                    )
                     new2 = corosponding[list_of_all.index(new)]
-                    negative_index = index - len(new)
+                    negative_index = random_index - len(new)
                     return f"%{self.random_capitalization(new2)}:~{negative_index},1%"
                 else:
-                    index = new.index(char)
+                    random_index = random.choice(
+                        [i for i, letter in enumerate(new) if letter == char]
+                    )
                     new = corosponding[list_of_all.index(new)]
-                    return f"%{self.random_capitalization(new)}:~{index},1%"
+                    return f"%{self.random_capitalization(new)}:~{random_index},1%"
         else:
             return self.ran1(char)
 
