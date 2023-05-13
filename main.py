@@ -90,13 +90,24 @@ install(show_locals=True)
 # the other hottest thing ive ever seen in my life
 FORMAT = "%(message)s"
 logging.basicConfig(
-    level="NOTSET", format=FORMAT, handlers=[RichHandler(show_time=False)]
+    level="NOTSET",
+    format=FORMAT,
+    handlers=[
+        RichHandler(show_time=False),
+    ],
 )
+
 
 log = logging.getLogger("rich")
 
 if not debug:
     log.setLevel(logging.INFO)
+else:
+    file_handler = logging.FileHandler("somalifuscator.log")
+    format2 = logging.Formatter("%(asctime)s - %(levelname)s - %(message)s")
+    file_handler.setFormatter(format2)
+    log.addHandler(file_handler)
+    log.setLevel(logging.DEBUG)
 
 # fix colorama
 colorama.deinit()
