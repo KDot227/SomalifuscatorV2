@@ -93,12 +93,6 @@ Long story short baum made [this](https://github.com/baum1810/batchobfuscator) a
 Not only is the Obfuscator very fast but it's also very customizable. If you know python code well enough nothing is stopping you from going into the code and changing some of the randint values to occur more frequently making your code more obfuscated and harder to read.
 
 <h2 align="center">
-  Cool map thing I drew
-</h2>
-
-![map](https://i.imgur.com/Lc0EAe0.png)
-
-<h2 align="center">
   Level 1
 </h2>
 
