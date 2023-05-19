@@ -997,6 +997,7 @@ class Main:
                 f.write(self.obf_oneline(f"set KDOT={random_order}\n"))
                 # This regex is basically tryna get variables that are set to a value. For example if someone has set "starttime=%time%"
                 regex_bat = re.compile(r"\w+=[^=]*%\w+%\b|\w+=[^=]*%\w+%\B")
+                regex2 = re.compile(r"%(\w+)%")
                 for index, line in enumerate(data):
                     log.debug(f"Processing line {index}")
                     echo_check123 = False
@@ -1049,6 +1050,12 @@ class Main:
                             )
                             f.write(random_symbols)
                         for index2, word in enumerate(line.split()):
+                            # checks = [
+                            #    "echo",
+                            #    #more coming soon
+                            # ]
+                            # if word in checks:
+
                             if any(
                                 env_var.lower() in word.lower() for env_var in env_vars
                             ):
@@ -1068,6 +1075,10 @@ class Main:
                                 log.debug("regex True")
                                 f.write(word + " ")
                                 continue
+                            elif re.match(regex2, word):
+                                log.debug("regex2 True")
+                                f.write(word + " ")
+                                continue
                             elif word.startswith(":") and not word.startswith("::"):
                                 log.debug("label True")
                                 f.write(word + " ")
@@ -1084,6 +1095,7 @@ class Main:
                                         random_obf = [
                                             self.ran1(char),
                                             self.ran2(char, carrot_case),
+                                            # self.poopcuh(char),
                                         ]
                                         f.write(f"{random.choice(random_obf)}")
                                 f.write(" ")
@@ -1229,6 +1241,9 @@ class Main:
                     return f"%{self.random_capitalization(new)}:~{random_index},1%"
         else:
             return self.ran1(char)
+
+    def poopcuh(self) -> str:
+        return ""
 
     # def ran3(self, char):
     #    if char in string.ascii_letters:
@@ -1549,7 +1564,6 @@ class Main:
                     else:
                         maybe_echo_check = random.randint(1, 3)
                         if maybe_echo_check == 1 and not value[3]:
-                            print(value[3])
                             part_3 = f";{self.obf_oneline('set')} /a {self.obf_oneline('ans')}={self.obf_oneline(list(self.dict_thing.values())[index + 1][0])}\n{self.obf_oneline(random.choice(self.tests()))}\n;{self.random_semi_and_comma(self.obf_oneline('goto'))} :%ans%\n"
                         else:
                             part_3 = f";{self.obf_oneline('set')} /a {self.obf_oneline('ans')}={self.obf_oneline(list(self.dict_thing.values())[index + 1][0])}\n;{self.random_semi_and_comma(self.obf_oneline('goto'))} :%ans%\n"
