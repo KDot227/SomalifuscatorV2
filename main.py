@@ -6,6 +6,7 @@ import time
 import json
 import kdot
 import shutil
+import base64
 import logging
 import argparse
 from tkinter import Tk
@@ -1185,7 +1186,9 @@ class Main:
 """
                 aw_hell_nah2 = f"""
 :{self.ran_string_1} string [rtnVar]
-for /f eol^=^%LF%%LF%^ delims^= %%A in ('forfiles /p "%~dp0." /m "%~nx0" /c "cmd /c e%GODFATHER%ch%GODFATHER%o(%~1"') do if "%~2" neq "" (set %~2=%%A)"""
+for /f eol^=^%LF%%LF%^ delims^= %%A in ('forfiles /p "%~dp0." /m "%~nx0" /c "cmd /c e%GODFATHER%ch%GODFATHER%o(%~1"') do if "%~2" neq "" (set %~2=%%A)
+{self.obf_oneline("goto")} :EOF
+"""
                 data.insert(len(data), aw_hell_nah2)
                 data.insert(0, aw_hell_nah)
             if debug:
@@ -1307,9 +1310,22 @@ for /f eol^=^%LF%%LF%^ delims^= %%A in ('forfiles /p "%~dp0." /m "%~nx0" /c "cmd
 
     def echo(self, *args):
         args_yur = "".join(args)
+        options = [
+            self.hex,
+            self.powershell,
+        ]
+        picked = random.choice(options)
+        return picked(args_yur)
+
+    def hex(self, args_yur):
         output = self.create_hex_string(args_yur)
         ran_string = self.make_random_string(length_nums=(10, 11), special_chars=False)
-        return f'{self.obf_oneline("call")} :{self.ran_string_1} "{self.obf_oneline(output)}" {self.obf_oneline(ran_string)}\necho %{ran_string}%\n'
+        return f'{self.obf_oneline("call")} :{self.ran_string_1} "{self.obf_oneline(output)}" {self.obf_oneline(ran_string)}\n{self.obf_oneline("echo")}%{ran_string}%\n'
+
+    def powershell(self, args_yur):
+        encoded_bytes = base64.b64encode(args_yur.encode("utf-16le"))
+        base64_string = str(encoded_bytes, "utf-8")
+        return f"{self.obf_oneline('powershell -nop -c')[:-1]} \"{self.obf_oneline('IEX([System.Text.Encoding]::Unicode.GetString([System.Convert]::FromBase64String')[:-1]}('{base64_string}')))\"\n"
 
     def random_swap(self):
         self.cesar_val = random.randint(1, 13)
