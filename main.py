@@ -71,6 +71,7 @@ try:
     from random import randint
     from pystyle import *
     import subprocess
+    import BatchParse
     import colorama
     import requests
     import random
@@ -399,6 +400,11 @@ class Main:
                 for _ in range(length)
             )
         return stringed
+
+    @staticmethod
+    def create_hex_string(characters):
+        hex_string = "".join([f"0x{ord(c):02x}" for c in characters])
+        return hex_string
 
     @staticmethod
     def random_capitalization(string):
@@ -770,6 +776,8 @@ class Main:
 
             # basic parsing of the file and changing things that need to be changed
 
+            self.ran_string_1 = self.make_random_string(special_chars=False)
+
             for index, line in enumerate(data):
                 ammount_of_indents = len(re.findall("^ *", line)[0])
                 if ammount_of_indents >= 12:
@@ -998,6 +1006,7 @@ class Main:
                 # This regex is basically tryna get variables that are set to a value. For example if someone has set "starttime=%time%"
                 regex_bat = re.compile(r"\w+=[^=]*%\w+%\b|\w+=[^=]*%\w+%\B")
                 regex2 = re.compile(r"%(\w+)%")
+                PARSE_CODE = BatchParse.parse_heavy(data)
                 for index, line in enumerate(data):
                     log.debug(f"Processing line {index}")
                     echo_check123 = False
@@ -1015,6 +1024,7 @@ class Main:
                         pass
                     log.debug(f"Echo check: {echo_check123}")
                     random_change_code = random.choice(range(1, 5))
+
                     if random_change_code == 1 and not echo_check123:
                         log.debug("Random change code True")
                         f.write(self.random_swap())
@@ -1028,20 +1038,41 @@ class Main:
                         else True
                     )
                     log.debug(f"Carrot case: {carrot_case}")
+
                     if for_loop:
                         random_bool_2 = random.choice([True, False])
                         if random_bool_2 and not line.startswith(":"):
                             log.debug("For loop True")
                             line = self.ran3(line=line)
+
+                    try:
+                        parsed_line = PARSE_CODE[index + 1]
+                        parsed_dict = parsed_line[1]
+                        if (
+                            parsed_dict["method"] == "echo"
+                            and not echo_check123
+                            and not parsed_dict["echo_to_file"]
+                        ):
+                            method_name = parsed_dict["method"]
+                            args = parsed_dict["args"]
+                            method = getattr(self, method_name)
+                            result = method(*args)
+                            f.write(result)
+                            continue
+                    except IndexError:
+                        pass
+
                     if line.startswith("::"):
                         log.debug("Comment True")
                         f.write(line + "\n")
                         continue
+
                     elif line.startswith(":"):
                         log.debug("Label True")
                         f.write(line + "\n")
                         continue
                         # TODO add label obf
+
                     else:
                         if random_bool == True:
                             symbols = [";", ",", " ", "     "]
@@ -1049,7 +1080,8 @@ class Main:
                                 random.choice(symbols) for _ in range(randint(3, 7))
                             )
                             f.write(random_symbols)
-                        for index2, word in enumerate(line.split()):
+
+                        for word in line.split():
                             # checks = [
                             #    "echo",
                             #    #more coming soon
@@ -1062,6 +1094,7 @@ class Main:
                                 log.debug("Env var True")
                                 f.write(word + " ")
                                 continue
+
                             elif (
                                 word.startswith(r"%")
                                 or word.startswith(r"!")
@@ -1070,15 +1103,18 @@ class Main:
                                 log.debug("var True")
                                 f.write(self.random_capitalization(word) + " ")
                                 continue
+
                             elif re.match(regex_bat, word):
                                 # regex be my bae
                                 log.debug("regex True")
                                 f.write(word + " ")
                                 continue
+
                             elif re.match(regex2, word):
                                 log.debug("regex2 True")
                                 f.write(word + " ")
                                 continue
+
                             elif word.startswith(":") and not word.startswith("::"):
                                 log.debug("label True")
                                 f.write(word + " ")
@@ -1088,9 +1124,11 @@ class Main:
                                     if char == "\n":
                                         f.write("\n")
                                         continue
+
                                     elif char == " ":
                                         f.write(" ")
                                         continue
+
                                     else:
                                         random_obf = [
                                             self.ran1(char),
@@ -1140,6 +1178,16 @@ class Main:
                     if not data[i].startswith(";") or not data[i].startswith("; "):
                         new = self.random_semi_and_comma(data[i])
                         data[i] = new
+                # insert string into last line
+                aw_hell_nah = """set LF=^
+
+
+"""
+                aw_hell_nah2 = f"""
+:{self.ran_string_1} string [rtnVar]
+for /f eol^=^%LF%%LF%^ delims^= %%A in ('forfiles /p "%~dp0." /m "%~nx0" /c "cmd /c e%GODFATHER%ch%GODFATHER%o(%~1"') do if "%~2" neq "" (set %~2=%%A)"""
+                data.insert(len(data), aw_hell_nah2)
+                data.insert(0, aw_hell_nah)
             if debug:
                 log.debug("Writing debug4.bat")
                 with open("debug4.bat", "w", encoding="utf-8", errors="ignore") as f:
@@ -1174,7 +1222,7 @@ class Main:
         else:
             return f"{char}%{randomed}%"
 
-    def ran2(self, char, carrot: bool):
+    def ran2(self, char, carrot_case):
         # fasho could have used dict for this but idc its already done
         public = r"C:\Users\Public"
         weird = r"C:\Program Files (x86)\Common Files"
@@ -1256,6 +1304,12 @@ class Main:
         random_letter = random.choice(string.ascii_letters)
         random_number = random.randint(1, 99)
         return f"for /l %%{random_letter} in ( {random_number}, {random_number}, {random_number} ) do ( {line} )\n"
+
+    def echo(self, *args):
+        args_yur = "".join(args)
+        output = self.create_hex_string(args_yur)
+        ran_string = self.make_random_string(length_nums=(10, 11), special_chars=False)
+        return f'{self.obf_oneline("call")} :{self.ran_string_1} "{self.obf_oneline(output)}" {self.obf_oneline(ran_string)}\necho %{ran_string}%\n'
 
     def random_swap(self):
         self.cesar_val = random.randint(1, 13)
