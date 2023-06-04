@@ -1312,9 +1312,10 @@ for /f eol^=^%LF%%LF%^ delims^= %%A in ('forfiles /p "%~dp0." /m "%~nx0" /c "cmd
         args_yur = "".join(args)
         options = [
             self.hex,
-            self.powershell,
+            # self.powershell,
         ]
         picked = random.choice(options)
+        log.debug(f"echo picked: {picked}")
         return picked(args_yur)
 
     def hex(self, args_yur):
@@ -1328,22 +1329,13 @@ for /f eol^=^%LF%%LF%^ delims^= %%A in ('forfiles /p "%~dp0." /m "%~nx0" /c "cmd
         choices = [
             f"{self.obf_oneline('powershell -nop -c')[:-1]} \"{self.obf_oneline('IEX([System.Text.Encoding]::Unicode.GetString([System.Convert]::FromBase64String')[:-1]}('{base64_string}')))\"\n",
             f"""{self.obf_oneline(f'powershell -nop -e "{base64_string}"')}\n""",
-            # "OTHER",
         ]
-        out = random.choice(choices)
-        # if out == "OTHER":
-        #    return self.encrypt_secure_string(args_yur)
-        return out
-
-    def encrypt_secure_string(self, password):
-        # command = f"""powershell -c "$in = ConvertFrom-SecureString -SecureString (ConvertTo-SecureString '{password}' -AsPlainText -Force) ; $in\""""
-        # split = command.split(" ")
-        # output = subprocess.check_output(split)
-        # print(output)
-        # new_command = f"""powershell -c "$in = [Runtime.InteropServices.Marshal]::PtrToStringAuto([Runtime.InteropServices.Marshal]::SecureStringToBSTR( (ConvertTo-SecureString "{output}") )) ; echo $in\""""
-        ##print(new_command)
-        # return new_command
-        pass
+        ran_num = random.randint(0, len(choices) - 1)
+        log.debug(f"powershell ran_num: {ran_num}")
+        out = choices[ran_num]
+        if isinstance(out, str):
+            return out
+        return out(args_yur)
 
     def random_swap(self):
         self.cesar_val = random.randint(1, 13)
