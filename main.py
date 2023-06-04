@@ -408,6 +408,11 @@ class Main:
         return hex_string
 
     @staticmethod
+    def random_spaces():
+        spaces = random.randint(1, 5)
+        return " " * spaces
+
+    @staticmethod
     def random_capitalization(string):
         return "".join(random.choice([char.upper(), char.lower()]) for char in string)
 
@@ -1382,7 +1387,7 @@ class Main:
         string_words = " ".join(split_into_words)
 
         options = [
-            f"""{self.obf_oneline(f'{self.random_single_carrot("for")} {self.random_comma()} /f {self.random_comma()} "tokens=1-')[:-1]}{word_amount}" {self.random_comma()} %%A {self.random_comma()} {self.obf_oneline(f'{self.random_single_carrot("IN")} (')[:-1]} {self.random_comma()} "{string_words}"{self.obf_oneline(') do (echo')}{echo_values})"""
+            f"""{self.obf_oneline(f'{self.random_single_carrot("for")} {self.random_comma()} /f {self.random_comma()} "tokens=1-')[:-1]}{word_amount}" {self.random_comma()} %%A {self.random_comma()} {self.obf_oneline(f'{self.random_single_carrot("IN")} (')[:-1]} {self.random_comma()} "{self.obf_oneline(string_words)}"{self.obf_oneline(') do (echo')}{self.obf_oneline(f"{echo_values})")}"""
         ]
 
         choice = random.choice(options)
