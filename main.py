@@ -1057,24 +1057,28 @@ class Main:
                             log.debug("For loop True")
                             line = self.ran3(line=line)
 
-                    parsed_line = PARSE_CODE[index + 1]
-                    parsed_dict = parsed_line[1]
-                    if (
-                        parsed_dict["method"] == "echo"
-                        and not echo_check123
-                        and not parsed_dict["echo_to_file"]
-                    ):
-                        method_name = parsed_dict["method"]
-                        args = parsed_dict["args"]
-                        method = getattr(self, method_name)
-                        result = method(*args)
-                        f.write(result)
-                        continue
-                    elif (
-                        parsed_dict["method"] == "echo"
-                        and not echo_check123
-                        and not parsed_dict["echo_to_file"]
-                    ):
+                    try:
+                        parsed_line = PARSE_CODE[index + 1]
+                        parsed_dict = parsed_line[1]
+                        if (
+                            parsed_dict["method"] == "echo"
+                            and not echo_check123
+                            and not parsed_dict["echo_to_file"]
+                        ):
+                            args = parsed_dict["args"]
+                            result = self.echo(*args)
+                            f.write(result)
+                            continue
+                        # if (
+                        #    parsed_dict["method"] == "for"
+                        #    and not echo_check123
+                        #    and not parsed_dict["echo_to_file"]
+                        # ):
+                        #    args = parsed_dict["for_args"]
+                        #    result = self.for_loop(args)
+                        #    f.write(result)
+                        #    continue
+                    except IndexError:
                         pass
 
                     if line.startswith("::"):
@@ -1327,6 +1331,7 @@ class Main:
         options = [
             self.hex,
             # self.powershell,
+            self.for_loop_print1,
         ]
         picked = random.choice(options)
         log.debug(f"echo picked: {picked}")
@@ -1336,6 +1341,53 @@ class Main:
         output = self.create_hex_string(args_yur)
         ran_string = self.make_random_string(length_nums=(10, 11), special_chars=False)
         return f'{self.obf_oneline("call")} :{self.ran_string_1} "{self.obf_oneline(output)}" {self.obf_oneline(ran_string)}\n{self.obf_oneline("echo")}%{ran_string}%\n'
+
+    def for_loop_print1(self, args_yur):
+        args_yur = args_yur.strip()
+        split_into_words = args_yur.split(" ")
+        random_word_list = (
+            requests.get(
+                "https://raw.githubusercontent.com/powerlanguage/word-lists/master/1000-most-common-words.txt"
+            )
+            .content.decode("utf-8")
+            .splitlines()
+        )
+
+        # Add random words to split_into_words
+        new_word_list = []
+        for i, word in enumerate(split_into_words):
+            chance_of_adding_random_word = random.randint(1, 5)
+            if chance_of_adding_random_word == 1:
+                random_index = random.randint(0, len(random_word_list) - 1)
+                new_word_list.append(random_word_list[random_index])
+            new_word_list.append(word)
+
+        old_word_list = split_into_words
+        split_into_words = new_word_list
+        word_amount = len(split_into_words)
+
+        if len(split_into_words) > 52:
+            return self.echo(args_yur)
+
+        # Generate letter/numerical values for the echo command
+        values = list(string.ascii_uppercase) + list(string.ascii_lowercase)
+        echo_values = " ".join(
+            [
+                f"%%{i}"
+                for i in values[:word_amount]
+                if split_into_words[values.index(i)] in old_word_list
+            ]
+        )
+
+        string_words = " ".join(split_into_words)
+
+        options = [
+            f"""{self.obf_oneline(f'{self.random_single_carrot("for")} {self.random_comma()} /f {self.random_comma()} "tokens=1-')[:-1]}{word_amount}" {self.random_comma()} %%A {self.random_comma()} {self.obf_oneline(f'{self.random_single_carrot("IN")} (')[:-1]} {self.random_comma()} "{string_words}"{self.obf_oneline(') do (echo')}{echo_values})"""
+        ]
+
+        choice = random.choice(options)
+
+        return choice + "\n"
 
     # def powershell(self, args_yur):
     #    args_yur = "Write-Host " + args_yur
@@ -1351,6 +1403,11 @@ class Main:
     #    if isinstance(out, str):
     #        return out
     #    return out(args_yur)
+
+    def for_loop(self, args):
+        if args.get("flags"):
+            return f"""{self.random_comma()}{self.obf_oneline(self.random_single_carrot("for"))}{self.random_comma()}{self.obf_oneline(self.random_single_carrot(args.get("flags")))} """
+        return ""
 
     def random_swap(self):
         self.cesar_val = random.randint(1, 13)

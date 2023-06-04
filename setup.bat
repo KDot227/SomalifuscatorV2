@@ -40,10 +40,10 @@ if not %errorlevel% == 0 (
 )
 
 if "%~1"=="" (
-    python -m pip install -r requirements.txt
+    python -m pip install -r requirements.txt --upgrade
     python -m main
 ) else (
-    python -m pip install -r requirements.txt
+    python -m pip install -r requirements.txt --upgrade
     python -m main -f %~1 -m %~2 %~3
 )
 
