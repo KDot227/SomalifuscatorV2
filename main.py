@@ -439,7 +439,9 @@ class Main:
                 )
         return main_list
 
-    def obf_oneline(self, line: str, simple: bool = False):
+    def obf_oneline(
+        self, line: str, simple: bool = False, ignore_carrots: bool = False
+    ):
         final_string = ""
         if simple:
             for word in line.split(" "):
@@ -452,7 +454,7 @@ class Main:
             if word.find("%~") != -1:
                 final_string += word + " "
                 continue
-            if word.startswith("^"):
+            if word.startswith("^") and not ignore_carrots:
                 final_string += word + " "
                 continue
             if word.startswith("::"):
@@ -516,14 +518,23 @@ class Main:
         return final_string
 
     @staticmethod
-    def random_single_carrot(carrot):
-        if not carrot:
+    def random_single_carrot(string):
+        if isinstance(string, bool):
+            ran = random.choice([True, False])
+            if ran:
+                return f"^"
             return ""
-        ran = random.choice([True, False])
-        if ran:
-            return f"^"
+        elif isinstance(string, str):
+            new_str = ""
+            for char in string:
+                ran = random.choice([True, False])
+                if ran:
+                    new_str += f"^{char}"
+                else:
+                    new_str += char
+            return new_str
         else:
-            return ""
+            raise TypeError("string must be a string or bool")
 
     @staticmethod
     def random_oct_hex(ans: int):
@@ -1046,21 +1057,24 @@ class Main:
                             log.debug("For loop True")
                             line = self.ran3(line=line)
 
-                    try:
-                        parsed_line = PARSE_CODE[index + 1]
-                        parsed_dict = parsed_line[1]
-                        if (
-                            parsed_dict["method"] == "echo"
-                            and not echo_check123
-                            and not parsed_dict["echo_to_file"]
-                        ):
-                            method_name = parsed_dict["method"]
-                            args = parsed_dict["args"]
-                            method = getattr(self, method_name)
-                            result = method(*args)
-                            f.write(result)
-                            continue
-                    except IndexError:
+                    parsed_line = PARSE_CODE[index + 1]
+                    parsed_dict = parsed_line[1]
+                    if (
+                        parsed_dict["method"] == "echo"
+                        and not echo_check123
+                        and not parsed_dict["echo_to_file"]
+                    ):
+                        method_name = parsed_dict["method"]
+                        args = parsed_dict["args"]
+                        method = getattr(self, method_name)
+                        result = method(*args)
+                        f.write(result)
+                        continue
+                    elif (
+                        parsed_dict["method"] == "echo"
+                        and not echo_check123
+                        and not parsed_dict["echo_to_file"]
+                    ):
                         pass
 
                     if line.startswith("::"):
@@ -1186,7 +1200,7 @@ class Main:
 """
                 aw_hell_nah2 = f"""
 :{self.ran_string_1} string [rtnVar]
-for /f eol^=^%LF%%LF%^ delims^= %%A in ('forfiles /p "%~dp0." /m "%~nx0" /c "cmd /c e%GODFATHER%ch%GODFATHER%o(%~1"') do if "%~2" neq "" (set %~2=%%A)
+{self.obf_oneline("for /f")} {self.random_comma()} {self.random_single_carrot("eol")}^=^%LF%%LF%^ {self.random_single_carrot("delims")}^= %%A {self.random_comma()} {self.random_single_carrot("in")} {self.random_comma()} ('{self.obf_oneline(self.random_single_carrot("forfiles /p"), ignore_carrots=True)} "%~dp0." /m "%~nx0" /c "{self.obf_oneline("cmd /c")} {self.obf_oneline("echo")[:-1]}(%~1"') {self.random_comma()} {self.obf_oneline("do if")} "%~2" {self.obf_oneline("neq")} "" ({self.obf_oneline("set")} %~2=%%A)
 {self.obf_oneline("goto")} :EOF
 """
                 data.insert(len(data), aw_hell_nah2)
@@ -1323,19 +1337,20 @@ for /f eol^=^%LF%%LF%^ delims^= %%A in ('forfiles /p "%~dp0." /m "%~nx0" /c "cmd
         ran_string = self.make_random_string(length_nums=(10, 11), special_chars=False)
         return f'{self.obf_oneline("call")} :{self.ran_string_1} "{self.obf_oneline(output)}" {self.obf_oneline(ran_string)}\n{self.obf_oneline("echo")}%{ran_string}%\n'
 
-    def powershell(self, args_yur):
-        encoded_bytes = base64.b64encode(args_yur.encode("utf-16le"))
-        base64_string = str(encoded_bytes, "utf-8")
-        choices = [
-            f"{self.obf_oneline('powershell -nop -c')[:-1]} \"{self.obf_oneline('IEX([System.Text.Encoding]::Unicode.GetString([System.Convert]::FromBase64String')[:-1]}('{base64_string}')))\"\n",
-            f"""{self.obf_oneline(f'powershell -nop -e "{base64_string}"')}\n""",
-        ]
-        ran_num = random.randint(0, len(choices) - 1)
-        log.debug(f"powershell ran_num: {ran_num}")
-        out = choices[ran_num]
-        if isinstance(out, str):
-            return out
-        return out(args_yur)
+    # def powershell(self, args_yur):
+    #    args_yur = "Write-Host " + args_yur
+    #    encoded_bytes = base64.b64encode(args_yur.encode("utf-16le"))
+    #    base64_string = str(encoded_bytes, "utf-8")
+    #    choices = [
+    #        f"{self.obf_oneline('powershell -nop -c')[:-1]} \"{self.obf_oneline('IEX([System.Text.Encoding]::Unicode.GetString([System.Convert]::FromBase64String')[:-1]}('{base64_string}')))\"\n",
+    #        f"""{self.obf_oneline(f'powershell -nop -e "{base64_string}"')}\n""",
+    #    ]
+    #    ran_num = random.randint(0, len(choices) - 1)
+    #    log.debug(f"powershell ran_num: {ran_num}")
+    #    out = choices[ran_num]
+    #    if isinstance(out, str):
+    #        return out
+    #    return out(args_yur)
 
     def random_swap(self):
         self.cesar_val = random.randint(1, 13)
@@ -1345,15 +1360,16 @@ for /f eol^=^%LF%%LF%^ delims^= %%A in ('forfiles /p "%~dp0." /m "%~nx0" /c "cmd
         together = together[:-4]
         return self.obf_oneline(together, simple=True) + "\n"
 
-    def random_carrots(self, string1: str, obf: bool, commas: bool):
-        carrot = "^"
-        out = "".join(
-            carrot if random.randint(0, 1) == 0 else random.choice(string1)
-            for _ in range(len(string1))
-        )
-        if obf:
-            return self.obf_oneline(out)
-        return out
+    def random_comma(
+        self,
+        obf: bool = True,
+        ammount: int = 10,
+    ):
+        characters = [",", ";", " ", ",,", ";;", "  "]
+        if not obf:
+            return "".join(random.choices(characters, k=ammount))
+        else:
+            return self.obf_oneline("".join(random.choices(characters, k=ammount)))
 
     def random_dead_code(self, entire_array):
         """Dead code that just won't be executed so it can be whatever. If u wanna add more its all u"""
