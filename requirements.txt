@@ -1,8 +1,6 @@
-colorama
-customtkinter
-Pillow
-pystyle
-requests
 rich
-kdot
 BatchParse
+requests
+kdot
+pystyle
+colorama

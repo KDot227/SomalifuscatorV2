@@ -5,21 +5,33 @@ import os
 import time
 import json
 import kdot
+import shutil
+import base64
+import logging
 import argparse
 from tkinter import Tk
 from tkinter import filedialog as kdot2
 
+try:
+    from ctypes import windll
+
+    # fix dpi awareness or else the file picker looks terrible
+    windll.shcore.SetProcessDpiAwareness(1)
+except:
+    pass
+
 # hide the tkinter window
 # I love stack overflow
-root = Tk()
-root.withdraw()
+if os.name == "nt":
+    root = Tk()
+    root.withdraw()
 
-root.overrideredirect(True)
-root.geometry("0x0+0+0")
+    root.overrideredirect(True)
+    root.geometry("0x0+0+0")
 
-root.deiconify()
-root.lift()
-root.focus_force()
+    root.deiconify()
+    root.lift()
+    root.focus_force()
 
 current_dir = os.path.dirname(os.path.realpath(__file__))
 settings_path = current_dir + "/settings.json"
@@ -43,7 +55,8 @@ try:
     scramble_labels = settings["scramble_labels"]
     echo_check = settings["echo_check"]
     double_click_check = settings["double_click_check"]
-    recursive_xor = settings["recursive_xor"]
+    carrots_var = settings["carrots_var"]
+    debug = settings["debug"]
 except:
     print(
         "Your settings.json file has been update! Please redownload somalifuscator and try again"
@@ -51,16 +64,15 @@ except:
     time.sleep(30)
     os._exit(1)
 
-global debug
-debug = False
-
 try:
     from rich.progress import Progress, track
+    from rich.logging import RichHandler
+    from rich.traceback import install
     from zipfile import ZipFile
     from random import randint
-    from ctypes import windll
     from pystyle import *
     import subprocess
+    import BatchParse
     import colorama
     import requests
     import random
@@ -74,11 +86,33 @@ except Exception as e:
     time.sleep(5)
     os._exit(1)
 
+# this the hottest thing ive ever seen in my life
+install(show_locals=True)
+
+# the other hottest thing ive ever seen in my life
+FORMAT = "%(message)s"
+logging.basicConfig(
+    level="NOTSET",
+    format=FORMAT,
+    handlers=[
+        RichHandler(show_time=False),
+    ],
+)
+
+
+log = logging.getLogger("rich")
+
+if not debug:
+    log.setLevel(logging.INFO)
+else:
+    file_handler = logging.FileHandler("somalifuscator.log")
+    format2 = logging.Formatter("%(asctime)s - %(levelname)s - %(message)s")
+    file_handler.setFormatter(format2)
+    log.addHandler(file_handler)
+    log.setLevel(logging.DEBUG)
+
 # fix colorama
 colorama.deinit()
-
-# fix dpi awareness or else the file picker looks terrible
-windll.shcore.SetProcessDpiAwareness(1)
 
 # proud author
 __author__ = "K.Dot#4044 and Godfather"
@@ -146,8 +180,6 @@ options1 = r"""[1] Level 1 (Recommended to use AFTER 2) (Rot-x method)
 [3] Level 3 (Encoding trick by changing first 2 bytes)
 [4] Level 4 (NOTE: Don't end your files with exit when its done with this command or it might break. (same with pause))
 [5] Level 5 (NOTE: THIS WAS NOT MADE BY ME IT WAS MADE BY https://www.dostips.com/forum/memberlist.php?mode=viewprofile&u=2258 W mans btw) (If u really wanna be mean use Ultimate first lmao)
-[clean] cleans the code to try and fix any common errors (FIXES BUILT IN VARIABLES)
-[all] does 1, 2, 3 and clean
 [fud] makes it undetectable by everything on virustotal
 """
 options2 = r"""
@@ -163,7 +195,7 @@ options3 = (
 [exe2bat] Converts exe to bat (EXPERIMENTAL) (NOTE THIS IS NOT A DECOMPILER. IT EMBEDS THE EXE IN THE BAT FILE)
 [py2bat] Converts python file to bat (Note you cant use things like getting the execution path cause that might break but idk ur choice)
 
-[?] (If you want to use built in variables such as %~dp0 etc wrap them in percent signes then run the clean mode afterwards. You DONT have to do this if your using ultimate)
+NOTE IF SOMETHING ISN'T WORKING IT'S PROBABLY YOUR FAULT
 """
     + "\n\n"
 )
@@ -184,12 +216,13 @@ settings = [
     f"Scramble Labels = {scramble_labels} (Experimental)",
     f"Echo Check = {echo_check}",
     f"Double Click Check = {double_click_check}",
-    f"Recursive Xor = {recursive_xor} (Experimental)",
+    f"Carrot Bypass = {carrots_var} (Experimental)",
+    f"Debug = {debug}",
 ]
 
 
 class AutoUpdate:
-    def __init__(self):
+    def __init__(self) -> None:
         self.code = (
             "https://raw.githubusercontent.com/KDot227/Somalifuscator/main/main.py"
         )
@@ -199,18 +232,24 @@ class AutoUpdate:
             username = os.getlogin()
             if username == "this1":
                 self.bypass = True
-            self.update()
         except OSError:
             self.bypass = True
+        self.update()
 
-    def update(self):
+    def update(self) -> None:
         if not self.bypass:
             print("Checking for updates...")
             code = requests.get(self.code, timeout=10).text
             with open(__file__, "r", encoding="utf-8", errors="ignore") as f:
                 main_code = f.read()
             if code != main_code:
-                print("Updating...")
+                check = Write.Input(
+                    "There is an update! Would you like to update? (y/n) -> ",
+                    Colors.green,
+                    interval=0.05,
+                )
+                if not check.lower() == "y":
+                    return
                 with open(__file__, "w", encoding="utf-8", errors="ignore") as f:
                     f.write(code)
                 os.startfile(__file__)
@@ -224,8 +263,8 @@ class Main:
         if mode:
             self.level = mode
             self.file = file
-            self.down = False
             self.rep_num = 0
+            self.ran_through = 0
             self.level = self.level.lower()
             self.level_dict = {
                 "1": self.level1,
@@ -233,8 +272,6 @@ class Main:
                 "3": self.level3,
                 "4": self.level4,
                 "5": self.level5,
-                "clean": self.clean,
-                "all": self.all,
                 "fud": self.fud,
                 "ultimate": self.ultimate,
                 "embed": self.embed,
@@ -262,7 +299,6 @@ class Main:
         self.carrot = False
         self.label = False
         # This is so the fud mode doesn't show the first time it's ran
-        self.down = False
         self.rep_num = 0
         for setting in settings:
             setting_name, setting_value = setting.split("=")
@@ -289,13 +325,15 @@ class Main:
 
         self.file = ""
 
-        while not os.path.exists(self.file):
-            self.file = kdot2.askopenfilename(
-                title="Select a file to obfuscate",
-                filetypes=(("Batch files", "*.bat"), ("All files", "*.*")),
-            )
-
-        root.destroy()
+        if os.name == "nt":
+            while not os.path.exists(self.file):
+                self.file = kdot2.askopenfilename(
+                    title="Select a file to obfuscate",
+                    filetypes=(("Batch files", "*.bat"), ("All files", "*.*")),
+                )
+        else:
+            while not os.path.exists(self.file):
+                self.file = Write.Input("Enter the path to the file -> ", Colors.green)
 
         if os.path.exists(self.file):
             os.system("cls" if os.name == "nt" else "clear")
@@ -314,8 +352,6 @@ class Main:
                 "3": self.level3,
                 "4": self.level4,
                 "5": self.level5,
-                "clean": self.clean,
-                "all": self.all,
                 "fud": self.fud,
                 "ultimate": self.ultimate,
                 "embed": self.embed,
@@ -341,18 +377,20 @@ class Main:
             Main()
 
     @staticmethod
-    def make_random_string(length_nums=(5, 7)):
+    def make_random_string(length_nums=(5, 7), special_chars=True):
         length = random.randint(*length_nums)
+        no_spec = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+        spec = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ#$(),.?@[]_"
+        choice_list = spec if special_chars else no_spec
         stringed = "".join(
             random.choice(
                 # Batch has a specific issue with characters that aren't in the normal ASCII table cause if u got them in a variable it will make the variable explode. I fixed this before by changing the chcp to 65001 but sometimes that wouldn't fix things
                 # "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZḆḞԍǏƘԸɌȚЦѠƳȤѧćễļṃŉᵲừŵź☠☢☣卐"
                 # "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
-                "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ#$(),.?@[]_"
+                choice_list
             )
             for _ in range(length)
         )
-        # yes this has happened to me before and echo check terms it
         while "echo" in stringed.lower():
             stringed = "".join(
                 random.choice(
@@ -365,6 +403,16 @@ class Main:
         return stringed
 
     @staticmethod
+    def create_hex_string(characters):
+        hex_string = "".join([f"0x{ord(c):02x}" for c in characters])
+        return hex_string
+
+    @staticmethod
+    def random_spaces():
+        spaces = random.randint(1, 5)
+        return " " * spaces
+
+    @staticmethod
     def random_capitalization(string):
         return "".join(random.choice([char.upper(), char.lower()]) for char in string)
 
@@ -374,11 +422,10 @@ class Main:
         length = random.choice([9, 11])
         return "".join(random.choice(chinese_characters) for _ in range(length))
 
-    @staticmethod
-    def fake_ceaser_cipher():
-        together = caesar_cipher_rotations(cesar_val) + caesar_cipher_rotations_upper(
-            cesar_val
-        )
+    def fake_ceaser_cipher(self):
+        together = caesar_cipher_rotations(
+            self.cesar_val
+        ) + caesar_cipher_rotations_upper(self.cesar_val)
         together = together[:-4]
         return together
 
@@ -397,8 +444,14 @@ class Main:
                 )
         return main_list
 
-    def obf_oneline(self, line):
+    def obf_oneline(
+        self, line: str, simple: bool = False, ignore_carrots: bool = False
+    ):
         final_string = ""
+        if simple:
+            for word in line.split(" "):
+                final_string += f"%{self.make_random_string(special_chars=False)}%{word}%{self.make_random_string(special_chars=False)}% "
+            return final_string
         for word in line.split(" "):
             if word.startswith("%"):
                 final_string += word + " "
@@ -406,7 +459,7 @@ class Main:
             if word.find("%~") != -1:
                 final_string += word + " "
                 continue
-            if word.startswith("^"):
+            if word.startswith("^") and not ignore_carrots:
                 final_string += word + " "
                 continue
             if word.startswith("::"):
@@ -419,9 +472,7 @@ class Main:
                     weird = r"C:\Program Files (x86)\Common Files"
                     program_1 = r"C:\Program Files"
                     program_2 = r"C:\Program Files (x86)"
-                    psmodule_path = r"C:\Program Files\WindowsPowerShell\Modules;C:\WINDOWS\system32\WindowsPowerShell\v1.0\Modules"
                     driver_stuff = r"C:\Windows\System32\Drivers\DriverData"
-                    comspec = r"C:\WINDOWS\system32\cmd.exe"
                     pathext = r".COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC"
 
                     list_of_all = [
@@ -429,9 +480,7 @@ class Main:
                         weird,
                         program_1,
                         program_2,
-                        psmodule_path,
                         driver_stuff,
-                        comspec,
                         pathext,
                     ]
 
@@ -440,9 +489,7 @@ class Main:
                         "COMMONPROGRAMFILES(X86)",
                         "PROGRAMFILES",
                         "PROGRAMFILES(X86)",
-                        "PSMODULEPATH",
                         "DRIVERDATA",
-                        "COMSPEC",
                         "PATHEXT",
                     ]
 
@@ -457,18 +504,11 @@ class Main:
                             final_string += char
                         new = random.choice(new_lists)
                         if char in new:
-                            if new == psmodule_path:
-                                index = new.index(char)
-                                new = corosponding[list_of_all.index(new)]
-                                final_string += (
-                                    f"%{self.random_capitalization(new)}:~{index},1%"
-                                )
-                            else:
-                                index = new.index(char)
-                                new = corosponding[list_of_all.index(new)]
-                                final_string += (
-                                    f"%{self.random_capitalization(new)}:~{index},1%"
-                                )
+                            index = new.index(char)
+                            new = corosponding[list_of_all.index(new)]
+                            final_string += (
+                                f"%{self.random_capitalization(new)}:~{index},1%"
+                            )
                     else:
                         if unicode:
                             final_string += f"%‮%{char}%‮%"
@@ -483,14 +523,23 @@ class Main:
         return final_string
 
     @staticmethod
-    def random_single_carrot(carrot):
-        if not carrot:
+    def random_single_carrot(string):
+        if isinstance(string, bool):
+            ran = random.choice([True, False])
+            if ran:
+                return f"^"
             return ""
-        ran = random.choice([True, False])
-        if ran:
-            return f"^"
+        elif isinstance(string, str):
+            new_str = ""
+            for char in string:
+                ran = random.choice([True, False])
+                if ran:
+                    new_str += f"^{char}"
+                else:
+                    new_str += char
+            return new_str
         else:
-            return ""
+            raise TypeError("string must be a string or bool")
 
     @staticmethod
     def random_oct_hex(ans: int):
@@ -530,7 +579,7 @@ class Main:
         """Returns the Caesar cipher rotation for a given letter and rotation value."""
         alphabet = list("abcdefghijklmnopqrstuvwxyz")
         letter_index = alphabet.index(letter.lower())
-        rotated_alphabet = alphabet[cesar_val:] + alphabet[:cesar_val]
+        rotated_alphabet = alphabet[self.cesar_val :] + alphabet[: self.cesar_val]
         rotated_letter = rotated_alphabet[letter_index]
 
         return rotated_letter
@@ -539,22 +588,21 @@ class Main:
         """Returns the Caesar cipher rotation for a given letter and rotation value."""
         alphabet = list("ABCDEFGHIJKLMNOPQRSTUVWXYZ")
         letter_index = alphabet.index(letter.upper())
-        rotated_alphabet = alphabet[cesar_val:] + alphabet[:cesar_val]
+        rotated_alphabet = alphabet[self.cesar_val :] + alphabet[: self.cesar_val]
         rotated_letter = rotated_alphabet[letter_index]
 
         return rotated_letter
 
     def mixer(self):
-        original_file = self.file
-        with open("mixer.bat", "w") as f:
-            f.write(code)
-        self.file = "mixer.bat"
-        self.fud()
-        with open("mixer.bat.fud.bat", "r", encoding="utf-8", errors="ignore") as f:
-            self.code_new = f.read()
-        os.remove("mixer.bat")
-        os.remove("mixer.bat.fud.bat")
-        self.file = original_file
+        log.info("Running Mixer")
+        array_code = []
+        new_code = ""
+        code2 = code.split("\n")
+        for line in code2:
+            array_code.append(self.obf_oneline(line, simple=True) + "\n")
+        for line in array_code:
+            new_code += line
+        self.code_new = new_code
 
     def level1(self):
         carrot = False
@@ -671,50 +719,6 @@ class Main:
             for i in out_hex:
                 f.write(bytes.fromhex(i))
 
-    def clean(self):
-        with open(self.file, "r", encoding="utf-8", errors="ignore") as f:
-            contents = f.read()
-        with open(
-            f"{self.file}.cleaned.bat", "a+", encoding="utf-8", errors="ignore"
-        ) as f:
-            # if there are any others that people use please make a pr and add them.
-            batch_vars = [
-                "%~dp0",
-                "%~f0",
-                "%~n0",
-                "%~x0",
-                "%~dpnx0",
-            ]
-            batch_vars_to_replace = [
-                r"%~dp0%",
-                r"%~f0%",
-                r"%~n0%",
-                r"%~x0%",
-                r"%~dpnx0%",
-            ]
-            for i in range(len(batch_vars)):
-                contents = contents.replace(batch_vars_to_replace[i], batch_vars[i])
-            f.write(contents)
-
-    def all(self):
-        names = []
-        self.level2()
-        self.file = f"{self.file}.level2.bat"
-        names.append(self.file)
-        self.level1()
-        self.file = f"{self.file}.level1.bat"
-        names.append(self.file)
-        self.clean()
-        self.file = f"{self.file}.cleaned.bat"
-        names.append(self.file)
-        self.level3()
-        os.rename(f"{self.file}.level3.bat", "FINAL.bat")
-        for name in names:
-            os.remove(name)
-        print("FINAL.bat is the finished product!")
-        time.sleep(5)
-        os._exit(0)
-
     def fud(self):
         carrot = False
         var = False
@@ -727,59 +731,32 @@ class Main:
         with open(f"{self.file}.fud.bat", "a+", encoding="utf-8", errors="ignore") as f:
             f.write(self.random_capitalization("::Made by K.Dot and Godfather\n"))
             # this is so I don't have to see the status bar when using mixer
-            if self.down == False:
-                for line in data:
-                    if line.startswith(":") and not line.startswith("::"):
-                        f.write(line)
-                        continue
-                    for char in line:
-                        if char == ">":
+            for line in track(
+                data, description="[bold green]Obfuscating", total=len(data)
+            ):
+                if line.startswith(":") and not line.startswith("::"):
+                    f.write(line)
+                    continue
+                for char in line:
+                    if char == ">":
+                        f.write(char)
+                    elif char == "^":
+                        f.write(char)
+                        carrot = True
+                    elif carrot == True:
+                        f.write(char)
+                        carrot = False
+                    else:
+                        if char == "%":
+                            var = not var
                             f.write(char)
-                        elif char == "^":
+                        elif var == True:
                             f.write(char)
-                            carrot = True
-                        elif carrot == True:
+                        elif "\n" in char:
                             f.write(char)
-                            carrot = False
                         else:
-                            if char == "%":
-                                var = not var
-                                f.write(char)
-                            elif var == True:
-                                f.write(char)
-                            elif "\n" in char:
-                                f.write(char)
-                            else:
-                                random = self.make_random_string()
-                                f.write(f"{char}%{random}%")
-            else:
-                for line in track(
-                    data, description="[bold green]Obfuscating", total=len(data)
-                ):
-                    if line.startswith(":") and not line.startswith("::"):
-                        f.write(line)
-                        continue
-                    for char in line:
-                        if char == ">":
-                            f.write(char)
-                        elif char == "^":
-                            f.write(char)
-                            carrot = True
-                        elif carrot == True:
-                            f.write(char)
-                            carrot = False
-                        else:
-                            if char == "%":
-                                var = not var
-                                f.write(char)
-                            elif var == True:
-                                f.write(char)
-                            elif "\n" in char:
-                                f.write(char)
-                            else:
-                                random = self.make_random_string()
-                                f.write(f"{char}%{random}%")
-        self.down = not self.down
+                            random = self.make_random_string()
+                            f.write(f"{char}%{random}%")
 
     def ultimate(self, utf_16=True, check_bypass=False) -> None:
         self.check_bypass = check_bypass
@@ -800,11 +777,14 @@ class Main:
             )
             try:
                 os.remove(f"{self.file}.ultimate.bat")
+                log.info("Removed old file")
             except:
+                log.warning("No file to remove")
                 pass
             # cool thing
             # mshta vbscript:execute("CreateObject(""Scripting.FileSystemObject"").GetStandardStream(1).Write(Chr(89) & Chr(111)& Chr(117) & Chr(114) & Chr(32) & Chr(109) & Chr(97) & Chr(109) & Chr(97) & Chr(32) ):Close")|more
             # ultimate mode
+            self.cesar_val = cesar_val
             with open(self.file, "r", encoding="utf-8", errors="ignore") as f:
                 data = f.readlines()
 
@@ -812,6 +792,17 @@ class Main:
             # Basically the entire point of it is to turn multiline commands that could be oneline into just oneline commands. I'm guessing this will break for anything larger than like 30 lines. If that's the cause then do if not stuff
 
             # basic parsing of the file and changing things that need to be changed
+
+            self.ran_string_1 = self.make_random_string(special_chars=False)
+
+            for index, line in enumerate(data):
+                ammount_of_indents = len(re.findall("^ *", line)[0])
+                if ammount_of_indents >= 12:
+                    print(
+                        "You have more than 12 spaces for 1 indent. Please don't use more than 4 and chain your indents into 1 line."
+                    )
+                    time.sleep(5)
+                    os._exit(1)
 
             new_lines = []
             i = 0
@@ -841,16 +832,17 @@ class Main:
                 if line:
                     new_lines.append(line + "\n")
                 i += 1
-
+            log.info("Formated lines")
             data = new_lines.copy()
 
             if scramble_labels:
+                log.info("Scrambeling labels")
                 unique_labels = set(re.findall(r":\w+", " ".join(data)))
 
                 label_mappings = {}
 
                 for label in unique_labels:
-                    random_string = self.make_random_string((8, 9))
+                    random_string = self.make_random_string((8, 9), False)
                     label_mappings[label] = ":" + random_string
 
                 for i in range(len(data)):
@@ -860,6 +852,7 @@ class Main:
             data = data.copy()
 
             if debug:
+                log.debug("Writing debug1.bat")
                 with open("debug1.bat", "w", encoding="utf-8", errors="ignore") as f:
                     f.writelines(data)
 
@@ -973,43 +966,46 @@ class Main:
 
             for env_var in env_vars:
                 if env_var in data:
+                    log.info(f"Found env var: {env_var}")
                     self.used_env_vars.append(env_var)
 
-            # if ads:
-            #    lines = data.copy()
-            #    new_lines = []
-            #    maybe = False
-            #
-            #    for line in lines:
-            #        line = line.lower()
-            #        # basic checks
-            #        if (
-            #            line.startswith("echo")
-            #            and not line.startswith("echo @")
-            #            and ("&" not in line or "^&" in line)
-            #        ):
-            #            maybe = True
-            #            new_lines.append(
-            #                line.strip()
-            #                + " > somali.txt:kdot & more < somali.txt:kdot\n"
-            #            )
-            #        else:
-            #            new_lines.append(line)
-            #
-            #    new_lines.reverse()
-            #    for index, line in enumerate(new_lines):
-            #        if (
-            #            line.startswith("echo")
-            #            and not line.startswith("echo @")
-            #            and maybe
-            #        ):
-            #            new_lines[index] = line.strip() + " & del somali.txt\n"
-            #            break
-            #    new_lines.reverse()
-            #
-            #    data = new_lines.copy()
+            if ads:
+                log.debug("Adding ADS")
+                lines = data.copy()
+                new_lines = []
+                maybe = False
+
+                for line in lines:
+                    line = line.lower()
+                    # basic checks
+                    if (
+                        line.startswith("echo")
+                        and not line.startswith("echo @")
+                        and ("&" not in line or "^&" in line)
+                    ):
+                        maybe = True
+                        new_lines.append(
+                            line.strip()
+                            + " > somali.txt:kdot & more < somali.txt:kdot\n"
+                        )
+                    else:
+                        new_lines.append(line)
+
+                new_lines.reverse()
+                for index, line in enumerate(new_lines):
+                    if (
+                        line.startswith("echo")
+                        and not line.startswith("echo @")
+                        and maybe
+                    ):
+                        new_lines[index] = line.strip() + " & del somali.txt\n"
+                        break
+                new_lines.reverse()
+                log.debug("Added ADS")
+                data = new_lines.copy()
 
             if debug:
+                log.debug("Writing debug2.bat")
                 with open("debug1_2.bat", "w", encoding="utf-8", errors="ignore") as f:
                     f.writelines(data)
 
@@ -1017,17 +1013,6 @@ class Main:
             with open(
                 f"{self.file}.ultimate.bat", "a+", encoding="utf-8", errors="ignore"
             ) as f:
-                # self.potential_values = {
-                #    "echo": self.echo,
-                #    "set": self.set_,
-                #    "setlocal": self.setlocal,
-                #    "if": self.if_,
-                #    "for": self.for_,
-                #    "goto": self.goto,
-                #    "call": self.call,
-                #    "pause": self.pause,
-                #    "exit": self.exit,
-                # }
                 f.write(self.random_capitalization("::Made by K.Dot and Godfather\n"))
                 f.write(self.code_new)
                 characters = (
@@ -1035,28 +1020,33 @@ class Main:
                 )
                 random_order = "".join(random.sample(characters, len(characters)))
                 f.write(self.obf_oneline(f"set KDOT={random_order}\n"))
-                # for line in track(
-                #    data, description="[bold green]Obfuscating", total=len(data)
-                # ):
                 # This regex is basically tryna get variables that are set to a value. For example if someone has set "starttime=%time%"
                 regex_bat = re.compile(r"\w+=[^=]*%\w+%\b|\w+=[^=]*%\w+%\B")
+                regex2 = re.compile(r"%(\w+)%")
+                PARSE_CODE = BatchParse.parse_heavy(data)
                 for index, line in enumerate(data):
+                    log.debug(f"Processing line {index}")
+                    echo_check123 = False
+                    try:
+                        if r"%errorlevel%" in data[index - 1].lower():
+                            echo_check123 = True
+                    except IndexError:
+                        pass
+                    if r"%errorlevel%" in line.lower():
+                        echo_check123 = True
+                    try:
+                        if r"%errorlevel%" in data[index + 1].lower():
+                            echo_check123 = True
+                    except IndexError:
+                        pass
+                    log.debug(f"Echo check: {echo_check123}")
+                    random_change_code = random.choice(range(1, 5))
+
+                    if random_change_code == 1 and not echo_check123:
+                        log.debug("Random change code True")
+                        f.write(self.random_swap())
                     progress.update(task1andhalf, advance=100 / len(data))
                     random_bool = random.choice([True, False])
-                    # first_word = line.split()[0]
-                    # error_level_next = False
-                    # try:
-                    #    if r"%errorlevel%" in data[index - 1].lower():
-                    #        error_level_next = True
-                    # except IndexError:
-                    #    pass
-                    # if r"%errorlevel%" in line.lower():
-                    #    error_level_next = True
-                    # try:
-                    #    if r"%errorlevel%" in data[index + 1].lower():
-                    #        error_level_next = True
-                    # except IndexError:
-                    #    pass
                     bad_words = ["set", "&", "nul", ">"]
                     # why do some of these break? no idea lmao
                     carrot_case = (
@@ -1064,24 +1054,49 @@ class Main:
                         if any(word in line.lower() for word in bad_words)
                         else True
                     )
+                    log.debug(f"Carrot case: {carrot_case}")
+
                     if for_loop:
                         random_bool_2 = random.choice([True, False])
                         if random_bool_2 and not line.startswith(":"):
+                            log.debug("For loop True")
                             line = self.ran3(line=line)
+
+                    try:
+                        parsed_line = PARSE_CODE[index + 1]
+                        parsed_dict = parsed_line[1]
+                        if (
+                            parsed_dict["method"] == "echo"
+                            and not echo_check123
+                            and not parsed_dict["echo_to_file"]
+                        ):
+                            args = parsed_dict["args"]
+                            result = self.echo(*args)
+                            f.write(result)
+                            continue
+                        # if (
+                        #    parsed_dict["method"] == "for"
+                        #    and not echo_check123
+                        #    and not parsed_dict["echo_to_file"]
+                        # ):
+                        #    args = parsed_dict["for_args"]
+                        #    result = self.for_loop(args)
+                        #    f.write(result)
+                        #    continue
+                    except IndexError:
+                        pass
+
                     if line.startswith("::"):
+                        log.debug("Comment True")
                         f.write(line + "\n")
                         continue
+
                     elif line.startswith(":"):
+                        log.debug("Label True")
                         f.write(line + "\n")
                         continue
                         # TODO add label obf
-                    # elif first_word in self.potential_values:
-                    #    output_obf = self.potential_values[first_word](
-                    #        line, error_level_next
-                    #    )
-                    #    print("worked")
-                    #    f.write(output_obf + "\n")
-                    #    continue
+
                     else:
                         if random_bool == True:
                             symbols = [";", ",", " ", "     "]
@@ -1089,20 +1104,43 @@ class Main:
                                 random.choice(symbols) for _ in range(randint(3, 7))
                             )
                             f.write(random_symbols)
+
                         for word in line.split():
+                            # checks = [
+                            #    "echo",
+                            #    #more coming soon
+                            # ]
+                            # if word in checks:
+
                             if any(
                                 env_var.lower() in word.lower() for env_var in env_vars
                             ):
+                                log.debug("Env var True")
                                 f.write(word + " ")
                                 continue
-                            elif word.startswith("%") or word.startswith("!"):
+
+                            elif (
+                                word.startswith(r"%")
+                                or word.startswith(r"!")
+                                or r"%%" in word
+                            ):
+                                log.debug("var True")
                                 f.write(self.random_capitalization(word) + " ")
                                 continue
+
                             elif re.match(regex_bat, word):
                                 # regex be my bae
+                                log.debug("regex True")
                                 f.write(word + " ")
                                 continue
+
+                            elif re.match(regex2, word):
+                                log.debug("regex2 True")
+                                f.write(word + " ")
+                                continue
+
                             elif word.startswith(":") and not word.startswith("::"):
+                                log.debug("label True")
                                 f.write(word + " ")
                                 continue
                             else:
@@ -1110,15 +1148,16 @@ class Main:
                                     if char == "\n":
                                         f.write("\n")
                                         continue
+
                                     elif char == " ":
                                         f.write(" ")
                                         continue
+
                                     else:
                                         random_obf = [
                                             self.ran1(char),
-                                            self.ran2(
-                                                char, random_order, carrot=carrot_case
-                                            ),
+                                            self.ran2(char, carrot_case),
+                                            # self.poopcuh(char),
                                         ]
                                         f.write(f"{random.choice(random_obf)}")
                                 f.write(" ")
@@ -1129,9 +1168,12 @@ class Main:
             ) as f:
                 news = f.readlines()
             if debug:
+                log.debug("Writing debug2.bat")
                 with open("debug2.bat", "w", encoding="utf-8", errors="ignore") as f:
                     f.writelines(news)
+            log.info("Adding echo check")
             news.insert(2, self.obf_oneline(self.first_line_echo_check()))
+            log.info("Scrambling")
             messed_up = self.scrambler(news)
             progress.update(task2, advance=100)
             with open(
@@ -1141,6 +1183,7 @@ class Main:
                     for thing in array:
                         f.write(thing.strip() + "\n")
             if debug:
+                log.debug("Writing debug3.bat")
                 with open("debug3.bat", "w", encoding="utf-8", errors="ignore") as f:
                     for array in messed_up:
                         for thing in array:
@@ -1149,18 +1192,30 @@ class Main:
             with open(
                 f"{self.file}.ultimate.bat", "r", encoding="utf-8", errors="ignore"
             ) as f:
+                log.debug("Replacing all instances of echo")
                 data = f.readlines()
                 # add echo off to the first line
                 data.insert(0, "@echo off\n")
                 for i in range(len(data)):
                     if "echo" in data[i]:
-                        data[i] = data[i].replace(
-                            "echo", r"%GODFATHER%e%GODFATHER%c%GODFATHER%h%GODFATHER%o"
-                        )
+                        data[i] = data[i].replace("echo", self.obf_oneline("echo"))
                     if not data[i].startswith(";") or not data[i].startswith("; "):
                         new = self.random_semi_and_comma(data[i])
                         data[i] = new
+                # insert string into last line
+                aw_hell_nah = """set LF=^
+
+
+"""
+                aw_hell_nah2 = f"""
+:{self.ran_string_1} string [rtnVar]
+{self.obf_oneline("for /f")} {self.random_comma()} {self.random_single_carrot("eol")}^=^%LF%%LF%^ {self.random_single_carrot("delims")}^= %%A {self.random_comma()} {self.random_single_carrot("in")} {self.random_comma()} ('{self.obf_oneline(self.random_single_carrot("forfiles /p"), ignore_carrots=True)} "%~dp0." /m "%~nx0" /c "{self.obf_oneline("cmd /c")} {self.obf_oneline("echo")[:-1]}(%~1"') {self.random_comma()} {self.obf_oneline("do if")} "%~2" {self.obf_oneline("neq")} "" ({self.obf_oneline("set")} %~2=%%A)
+{self.obf_oneline("goto")} :EOF
+"""
+                data.insert(len(data), aw_hell_nah2)
+                data.insert(0, aw_hell_nah)
             if debug:
+                log.debug("Writing debug4.bat")
                 with open("debug4.bat", "w", encoding="utf-8", errors="ignore") as f:
                     f.writelines(data)
             progress.update(task4, advance=100)
@@ -1193,51 +1248,28 @@ class Main:
         else:
             return f"{char}%{randomed}%"
 
-    def ran2(self, char, random_order, carrot: bool):
+    def ran2(self, char, carrot_case):
         # fasho could have used dict for this but idc its already done
         public = r"C:\Users\Public"
         weird = r"C:\Program Files (x86)\Common Files"
         program_1 = r"C:\Program Files"
         program_2 = r"C:\Program Files (x86)"
-        psmodule_path = r"C:\Program Files\WindowsPowerShell\Modules;C:\WINDOWS\system32\WindowsPowerShell\v1.0\Modules"
         driver_stuff = r"C:\Windows\System32\Drivers\DriverData"
-        comspec = r"C:\WINDOWS\system32\cmd.exe"
         pathext = r".COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC"
-        session_name = r"Console"
-        program_data = r"C:\ProgramData"
-        alluserprofile = r"C:\ProgramData"
-        ProgramW6432 = r"C:\Program Files"
-        SystemDrive = r"C:"
-        SystemRoot = r"C:\WINDOWS"
-        windir = r"C:\WINDOWS"
-        # not adding the comspec exploit yet
-        ComSpec = r"C:\WINDOWS\system32\cmd.exe"
         CommonProgramFiles = r"C:\Program Files\Common Files"
         CommonProgramFiles_x86 = r"C:\Program Files (x86)\Common Files"
         CommonProgramW6432 = r"C:\Program Files\Common Files"
-        DriverData = r"C:\Windows\System32\Drivers\DriverData"
 
         list_of_all = [
             public,
             weird,
             program_1,
             program_2,
-            psmodule_path,
             driver_stuff,
-            comspec,
             pathext,
-            session_name,
-            program_data,
-            alluserprofile,
-            ProgramW6432,
-            SystemDrive,
-            SystemRoot,
-            windir,
-            ComSpec,
             CommonProgramFiles,
             CommonProgramFiles_x86,
             CommonProgramW6432,
-            DriverData,
         ]
 
         corosponding = [
@@ -1245,67 +1277,47 @@ class Main:
             "COMMONPROGRAMFILES(X86)",
             "PROGRAMFILES",
             "PROGRAMFILES(X86)",
-            "PSMODULEPATH",
             "DRIVERDATA",
-            "COMSPEC",
             "PATHEXT",
-            "SESSIONNAME",
-            "PROGRAMDATA",
-            "ALLUSERPROFILE",
-            "PROGRAMW6432",
-            "SYSTEMDRIVE",
-            "SYSTEMROOT",
-            "WINDIR",
-            "COMSPEC",
             "COMMONPROGRAMFILES",
             "COMMONPROGRAMFILES(X86)",
             "COMMONPROGRAMW6432",
         ]
 
         new_lists = []
+        char_counter = 0
 
         for i in list_of_all:
             if char in i:
                 new_lists.append(i)
+                char_counter += i.count(char)
 
-        # random_posotive_negative = random.choice([True, False])
+        random_posotive_negative = False
         if len(new_lists) > 0:
             if char == " ":
                 return char
             new = random.choice(new_lists)
-            if char in new:
-                # if random_posotive_negative:
-                #    if new == psmodule_path:
-                #        index = new.index(char)
-                #        new = corosponding[list_of_all.index(new)]
-                #        return f"{self.random_single_carrot(carrot)}%{self.random_capitalization(new)}:~{index},1%"
-                #    else:
-                #        # index = new.index(char)
-                #        # new = corosponding[list_of_all.index(new)]
-                #        # length = len(new)
-                #        # neg_index = length - index
-                #        index = new.index(char)
-                #        new = corosponding[list_of_all.index(new)]
-                #        negative_index = index - len(new)
-                #        print(
-                #            f"{self.random_single_carrot(carrot)}%{self.random_capitalization(new)}:~{negative_index},1% {char}"
-                #        )
-                #        return f"{self.random_single_carrot(carrot)}%{self.random_capitalization(new)}:~{negative_index},1%"
-                # else:
-                if new == psmodule_path:
-                    index = new.index(char)
-                    new = corosponding[list_of_all.index(new)]
-                    return f"{self.random_single_carrot(carrot)}%{self.random_capitalization(new)}:~{index},1%"
-                else:
-                    index = new.index(char)
-                    new = corosponding[list_of_all.index(new)]
-                    return f"{self.random_single_carrot(carrot)}%{self.random_capitalization(new)}:~{index},1%"
-        else:
-            if char in string.ascii_letters:
-                var = f"{self.random_single_carrot(carrot)}%{self.random_capitalization('KDOT')}:~{random_order.index(char)},1%"
-                return var
-            else:
+            if char not in string.ascii_letters:
                 return char
+            if char in new:
+                if random_posotive_negative:
+                    random_index = random.choice(
+                        [i for i, letter in enumerate(new) if letter == char]
+                    )
+                    new2 = corosponding[list_of_all.index(new)]
+                    negative_index = random_index - len(new)
+                    return f"%{self.random_capitalization(new2)}:~{negative_index},1%"
+                else:
+                    random_index = random.choice(
+                        [i for i, letter in enumerate(new) if letter == char]
+                    )
+                    new = corosponding[list_of_all.index(new)]
+                    return f"%{self.random_capitalization(new)}:~{random_index},1%"
+        else:
+            return self.ran1(char)
+
+    def poopcuh(self) -> str:
+        return ""
 
     # def ran3(self, char):
     #    if char in string.ascii_letters:
@@ -1319,90 +1331,107 @@ class Main:
         random_number = random.randint(1, 99)
         return f"for /l %%{random_letter} in ( {random_number}, {random_number}, {random_number} ) do ( {line} )\n"
 
-    def echo(self, line: str, errorlevel_state: bool) -> str:
-        choices = {
-            "for_loop": self.for_loop,
-            "mshta": self.mshta,
-            "powershell": self.powershell,
-        }
-        if not errorlevel_state:
-            pick = random.choice(list(choices.keys()))
-            return choices.get(pick)(line)
-        else:
-            return self.obf_oneline(line)
-
-    def mshta(self, line):
-        line = line.split(" ", 1)[1]
-        chars = [ord(c) for c in line]
-        chars = " & ".join([f"Chr({c})" for c in chars])
-        return self.obf_oneline(
-            f'mshta vbscript:execute("CreateObject(""Scripting.FileSystemObject"").GetStandardStream(1).Write({chars}):Close")|more'
-        )
-
-    def powershell(self, line):
-        everything_after_first_line = line.split(" ", 1)[1]
-        print(
-            f"""powershell.exe -NoLogo -NoProfile -ExecutionPolicy Bypass -Command "Write-Host {everything_after_first_line}" """
-        )
-        return f"""powershell.exe -NoLogo -NoProfile -ExecutionPolicy Bypass -Command "Write-Host {everything_after_first_line}" """
-
-    def for_loop(self, line, errorlevel_check: bool):
-        options_all = {
-            ".cdxml": ".cdxml=Microsoft.PowerShellCmdletDefinitionXML.1",
-            ".cmd": ".cmd=cmdfile",
-            ".ps1xml": ".ps1xml=Microsoft.PowerShellXMLData.1",
-            ".psc1": ".psc1=Microsoft.PowerShellConsole.1",
-        }
-        types = [
-            "findstr",
-            "assoc",
+    def echo(self, *args):
+        args_yur = "".join(args)
+        options = [
+            self.hex,
+            # self.powershell,
+            self.for_loop_print1,
         ]
-        # for loop base = for /f "tokens=1,2 delims= " %%a in ('assoc .cdxml') do (echo %%a)
-        # delimiters go to the first occurrence of any part of the dilimiter then but before that part and not including.
-        # for example for /f "tokens=1 delims=she" %%a in ('assoc .cdxml') do (echo %%a) will output .cdxml=Micro since the first occurence of the dilimiter is s
-        # tokens get each chunk of each line that is being seperated by the delimiters
+        picked = random.choice(options)
+        log.debug(f"echo picked: {picked}")
+        return picked(args_yur)
 
-        random_type = random.choice(types)
-        if random_type == "assoc":
-            tokens = "1,2"
-            out = f'{self.random_carrots("for", obf=True, commas=True)} /f '
-        else:
-            out = f'{self.random_carrots("for", obf=True, commas=True)} /f '
+    def hex(self, args_yur):
+        output = self.create_hex_string(args_yur)
+        ran_string = self.make_random_string(length_nums=(10, 11), special_chars=False)
+        return f'{self.obf_oneline("call")} :{self.ran_string_1} "{self.obf_oneline(output)}" {self.obf_oneline(ran_string)}\n{self.obf_oneline("echo")}%{ran_string}%\n'
 
-    def set_(self, line: str) -> str:
-        # all of these are finished im just too lazy to upload. (basically all except like half lmao)
-        return line
-
-    def setlocal(self, line: str) -> str:
-        return line
-
-    def if_(self, line: str) -> str:
-        return line
-
-    def for_(self, line: str) -> str:
-        return line
-
-    def goto(self, line: str) -> str:
-        return line
-
-    def call(self, line: str) -> str:
-        return line
-
-    def pause(self, line: str) -> str:
-        return line
-
-    def exit(self, line: str) -> str:
-        return line
-
-    def random_carrots(self, string1: str, obf: bool, commas: bool):
-        carrot = "^"
-        out = "".join(
-            carrot if random.randint(0, 1) == 0 else random.choice(string1)
-            for _ in range(len(string1))
+    def for_loop_print1(self, args_yur):
+        args_yur = args_yur.strip()
+        split_into_words = args_yur.split(" ")
+        random_word_list = (
+            requests.get(
+                "https://raw.githubusercontent.com/powerlanguage/word-lists/master/1000-most-common-words.txt"
+            )
+            .content.decode("utf-8")
+            .splitlines()
         )
-        if obf:
-            return self.obf_oneline(out)
-        return out
+
+        # Add random words to split_into_words
+        new_word_list = []
+        for i, word in enumerate(split_into_words):
+            chance_of_adding_random_word = random.randint(1, 5)
+            if chance_of_adding_random_word == 1:
+                random_index = random.randint(0, len(random_word_list) - 1)
+                new_word_list.append(random_word_list[random_index])
+            new_word_list.append(word)
+
+        old_word_list = split_into_words
+        split_into_words = new_word_list
+        word_amount = len(split_into_words)
+
+        if len(split_into_words) > 52:
+            return self.echo(args_yur)
+
+        # Generate letter/numerical values for the echo command
+        values = list(string.ascii_uppercase) + list(string.ascii_lowercase)
+        echo_values = " ".join(
+            [
+                f"%%{i}"
+                for i in values[:word_amount]
+                if split_into_words[values.index(i)] in old_word_list
+            ]
+        )
+
+        string_words = " ".join(split_into_words)
+
+        options = [
+            f"""{self.obf_oneline(f'{self.random_single_carrot("for")} {self.random_comma()} /f {self.random_comma()} "tokens=1-')[:-1]}{word_amount}" {self.random_comma()} %%A {self.random_comma()} {self.obf_oneline(f'{self.random_single_carrot("IN")} (')[:-1]} {self.random_comma()} "{self.obf_oneline(string_words)}"{self.obf_oneline(') do (echo')}{self.obf_oneline(f"{echo_values})")}"""
+        ]
+
+        choice = random.choice(options)
+
+        return choice + "\n"
+
+    # def powershell(self, args_yur):
+    #    args_yur = "Write-Host " + args_yur
+    #    encoded_bytes = base64.b64encode(args_yur.encode("utf-16le"))
+    #    base64_string = str(encoded_bytes, "utf-8")
+    #    choices = [
+    #        f"{self.obf_oneline('powershell -nop -c')[:-1]} \"{self.obf_oneline('IEX([System.Text.Encoding]::Unicode.GetString([System.Convert]::FromBase64String')[:-1]}('{base64_string}')))\"\n",
+    #        f"""{self.obf_oneline(f'powershell -nop -e "{base64_string}"')}\n""",
+    #    ]
+    #    ran_num = random.randint(0, len(choices) - 1)
+    #    log.debug(f"powershell ran_num: {ran_num}")
+    #    out = choices[ran_num]
+    #    if isinstance(out, str):
+    #        return out
+    #    return out(args_yur)
+
+    def for_loop(self, args):
+        if args.get("flags"):
+            return f"""{self.random_comma()}{self.obf_oneline(self.random_single_carrot("for"))}{self.random_comma()}{self.obf_oneline(self.random_single_carrot(args.get("flags")))} """
+        return ""
+
+    def random_swap(self):
+        self.cesar_val = random.randint(1, 13)
+        together = caesar_cipher_rotations(
+            self.cesar_val
+        ) + caesar_cipher_rotations_upper(self.cesar_val)
+        together = together[:-4]
+        return self.obf_oneline(together, simple=True) + "\n"
+
+    def random_comma(
+        self,
+        obf: bool = True,
+        ammount: int = 10,
+    ):
+        characters = [",", ";", " ", ",,", ";;", "  "]
+        if not obf:
+            return "".join(random.choices(characters, k=ammount))
+        else:
+            return self.obf_oneline("".join(random.choices(characters, k=ammount)))
 
     def random_dead_code(self, entire_array):
         """Dead code that just won't be executed so it can be whatever. If u wanna add more its all u"""
@@ -1496,32 +1525,16 @@ class Main:
         random2 = "".join(str(i) for i in random_binary)
         random2 = int(random2, 2)
 
-        max_fixed = int("1" * len(binary_string), 2)
         # me asf when xor dont wanna be bae
         fixed2 = random2 ^ ans
-        while fixed2 > max_fixed:
-            random_binary = [random.choice(choices) for i in range(len(binary_string))]
-            random2 = "".join(str(i) for i in random_binary)
-            random2 = int(random2, 2)
-            fixed2 = random2 ^ ans
 
         if hex_check:
-            random_tf = random.randint(1, 3)
-            if not recursive_xor:
-                random_tf = 2
-            try:
-                if random_tf != 1:
-                    return f"({self.random_oct_hex(random2)} ^^ {self.random_oct_hex(fixed2)})"
-                else:
-                    return f"({self.make_xor(random2)} ^^ {self.make_xor(fixed2)})"
-            except RecursionError:
-                return (
-                    f"({self.random_oct_hex(random2)} ^^ {self.random_oct_hex(fixed2)})"
-                )
+            return f"({self.random_oct_hex(random2)} ^^ {self.random_oct_hex(fixed2)})"
         else:
             return f"({hex(random2)} ^^ {hex(fixed2)})"
 
     def generate_math_problem(self, answer: int):
+        log.debug("Making problem. Answer is: " + str(answer))
         """Entire point of this is to make a math problem for the set /a. We do this cause kids need a calculator but once they see that there are octals and hexadecimals they'll prolly give up lmao"""
         # no division since we don't want floats BUT we can use division in the answer since its how you undo multiplication
         # but im not gonna do this cause it still makes floats and im slow
@@ -1551,6 +1564,7 @@ class Main:
         # randomly do hex or oct to ans instead of all just hex
         choices = [True, False]
         problem2 = f"{self.random_oct_hex(ans) if random.choice(choices) else self.make_xor(ans)} {opp1} {self.random_oct_hex(num1) if random.choice(choices) else self.make_xor(num1)} {opp2} {self.random_oct_hex(num2) if random.choice(choices) else self.make_xor(num2)}"
+        self.rep_num = 0
         problem23 = f"{ans} {opp1} {num1} {opp2} {num2}"
 
         ans2 = eval(problem23)
@@ -1590,6 +1604,7 @@ class Main:
         """This absolutely beautiful function takes the code, puts it into a nested array of goto values that all point to each other then obfuscates tf outta it."""
         original_lines = codeed
 
+        log.debug("Adding fake labels to code")
         for index, line in enumerate(original_lines):
             # not sure if echo really makes a difference but batch does some weird things sometimes
             echo_check123 = False
@@ -1614,6 +1629,7 @@ class Main:
                     label = f":{self.make_random_label_no_working()}\n"
                     original_lines.insert(index, label)
 
+        log.debug("Removing bad lines")
         original_lines = [
             item for item in original_lines if item not in [";", "\n", ";\n"]
         ]
@@ -1639,6 +1655,7 @@ class Main:
                     echo_check123 = True
             except IndexError:
                 pass
+            log.debug(f"PRE Scrambling line {index}")
             t = self.generate_math_problem(answer=random.randint(100000, 10000000))
             self.dict_thing[item] = [
                 t[0],
@@ -1651,6 +1668,7 @@ class Main:
 
         # NOTE everything in this for loop is the most confusing and worse coding I have ever done in my life. I am sorry for whoever is trying to read, imrpove or just understand what is going on especially if you have no prior knowledge of batch
         for index, (key, value) in enumerate(self.dict_thing.items()):
+            log.debug(f"Scrambling line {index}")
             if index == 0:
                 remem = [
                     f";{self.obf_oneline('set')} /a {self.obf_oneline('ans')}={self.obf_oneline(value[0])}\n;{self.random_semi_and_comma(self.obf_oneline('goto'))} :%ans%\n"
@@ -1704,7 +1722,6 @@ class Main:
                     else:
                         maybe_echo_check = random.randint(1, 3)
                         if maybe_echo_check == 1 and not value[3]:
-                            print(value[3])
                             part_3 = f";{self.obf_oneline('set')} /a {self.obf_oneline('ans')}={self.obf_oneline(list(self.dict_thing.values())[index + 1][0])}\n{self.obf_oneline(random.choice(self.tests()))}\n;{self.random_semi_and_comma(self.obf_oneline('goto'))} :%ans%\n"
                         else:
                             part_3 = f";{self.obf_oneline('set')} /a {self.obf_oneline('ans')}={self.obf_oneline(list(self.dict_thing.values())[index + 1][0])}\n;{self.random_semi_and_comma(self.obf_oneline('goto'))} :%ans%\n"
@@ -1713,21 +1730,28 @@ class Main:
 
             main_list.append([part_1, part_2, part_3])
 
+        log.info("Shuffling lines")
         random.shuffle(main_list)
 
+        log.info("Adding random comments and spacing")
         main_list = self.random_inserts(main_list)
 
+        log.info("Adding random dead code")
         main_list = self.random_dead_code(main_list)
 
+        log.info("Adding bad labels and dead code")
         main_list = self.bad_labels_and_dead_code(main_list)
 
         if random_spacing:
+            log.info("Adding more dead comments and random spacing")
             main_list = self.more_dead_comments(main_list)
 
         if pogdog_fun:
+            log.info("Adding pogdog fun")
             main_list = self.pogdog(main_list)
 
         # pointer that points to first line of the actual code.
+        log.info("Adding pointer")
         main_list.insert(0, remem)
 
         return main_list
@@ -1750,7 +1774,6 @@ class Main:
                 f"if %cd% == %cd% ( goto :{good_label} ) else ( goto :{label123} )",
                 f"if chcp leq 1 ( goto :{label123} ) else ( goto :{good_label} )",
                 f"if %CD% == %__CD__% ( goto :{label123} ) else ( goto :{good_label} )",
-                f"if %~dp0==%__cd__% ( goto :{good_label} ) else ( goto :{label123} )",
             ]
         else:
             examples = [
@@ -1765,7 +1788,6 @@ class Main:
                 f"if not defined KDOT ( goto :EOF ) else ( goto :{good_label} )",
                 f"if not defined f ( goto :EOF ) else ( goto :{good_label} )",
                 f"if %CD% == %__CD__% ( goto :{label123} ) else ( goto :{good_label} )",
-                f"if %~dp0==%__cd__% ( goto :{good_label} ) else ( goto :{label123} )",
             ]
         if echo_weird:
             random_maybe = random.choice([True, False])
@@ -1846,6 +1868,9 @@ class Main:
         return main_list
 
     def first_line_echo_check(self):
+        random_bat_name = self.random_capitalization(
+            self.make_random_string((5, 6), False)
+        )
         if not echo_check:
             return "\n"
         """basically just checks the entire file for the word echo. If it finds it then it will kill the process. Also the no debug checks to see if the user is double clicking the file instead of running it through a different application"""
@@ -1860,28 +1885,28 @@ class Main:
         if self.debug:
             if self.checked123 == True:
                 command = (
-                    r'echo @echo off > close.bat && echo findstr /i "echo" "%~f0" >> close.bat && echo if %%errorlevel%% == 0 ( taskkill /f /im cmd.exe ) else ( ( goto ) ^2^>^n^u^l ^& del "%%~f0" ) >> close.bat && call close.bat'
+                    rf'echo @echo off > kdot{random_bat_name}.bat && echo findstr /i "echo" "%~f0" >> kdot{random_bat_name}.bat && echo if %%errorlevel%% == 0 ( taskkill /f /im cmd.exe ) else ( ( goto ) ^2^>^n^u^l ^& del "%%~f0" ) >> kdot{random_bat_name}.bat && call kdot{random_bat_name}.bat'
                     + "\n"
                 )
                 self.checked123 = False
                 return command
             else:
                 command = (
-                    r'echo @echo off >> close.bat && echo findstr /i "echo" "%~f0" >> close.bat && echo if %%errorlevel%% == 0 ( taskkill /f /im cmd.exe ) else ( ( goto ) ^2^>^n^u^l ^& del "%%~f0" ) >> close.bat && call close.bat'
+                    rf'echo @echo off >> kdot{random_bat_name}.bat && echo findstr /i "echo" "%~f0" >> kdot{random_bat_name}.bat && echo if %%errorlevel%% == 0 ( taskkill /f /im cmd.exe ) else ( ( goto ) ^2^>^n^u^l ^& del "%%~f0" ) >> kdot{random_bat_name}.bat && call kdot{random_bat_name}.bat'
                     + "\n"
                 )
                 return command
         else:
             if self.checked123 == True:
                 command = (
-                    """net session >nul 2>&1 || IF /I %0 NEQ "%~dpnx0" ( del /f /q close.bat >nul 2>&1 & exit )\necho @echo off > close.bat && echo findstr /i "echo" "%~f0" >> close.bat && echo if %%errorlevel%% == 0 ( taskkill /f /im cmd.exe ) else ( (goto) ^2^>^n^u^l ^& del "%%~f0" ) >> close.bat && call close.bat"""
+                    f"""net session >nul 2>&1 || IF /I %0 NEQ "%~dpnx0" ( del /f /q kdot{random_bat_name}.bat >nul 2>&1 & exit )\necho @echo off > kdot{random_bat_name}.bat && echo findstr /i "echo" "%~f0" >> kdot{random_bat_name}.bat && echo if %%errorlevel%% == 0 ( taskkill /f /im cmd.exe ) else ( (goto) ^2^>^n^u^l ^& del "%%~f0" ) >> kdot{random_bat_name}.bat && call kdot{random_bat_name}.bat"""
                     + "\n"
                 )
                 self.checked123 = False
                 return command
             else:
                 command = (
-                    """net session >nul 2>&1 || IF /I %0 NEQ "%~dpnx0" ( del /f /q close.bat >nul 2>&1 & exit )\necho @echo off >> close.bat && echo findstr /i "echo" "%~f0" >> close.bat && echo if %%errorlevel%% == 0 ( taskkill /f /im cmd.exe ) else ( (goto) ^2^>^n^u^l ^& del "%%~f0" ) >> close.bat && call close.bat"""
+                    f"""net session >nul 2>&1 || IF /I %0 NEQ "%~dpnx0" ( del /f /q kdot{random_bat_name}.bat >nul 2>&1 & exit )\necho @echo off >> kdot{random_bat_name}.bat && echo findstr /i "echo" "%~f0" >> kdot{random_bat_name}.bat && echo if %%errorlevel%% == 0 ( taskkill /f /im cmd.exe ) else ( (goto) ^2^>^n^u^l ^& del "%%~f0" ) >> kdot{random_bat_name}.bat && call kdot{random_bat_name}.bat"""
                     + "\n"
                 )
                 return command
@@ -2137,24 +2162,34 @@ FriendlyName=-
 PostInstallCmd=<None>
 AdminQuietInstCmd=
 """
-        current_dir = os.getcwd()
+        os.mkdir("build")
         bat_file_name = os.path.basename(self.file)
+        # get file path without name of file
+        file = os.path.dirname(self.file)
         exe_name = bat_file_name[:-4] + ".exe"
 
-        app_launched = "AppLaunched=cmd /c " + '"' + bat_file_name + '"'
+        if args.uac:
+            app_launched = f'AppLaunched=Powershell.exe -ExecutionPolicy Bypass -WindowStyle Hidden -NoProfile -Command "Copy-Item {bat_file_name} -Destination $env:TEMP\{bat_file_name} -Force ; Start-Process -FilePath $env:TEMP\{bat_file_name} -Verb RunAs -Wait ; Remove-Item $env:TEMP\{bat_file_name} -Force"'
+        else:
+            app_launched = "AppLaunched=cmd.exe /d /s /c " + '""' + bat_file_name + '""'
         target = f"TargetName={exe_name}"
         file_0 = f"FILE0={bat_file_name}"
-        source_files = f"[SourceFiles]\nSourceFiles0={current_dir}"
+        source_files = f"[SourceFiles]\nSourceFiles0={file}"
         extra = f"[SourceFiles0]\n%FILE0%="
 
         to_write = [app_launched, target, file_0, source_files, extra]
-        with open("setup.sed", "a+") as f:
+        with open("build\\setup.sed", "a+") as f:
             f.write(code)
             for item in to_write:
                 f.write(item + "\n")
+        original_dir = os.getcwd()
+        shutil.copy(self.file, "build")
+        os.chdir("build")
         os.system("iexpress /n /q /m setup.sed")
-        os.remove("setup.sed")
-        print(f"Exe file saved as {exe_name}")
+        shutil.move(exe_name, original_dir)
+        os.chdir(original_dir)
+        shutil.rmtree("build")
+        print(f"Created {exe_name}")
 
     def bat2exe2(self):
         warning = Write.Input(
@@ -2293,13 +2328,17 @@ exit /b 0
 
 
 if __name__ == "__main__":
+    log.info("I hate Godfather")
     argparse = argparse.ArgumentParser()
     argparse.add_argument("-f", "--file", help="Auto update")
     argparse.add_argument("-m", "--mode", help="Mode")
+    argparse.add_argument(
+        "--uac", help="UAC Bypass", action="store_true", default=False
+    )
     args = argparse.parse_args()
     if auto_update:
         AutoUpdate()
     Main(args.mode, args.file)
     print("Done!")
-    time.sleep(3)
+    time.sleep(300)
     os._exit(0)

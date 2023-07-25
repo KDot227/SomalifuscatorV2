@@ -39,12 +39,20 @@ if not %errorlevel% == 0 (
     exit /b 1
 )
 
-if "%~1"=="" (
-    python -m pip install -r requirements.txt --upgrade
-    python -m main
-) else (
-    python -m pip install -r requirements.txt --upgrade
+python -m pip install -r requirements.txt --upgrade
+
+if not "%~2"==""
+    pushd old_somalifuscator
     python -m main -f %~1 -m %~2 %~3
+    popd
+if "%~1"=="" (
+    pushd src
+    python -m main
+    popd
+) else (
+    pushd src
+    python -m main -f %~1
+    popd
 )
 
 exit /b 0
