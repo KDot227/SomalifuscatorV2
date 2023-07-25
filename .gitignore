@@ -1,17 +1,5 @@
 simple_for.bat
-test.bat
-test2.bat
-test3.bat
-test4.bat
-test5.bat
-test6.bat
-test7.bat
-test8.bat
-test9.bat
-example.bat
-test_all.py
 main.exe
-\__pycache__
 *.bak
 debug1_2.bat
 debug1.bat
@@ -19,3 +7,8 @@ debug2.bat
 debug3.bat
 debug4.bat
 *.bat.*
+__pycache__
+somalifuscator.log
+tests/test*.bat
+src_paid
+test_all.bat
