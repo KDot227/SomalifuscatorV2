@@ -1,0 +1,9 @@
+{
+    "chinese": false,
+    "hidden": false,
+    "bloat": true,
+    "remove_blank_lines": true,
+    "super_obf": false,
+    "debug": false,
+    "key": "NONE"
+}

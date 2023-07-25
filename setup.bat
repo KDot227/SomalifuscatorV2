@@ -41,10 +41,11 @@ if not %errorlevel% == 0 (
 
 python -m pip install -r requirements.txt --upgrade
 
-if not "%~2"==""
+if "%~2" NEQ "" (
     pushd old_somalifuscator
     python -m main -f %~1 -m %~2 %~3
     popd
+)
 if "%~1"=="" (
     pushd src
     python -m main
