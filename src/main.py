@@ -12,11 +12,14 @@ from rich import print
 from rich.panel import Panel
 from rich.align import Align
 from rich.syntax import Syntax
+from rich.traceback import install
+
+install()
 
 from argparse import ArgumentParser
 
 
-__version__ = "1.0.1"
+__version__ = "1.0.3"
 
 
 class Main:
@@ -26,7 +29,7 @@ class Main:
             # with open(args.file, encoding="utf8", errors="ignore") as f:
             #    file_content = f.read()
             # print(Align.center(Panel.fit(file_content, title="Batch Content")))
-            Obfuscator(args.file, double_click_check=False, utf_16_bom=False, tasks=False, rich_off=args.rich_off)
+            Obfuscator(args.file, double_click_check=False, utf_16_bom=False)
             return
 
         AutoUpdate(__version__)
@@ -52,6 +55,7 @@ class Main:
             input("Press any key to exit...")
         else:
             Obfuscator(self.file_location)
+            input("Press any key to exit...")
 
         return
 
@@ -59,7 +63,6 @@ class Main:
 if __name__ == "__main__":
     parse = ArgumentParser()
     parse.add_argument("-f", "--file", help="File to obfuscate", type=str)
-    parse.add_argument("-r", "--rich-off", help="Turn off rich", action="store_true")
     args = parse.parse_args()
     Main().main()
     sys.exit(0)

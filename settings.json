@@ -5,5 +5,6 @@
     "remove_blank_lines": true,
     "super_obf": false,
     "debug": false,
+    "FUD": false,
     "key": "NONE"
 }

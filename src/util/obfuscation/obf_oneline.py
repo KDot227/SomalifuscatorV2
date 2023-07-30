@@ -80,7 +80,8 @@ class Obfuscate_Single:
                     return self.obfuscate_normal(self.code) + "\n"
 
     def obfuscate_normal(self, line: str) -> str:
-        # return self.obfuscate_simple(line)
+        if all_.FUD:
+            return self.obfuscate_simple(line)
         """Obfuscates code but this method is very simple and made for small lines of code that needs to be obfuscated
 
         Args:
@@ -208,8 +209,6 @@ class Obfuscate_Single:
                 final_string += f"{word} "
                 continue
             for char in word:
-                final_string += (
-                    f"%{make_random_string(special_chars=False)}%{char}%{make_random_string(special_chars=False)}%"
-                )
+                final_string += f"%{make_random_string(special_chars=False)}%{char}%{make_random_string(special_chars=False)}%"
             final_string += " "
         return final_string
