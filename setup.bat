@@ -56,4 +56,5 @@ if "%~1"=="" (
     popd
 )
 
+pause
 exit /b 0
