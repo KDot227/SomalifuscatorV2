@@ -5,6 +5,8 @@ from util.supporting.settings import all_
 from util.ui.ui import Ui
 from util.obfuscation.obfuscate import Obfuscator
 
+from util.auto_updating.updater import AutoUpdate
+
 from rich import print
 from rich.panel import Panel
 from rich.align import Align
@@ -25,6 +27,8 @@ class Main:
             print(Align.center(Panel.fit(file_content, title="Batch Content")))
             Obfuscator(args.file)
             return 0
+
+        AutoUpdate()
 
         # initialize UI
         self.ui = Ui()
