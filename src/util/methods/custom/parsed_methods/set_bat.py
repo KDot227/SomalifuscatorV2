@@ -26,11 +26,11 @@ class SetBat:
 
     @staticmethod
     def for_loop(args: str) -> str:
-        return Obfuscate_Single(random_scramble() + CommandWrappers.for_loop(command=args) + "\n").out()
+        return random_scramble() + Obfuscate_Single(CommandWrappers.for_loop(command=args), False).out() + "\n"
 
     @staticmethod
     def if_statement(args: str) -> str:
-        return Obfuscate_Single(random_scramble() + CommandWrappers.outside_command(command=args) + "\n").out()
+        return random_scramble() + Obfuscate_Single(CommandWrappers.outside_command(command=args), False).out() + "\n"
 
     @staticmethod
     def ads(args: str) -> str:

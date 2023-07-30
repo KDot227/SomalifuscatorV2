@@ -1,3 +1,4 @@
+import re
 import random
 
 from typing import List, Union
@@ -90,7 +91,9 @@ class Obfuscate_Single:
         """
         line = line.strip()
         final_string = ""
-        for index, word in enumerate(line.split(" ")):
+        regex_bat = re.compile(r"\w+=[^=]*%\w+%\b|\w+=[^=]*%\w+%\B")
+        regex2 = re.compile(r"%(\w+)%")
+        for index, word in enumerate(line.split()):
             if index == 0:
                 word = random_capitalization(word)
             if word.startswith("%"):
@@ -105,6 +108,12 @@ class Obfuscate_Single:
             if word.startswith("::"):
                 continue
             if word.startswith(":"):
+                final_string += f"{word} "
+                continue
+            if re.match(regex_bat, word):
+                final_string += f"{word} "
+                continue
+            if re.match(regex2, word):
                 final_string += f"{word} "
                 continue
             else:
@@ -172,6 +181,8 @@ class Obfuscate_Single:
         if len(char_line) == 1:
             return f"%{make_random_string(special_chars=False)}%{char_line}%{make_random_string(special_chars=False)}%"
         final_string = ""
+        regex_bat = re.compile(r"\w+=[^=]*%\w+%\b|\w+=[^=]*%\w+%\B")
+        regex2 = re.compile(r"%(\w+)%")
         for word in char_line.split(" "):
             if word.startswith("TO_SCRAMBLE_PLZ"):
                 final_string += f"{word} "
@@ -189,6 +200,12 @@ class Obfuscate_Single:
                 final_string += f"{word} "
                 continue
             if word.startswith("::"):
+                continue
+            if re.match(regex_bat, word):
+                final_string += f"{word} "
+                continue
+            if re.match(regex2, word):
+                final_string += f"{word} "
                 continue
             for char in word:
                 final_string += (

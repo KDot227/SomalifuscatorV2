@@ -58,8 +58,8 @@ class CommandWrappers:
         """
         commands = [
             # f"echo KDOT WAS HERE ^\nexit > nul\n{command}",
-            f"if exist %temp% ( {command} )",
-            f"if exist %appdata% ( {command} )",
+            f"if exist %temp% {command}",
+            f"if exist %appdata% {command}",
         ]
 
         return random.choice(commands)

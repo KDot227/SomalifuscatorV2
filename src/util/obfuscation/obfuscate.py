@@ -163,7 +163,7 @@ class Obfuscator:
                             "echo": EchoBat.echo_bat,
                             # "for": ForBat.for_bat,
                             # "if": IfBat.if_bat,
-                            # "set": SetBat.set_bat,
+                            "set": SetBat.set_bat,
                         }
 
                         if parsed_dict["method"] in methods_to_call and not echo_check123 and not "&" in line:
