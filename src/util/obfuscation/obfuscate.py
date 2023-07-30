@@ -104,7 +104,7 @@ class Obfuscator:
                 #        + "\n"
                 #    )
                 # else:
-                f.write(f"TO_SCRAMBLE_PLZset KDOT={random_order}")
+                f.write(f"TO_SCRAMBLE_PLZset KDOT={random_order}\n")
 
                 regex_bat = re.compile(r"\w+=[^=]*%\w+%\b|\w+=[^=]*%\w+%\B")
                 regex2 = re.compile(r"%(\w+)%")
@@ -113,9 +113,6 @@ class Obfuscator:
 
                 times_through = 0
                 for index, line in enumerate(self.data):
-                    if line.startswith("DONOTTOUCHKDOT123"):
-                        f.write(line.replace("DONOTTOUCHKDOT123", "") + "\n")
-                        continue
                     log.debug(f"Processing line {index}")
                     echo_check123 = False
                     try:
@@ -169,7 +166,7 @@ class Obfuscator:
                             # "set": SetBat.set_bat,
                         }
 
-                        if parsed_dict["method"] in methods_to_call and not echo_check123:
+                        if parsed_dict["method"] in methods_to_call and not echo_check123 and not "&" in line:
                             log.debug("Custom method True")
                             f.write(methods_to_call[parsed_dict["method"]](parsed_dict) + "\n")
                             continue
@@ -242,9 +239,7 @@ class Obfuscator:
                 current_code = self.get_current_code()
 
                 if not all_.super_obf:
-                    current_code.insert(
-                        1, Obfuscate_Single(AntiChanges.first_line_echo_check(self.double_click), simple=False).out()
-                    )
+                    current_code.insert(1, Obfuscate_Single(AntiChanges.first_line_echo_check(self.double_click), simple=False).out())
 
                 # current_code = AntiChanges.ads_spammer(current_code)
 
@@ -308,11 +303,7 @@ class Obfuscator:
 
     @staticmethod
     def gen_ran_special() -> str:
-        return (
-            make_random_string(length_nums=(7, 14))
-            + make_random_string(length_nums=(7, 14))
-            + make_random_string(length_nums=(7, 14))
-        )
+        return make_random_string(length_nums=(7, 14)) + make_random_string(length_nums=(7, 14)) + make_random_string(length_nums=(7, 14))
 
     @staticmethod
     def add_scramble(code) -> str:

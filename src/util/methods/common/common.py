@@ -13,6 +13,17 @@ else:
     chinese_characters = string.ascii_letters + string.digits
 
 
+def escape_batch(code: str) -> str:
+    code = code.replace("%", "%%").replace("!", "^!").replace("^", "^^").replace('"', '^"').replace("<", "^<").replace(">", "^>").replace("&", "^&").replace("|", "^|").replace("=", "^=").replace("(", "^(").replace(")", "^)")
+    return code
+
+
+def random_scramble() -> str:
+    if random.choice([True, False]):
+        return "TO_SCRAMBLE_PLZ"
+    return ""
+
+
 def make_random_string(length_nums=(5, 7), special_chars=True):
     length = random.randint(*length_nums)
     no_spec = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"

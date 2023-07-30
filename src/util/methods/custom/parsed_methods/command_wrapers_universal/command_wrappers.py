@@ -9,7 +9,8 @@ class CommandWrappers:
     def __init__(self) -> None:
         pass
 
-    def main(self, command: str):
+    @staticmethod
+    def main(command: str):
         """
         A method that randomly chooses one of the available command wrappers and applies it to the given command.
 
@@ -22,12 +23,13 @@ class CommandWrappers:
         chocies = [
             CommandWrappers.for_loop,
             CommandWrappers.outside_command,
-            CommandWrappers.var_command,
+            # CommandWrappers.var_command,
         ]
 
         return random.choice(chocies)(command)
 
-    def for_loop(self, command: str):
+    @staticmethod
+    def for_loop(command: str):
         """
         A method that wraps the given command in a for loop.
 
@@ -43,7 +45,8 @@ class CommandWrappers:
         ]
         return random.choice(loops)
 
-    def outside_command(self, command: str):
+    @staticmethod
+    def outside_command(command: str):
         """
         A method that wraps the given command in a block of code that runs before the command.
 
@@ -54,12 +57,15 @@ class CommandWrappers:
             str: The wrapped command.
         """
         commands = [
-            f"echo KDOT WAS HERE ^\nexit > nul\n{command}",
+            # f"echo KDOT WAS HERE ^\nexit > nul\n{command}",
             f"if exist %temp% ( {command} )",
             f"if exist %appdata% ( {command} )",
         ]
 
-    def var_command(self, command: str):
+        return random.choice(commands)
+
+    @staticmethod
+    def var_command(command: str):
         """
         A method that wraps the given command in an environment variable.
 
