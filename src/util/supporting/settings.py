@@ -90,7 +90,7 @@ log = logging.getLogger("rich")
 # If debug mode is not enabled, set the logging level to INFO
 if not all_.get_key("debug"):
     log.setLevel(logging.INFO)
-    log.info("logging level is INFO")
+    # log.info("logging level is INFO")
 else:
     # If debug mode is enabled, create a log file and set the logging level to DEBUG
     try:
@@ -103,4 +103,4 @@ else:
     file_handler.setFormatter(format2)
     log.addHandler(file_handler)
     log.setLevel(logging.DEBUG)
-    log.info("logging level is DEBUG")
+    # log.info("logging level is DEBUG")

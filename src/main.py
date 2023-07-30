@@ -23,11 +23,11 @@ class Main:
     def main(self):
         super_obf = all_.super_obf
         if any([args.file]):
-            with open(args.file, encoding="utf8", errors="ignore") as f:
-                file_content = f.read()
-            print(Align.center(Panel.fit(file_content, title="Batch Content")))
-            Obfuscator(args.file)
-            return 0
+            # with open(args.file, encoding="utf8", errors="ignore") as f:
+            #    file_content = f.read()
+            # print(Align.center(Panel.fit(file_content, title="Batch Content")))
+            Obfuscator(args.file, double_click_check=False, utf_16_bom=False, tasks=False, rich_off=args.rich_off)
+            return
 
         AutoUpdate(__version__)
 
@@ -53,12 +53,13 @@ class Main:
         else:
             Obfuscator(self.file_location)
 
-        return 0
+        return
 
 
 if __name__ == "__main__":
     parse = ArgumentParser()
     parse.add_argument("-f", "--file", help="File to obfuscate", type=str)
+    parse.add_argument("-r", "--rich-off", help="Turn off rich", action="store_true")
     args = parse.parse_args()
     Main().main()
     sys.exit(0)

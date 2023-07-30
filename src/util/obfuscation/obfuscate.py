@@ -25,7 +25,7 @@ from util.methods.custom.parsed_methods.set_bat import SetBat
 
 from util.methods.dead_code.dead_code import DeadCode
 
-from rich.progress import track, Progress
+from rich.progress import SpinnerColumn, Progress, TimeElapsedColumn
 
 letter_assignments_cypher = CaesarCipher.both(c_val.value)
 
@@ -42,23 +42,47 @@ class Obfuscator:
         file: str,
         double_click_check: bool = True,
         utf_16_bom: bool = True,
+        tasks: bool = True,
+        rich_off: bool = False,
     ) -> None:
         self.new_file = f"{file[:-4]}_obf.bat"
         self.double_click = double_click_check
         self.utf_16_bom = utf_16_bom
+        self.tasks = tasks
+        self.rich_off = rich_off
         self.obfuscate(file)
+
+    @staticmethod
+    def random_spinners() -> str:
+        spinners = [
+            "aesthetic",
+            "betaWave",
+            "bounce",
+            "bouncingBall",
+            "bouncingBar",
+            "material",
+            "pong",
+            "shark",
+        ]
+
+        return random.choice(spinners)
 
     # make reutrn bytes later
     def obfuscate(self, file):
-        with Progress() as progress:
-            task1 = progress.add_task("[red]Obfuscating...", total=100)
-            task2 = progress.add_task("[green]Scrambling...", total=100)
-            task3 = progress.add_task("[cyan]Writing Out Bytes", total=100)
-            # do tasks
+        with Progress(
+            SpinnerColumn(self.random_spinners()),
+            *Progress.get_default_columns(),
+            TimeElapsedColumn(),
+        ) as progress:
+            if self.tasks:
+                task1 = progress.add_task("[red]Obfuscating...", total=100)
+                task2 = progress.add_task("[green]Scrambling...", total=100)
+                task3 = progress.add_task("[cyan]Writing Out Bytes", total=100)
             try:
                 os.remove(f"{self.new_file}")
             except FileNotFoundError:
-                log.warning("No Obfuscated file found, creating one...")
+                if self.rich_off:
+                    log.warning("No Obfuscated file found, creating one...")
 
             with open(file, "r", encoding="utf8", errors="ignore") as f:
                 self.data = f.readlines()
@@ -83,7 +107,8 @@ class Obfuscator:
 
             for env_var in self.common_env_vars:
                 if env_var in self.data:
-                    log.info(f"Found env var: {env_var}")
+                    if self.rich_off:
+                        log.info(f"Found env var: {env_var}")
                     self.used_env_vars.append(env_var)
 
             with open(self.new_file, "a+", encoding="utf8", errors="ignore") as f:
@@ -231,7 +256,8 @@ class Obfuscator:
                                 f.write(" ")
                         f.write(" ")
                     f.write("\n")
-                    progress.update(task1, advance=(index / len(self.data) * 100))
+                    if self.tasks:
+                        progress.update(task1, advance=(index / len(self.data) * 100))
                     times_through += 1
                 f.close()
 
@@ -249,7 +275,8 @@ class Obfuscator:
                     scrambler = Scrambler()
                     fuck_up_code = scrambler.scramble(current_code)
 
-                progress.update(task2, advance=100)
+                if self.tasks:
+                    progress.update(task2, advance=100)
 
                 out = [Obfuscate_Single("@echo off\n", simple=False).out()] + fuck_up_code
 
@@ -262,7 +289,8 @@ class Obfuscator:
                 else:
                     self.write_code_chunk(out)
 
-                progress.update(task3, advance=100)
+                if self.tasks:
+                    progress.update(task3, advance=100)
 
                 return 0
 
