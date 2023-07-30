@@ -1,16 +1,15 @@
+import sys
 import time
 import requests
 import webbrowser
 
-__version__ = "1.0.0"
-
 
 class AutoUpdate:
     # There is no actual auto updating :skull:
-    def __init__(self) -> None:
-        self.check_for_updates()
+    def __init__(self, __version__) -> None:
+        self.check_for_updates(__version__)
 
-    def check_for_updates(self) -> None:
+    def check_for_updates(self, __version__) -> None:
         self.url = "https://raw.githubusercontent.com/KDot227/SomalifuscatorV2/main/src/main.py"
         main_code = requests.get(self.url).text
         version_string = "__version__ = "
@@ -23,5 +22,4 @@ class AutoUpdate:
                 print("Taking you there...")
                 time.sleep(1)
                 webbrowser.open("https://github.com/KDot227/SomalifuscatorV2")
-            else:
-                print("you are on the newest verison!")
+                sys.exit(0)

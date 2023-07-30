@@ -1,8 +1,9 @@
+import os
 import sys
 
 from util.supporting.settings import all_
 
-from util.ui.ui import Ui
+from util.ui.ui import Ui, UiLinux
 from util.obfuscation.obfuscate import Obfuscator
 
 from util.auto_updating.updater import AutoUpdate
@@ -15,7 +16,7 @@ from rich.syntax import Syntax
 from argparse import ArgumentParser
 
 
-__version__ = "1.0.0"
+__version__ = "1.0.1"
 
 
 class Main:
@@ -28,10 +29,13 @@ class Main:
             Obfuscator(args.file)
             return 0
 
-        AutoUpdate()
+        AutoUpdate(__version__)
 
         # initialize UI
-        self.ui = Ui()
+        if os.name == "nt":
+            self.ui = Ui()
+        else:
+            self.ui = UiLinux()
 
         # show main ui
         self.ui.main_ui()
