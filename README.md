@@ -14,13 +14,14 @@
   <img  src="https://img.shields.io/github/issues/KDot227/SomalifuscatorV2?color=27c722">
   <img  src="https://img.shields.io/github/issues-closed/KDot227/SomalifuscatorV2?color=27c722">
   <br>
-  <img  src="https://shields-io-visitor-counter.herokuapp.com/badge?page=KDot227.SomalifuscatorV2&color=27c722">
   <hr  style="border-radius: 2%; margin-top: 60px; margin-bottom: 60px;"  noshade=""  size="20"  width="100%">
 </div>
 
 <h1 align="center">
   READ
 </h1>
+
+If you are AT&T or another major coporation please reach out to me I would like a job im poor.
 
 <h2 align="center">
   How To Use
@@ -30,6 +31,20 @@ Download python (any version past 3.10)\
 Clone repo or download as zip (Then extract repo from zip (Yes people don't do that))\
 Run setup.bat\
 Have fun obfuscating!
+
+<h1 align="center">
+  Detections 😈
+</h1>
+
+Runtime test via scanner.to [results](https://scanner.to/result/9Vrtp48P58)
+
+Scantime test via avcheck.net [results](https://avcheck.net/id/yfkokUq7WRIr)
+
+Scantime test via Virustotal.com [results](https://www.virustotal.com/gui/file/589a7a6e7c45a94e2b8944a340cfe6dfc82068b9a30fce3160c827bf1a5aa437?nocache=1)
+
+So far it's esentially fud when using the fud mode and only detected by 2 av when using the normal mode. Fud mode slightly brings down protection but I intend to fix that within the next update.\
+\
+Another interesting this is how Virus total currently thinks that the file is Javascript (It obviousily isn't)
 
 <h1 align="center">
   But what if someone tries to deobfuscate 🤓
