@@ -2,8 +2,11 @@ import os, sys, time
 
 from util.methods.common.common import console
 
-from tkinter import Tk
-from tkinter import filedialog as fd
+try:
+    from tkinter import Tk
+    from tkinter import filedialog as fd
+except:
+    pass
 
 from rich import print
 from rich.align import Align
