@@ -9,7 +9,8 @@ from rich.logging import RichHandler
 current_file_path = Path(__file__).resolve()
 
 # Set the path to the configuration file
-conf_file = os.getcwd() + "\\settings.json"
+working_dir = os.getcwd().replace("\\", "/")
+conf_file = os.getcwd() + "/settings.json"
 
 # If the configuration file does not exist, create it with default settings
 if not os.path.exists(conf_file):

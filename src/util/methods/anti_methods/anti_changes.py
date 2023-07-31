@@ -11,7 +11,7 @@ checked = False
 
 class AntiChanges:
     @staticmethod
-    def first_line_echo_check(c_check: bool) -> str:
+    def first_line_echo_check(c_check: bool = True, *args, **kwargs) -> str:
         random_bat_name = make_random_string((5, 6), False)
         if all_.debug or not c_check:
             return "\n"
@@ -24,7 +24,7 @@ class AntiChanges:
         return other_command + command
 
     @staticmethod
-    def anti_check_error(code: list) -> list:
+    def anti_check_error(code: list, *args, **kwargs) -> list:
         """This just checks to see if the first byte of the file is the utf-16 BOM. If it is then it clears screen otherwise it exits."""
         strung = ">nul 2>&1 && exit >nul 2>&1 || cls \n@echo off\n"
         strung = Obfuscate_Single(strung, simple=True).out()
@@ -49,7 +49,7 @@ class AntiChanges:
         return out_hex
 
     @staticmethod
-    def byte_check() -> str:
+    def byte_check(*args, **kwargs) -> str:
         choices = [
             """powershell -NoLogo -NoProfile -ExecutionPolicy Bypass -Command \"$bytes = [System.IO.File]::ReadAllBytes('%~f0') ; if (($bytes[0] -ne 0xFF) -or ($bytes[1] -ne 0xFE) -or ($bytes[2] -ne 0x26)) { Write-Host 'The first 3 bytes of the file are not FF FE 0A.' ; taskkill /F /IM cmd.exe }\"""",
         ]
@@ -58,7 +58,7 @@ class AntiChanges:
         return choice
 
     @staticmethod
-    def vm_test():
+    def vm_test(*args, **kwargs):
         codes = [
             # r"""for /f "tokens=2 delims==" %%a in ('wmic computersystem get manufacturer /value') do set manufacturer=%%a\nfor /f "tokens=2 delims==" %%a in ('wmic computersystem get model /value') do set model=%%a\nif "%manufacturer%"=="Microsoft Corporation" if "%model%"=="Virtual Machine" exit\nif "%manufacturer%"=="VMware, Inc." exit\nif "%model%"=="VirtualBox" exit""",
             # r"""for /f "tokens=2 delims=:" %%a in ('systeminfo ^| find "Total Physical Memory"') do ( set available_memory=%%a ) & set available_memory=%available_memory: =% & set available_memory=%available_memory:M=% & set available_memory=%available_memory:B=% & set /a available_memory=%available_memory% / 1024 / 1024 & if not %available_memory% gtr 4 ( exit /b 1 )""",
@@ -70,7 +70,7 @@ class AntiChanges:
         return random.choice(codes)
 
     @staticmethod
-    def tests():
+    def tests(*args, **kwargs):
         choices = [
             AntiChanges.vm_test,
             AntiChanges.byte_check,
@@ -80,7 +80,7 @@ class AntiChanges:
         return random.choice(choices)()
 
     @staticmethod
-    def ads_spammer(code: list) -> list:
+    def ads_spammer(code: list, *args, **kwargs) -> list:
         ads_points = {}
         for index, line in enumerate(code):
             random_chance = random.randint(1, 10)
