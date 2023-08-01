@@ -9,4 +9,4 @@ if %errorLevel% == 0 (
 ) else (
     echo Failure: Current permissions inadequate.
 )
-pause >nul
+pause

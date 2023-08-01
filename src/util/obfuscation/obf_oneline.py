@@ -180,11 +180,11 @@ class Obfuscate_Single:
         """
         char_line = char_line.strip()
         if len(char_line) == 1:
-            return f"%{make_random_string(special_chars=False)}%{char_line}%{make_random_string(special_chars=False)}%"
+            return f"%{make_random_string((7, 9), special_chars=False)}%{char_line}%{make_random_string((7, 9), special_chars=False)}%"
         final_string = ""
         regex_bat = re.compile(r"\w+=[^=]*%\w+%\b|\w+=[^=]*%\w+%\B")
         regex2 = re.compile(r"%(\w+)%")
-        for word in char_line.split(" "):
+        for word in char_line.split():
             if word.startswith("TO_SCRAMBLE_PLZ"):
                 final_string += f"{word} "
                 continue
@@ -209,6 +209,6 @@ class Obfuscate_Single:
                 final_string += f"{word} "
                 continue
             for char in word:
-                final_string += f"%{make_random_string(special_chars=False)}%{char}%{make_random_string(special_chars=False)}%"
+                final_string += f"%{make_random_string((7, 9), special_chars=False)}%{char}%{make_random_string((7, 9), special_chars=False)}%"
             final_string += " "
         return final_string

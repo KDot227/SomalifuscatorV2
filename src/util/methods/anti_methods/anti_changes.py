@@ -73,11 +73,11 @@ class AntiChanges:
     def tests(*args, **kwargs):
         choices = [
             AntiChanges.vm_test,
-            AntiChanges.byte_check,
+            # AntiChanges.byte_check,
             AntiChanges.first_line_echo_check,
         ]
 
-        return random.choice(choices)()
+        return random.choice(choices)(False)
 
     @staticmethod
     def ads_spammer(code: list, *args, **kwargs) -> list:
