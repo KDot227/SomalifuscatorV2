@@ -22,7 +22,7 @@ if not os.path.exists(conf_file):
     "bloat": true,
     "remove_blank_lines": true,
     "super_obf": false,
-    "FUD": false,
+    "FUD": true,
     "debug": false,
     "key": "NONE"
 }"""
