@@ -14,6 +14,7 @@ from util.supporting.settings import log, all_
 
 from util.methods.anti_methods.anti_changes import AntiChanges
 from util.methods.anti_methods.anti_s_screen import AntiSScreen
+from util.methods.anti_methods.anti_console import AntiConsole
 
 from util.methods.common.common import make_random_string, random_capitalization, pogdog
 
@@ -272,6 +273,9 @@ class Obfuscator:
 
                 if all_.bloat:
                     out = pogdog(out)
+
+                if all_.anti_console:
+                    out = AntiConsole.main(out)
 
                 if not all_.debug and self.utf_16_bom:
                     out = [f"{Obfuscate_Single('>nul 2>&1 && exit >nul 2>&1 || cls').out()}\n"] + out

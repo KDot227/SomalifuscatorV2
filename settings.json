@@ -4,8 +4,9 @@
     "bloat": true,
     "remove_blank_lines": true,
     "super_obf": false,
-    "debug": false,
+    "debug": true,
     "smartscreen_bypass": true,
+    "anti_console": true,
     "FUD": true,
     "key": "NONE"
 }

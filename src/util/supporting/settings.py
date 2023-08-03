@@ -23,6 +23,7 @@ if not os.path.exists(conf_file):
     "remove_blank_lines": true,
     "super_obf": false,
     "smartscreen_bypass": false,
+    "anti_console": false,
     "FUD": true,
     "debug": false,
     "key": "NONE"

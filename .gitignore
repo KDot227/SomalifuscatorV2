@@ -1,14 +1,9 @@
 main.exe
 *.bak
-debug1_2.bat
-debug1.bat
-debug2.bat
-debug3.bat
-debug4.bat
 *.bat.*
 __pycache__
 somalifuscator.log
-tests/test*.bat
+tests/test*_obf.bat
 src_paid
 test_all.bat
 fun_stuff/
