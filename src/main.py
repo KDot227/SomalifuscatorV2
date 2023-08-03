@@ -19,7 +19,7 @@ install()
 from argparse import ArgumentParser
 
 
-__version__ = "1.0.4"
+__version__ = "1.1.0"
 
 
 class Main:
@@ -42,6 +42,9 @@ class Main:
 
         # show main ui
         self.ui.main_ui()
+
+        # hot asf settings
+        Ui.pretty_print_settings()
 
         # get file location
         self.file_location = self.ui.get_user_file()

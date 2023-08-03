@@ -1,6 +1,11 @@
-import os, sys, time
+import os
+import sys
+import time
+import json
 
 from util.methods.common.common import console
+
+from util.supporting.settings import conf_file
 
 try:
     from tkinter import Tk
@@ -55,6 +60,15 @@ class Ui:
         Clears the console screen.
         """
         os.system("cls")
+
+    @staticmethod
+    def pretty_print_settings() -> None:
+        with open(conf_file, "r") as f:
+            settings = json.load(f)
+        print(Align.center(f"Settings: {conf_file}"))
+        print(Align.center(f"{'-' * 20}"))
+        for key, value in settings.items():
+            print(Align.center(f"{key}: {value}"))
 
     def main_ui(self) -> None:
         """

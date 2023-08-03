@@ -1,12 +1,11 @@
 {
     "chinese": false,
-    "hidden": false,
     "bloat": true,
     "remove_blank_lines": true,
     "super_obf": false,
-    "debug": true,
     "smartscreen_bypass": true,
-    "anti_console": true,
+    "hidden": true,
     "FUD": true,
+    "debug": true,
     "key": "NONE"
 }

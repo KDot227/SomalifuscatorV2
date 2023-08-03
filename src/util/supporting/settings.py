@@ -18,12 +18,11 @@ if not os.path.exists(conf_file):
         f.write(
             """{
     "chinese": false,
-    "hidden": false,
     "bloat": true,
     "remove_blank_lines": true,
     "super_obf": false,
     "smartscreen_bypass": false,
-    "anti_console": false,
+    "hidden": false,
     "FUD": true,
     "debug": false,
     "key": "NONE"
