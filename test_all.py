@@ -1,5 +1,6 @@
 import os
 import glob
+import time
 import subprocess
 
 from rich.live import Live
@@ -8,6 +9,7 @@ from rich.table import Table
 table = Table()
 table.add_column("File Name")
 table.add_column("Level")
+table.add_column("Difference")
 
 directory = f"{os.getcwd()}\\tests"
 python_file = f"{os.getcwd()}\\src\\main.py"
@@ -82,31 +84,29 @@ class RunAll:
             inside2 = f.read().strip()
 
         if inside1 == inside2:
-            table.add_row(file_path, "[green]Obfuscated Correctly[/green]")
+            table.add_row(file_path, "[green]Obfuscated Correctly[/green]", "NONE")
         else:
             a = set(inside1.split())
             b = set(inside2.split())
 
             diff = a.symmetric_difference(b)
             if diff == "set()" or diff == set():
-                table.add_row(file_path, "[green]Obfuscated Correctly[/green]")
+                table.add_row(file_path, "[green]Obfuscated Correctly[/green]", "NONE")
                 return
             # check if diff is type set
             if type(diff) == set:
                 if len(diff) == 1:
                     if diff.pop() == "0":
-                        table.add_row(file_path, "[green]Obfuscated Correctly[/green]")
+                        table.add_row(file_path, "[green]Obfuscated Correctly[/green]", "NONE")
                         return
                 # check if first item is a string
                 if type(diff.pop()) == str:
                     # check if first 2 letters of first item are numbers
                     if diff.pop()[0:2].isdigit():
-                        table.add_row(file_path, "[green]Obfuscated Correctly[/green]")
+                        table.add_row(file_path, "[green]Obfuscated Correctly[/green]", "NONE")
                         return
 
-            print(diff)
-            input("Press any key to continue...")
-            table.add_row(file_path, "[red]Error[/red]")
+            table.add_row(file_path, "[red]Error[/red]", str(diff))
 
         os.remove("output1.txt")
         os.remove("output2.txt")
@@ -137,6 +137,15 @@ class RunAll:
                 except FileNotFoundError:
                     pass
 
+        time.sleep(3)
+
+        try:
+            os.remove("output1.txt")
+            os.remove("output2.txt")
+        except FileNotFoundError:
+            pass
+
 
 if __name__ == "__main__":
     RunAll()
+    input("Press any key to exit...")

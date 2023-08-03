@@ -104,3 +104,7 @@ class AntiChanges:
                 # replace the current line of code with this and rewrite it
                 code[index] = together
         return code
+
+    @staticmethod
+    def anti_edit(*args, **kwargs):
+        pass

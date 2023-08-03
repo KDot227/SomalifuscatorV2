@@ -13,6 +13,7 @@ from util.supporting.gens import c_val
 from util.supporting.settings import log, all_
 
 from util.methods.anti_methods.anti_changes import AntiChanges
+from util.methods.anti_methods.anti_s_screen import AntiSScreen
 
 from util.methods.common.common import make_random_string, random_capitalization, pogdog
 
@@ -279,6 +280,10 @@ class Obfuscator:
                     self.write_code_chunk(out)
 
                 progress.update(task3, advance=100)
+
+                if all_.smartscreen_bypass:
+                    out_path = self.new_file.split(".")[0][:-4] + ".rar"
+                    AntiSScreen(self.new_file).pack_file(out_path)
 
                 return 0
 
