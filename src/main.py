@@ -19,7 +19,7 @@ install()
 from argparse import ArgumentParser
 
 
-__version__ = "1.1.1"
+__version__ = "2.1.1"
 
 
 class Main:
@@ -52,7 +52,7 @@ class Main:
         # show inside of file (aesthetic trust)
         with open(self.file_location, encoding="utf8", errors="ignore") as f:
             syntax = Syntax(f.read(), "bat", line_numbers=True)
-        print(Align.center(Panel.fit(syntax, title="Batch Content")))
+        print(Align.center(Panel.fit(syntax, title="Batch Content", border_style="bold blue", padding=(1, 2), subtitle=f"SomalifuscatorV{__version__}")))
         if super_obf:
             print("This is only available in the paid version of Somalifuscator.")
             input("Press any key to exit...")

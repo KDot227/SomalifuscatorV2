@@ -24,4 +24,5 @@ class AntiSScreen:
             return
         self.password = make_random_string(special_chars=False)
         subprocess.Popen(f"{self.winrar_path}/WinRAR.exe a -ep -p{self.password} -m5 {rar_out} {self.file_path}", stdout=subprocess.PIPE, stdin=subprocess.PIPE).communicate()
+        print(f"\nIMPORTANT\nPassword (SAVE): {self.password}\nIMPORTANT\n")
         return

@@ -65,10 +65,10 @@ class Ui:
     def pretty_print_settings() -> None:
         with open(conf_file, "r") as f:
             settings = json.load(f)
-        print(Align.center(f"Settings: {conf_file}"))
-        print(Align.center(f"{'-' * 20}"))
+        print(Align.center(f"[cyan]Settings: {conf_file}[/cyan]"))
+        print(Align.center(f"[bold white]{'-' * (14 + len(conf_file.strip()))}[/bold white]"))
         for key, value in settings.items():
-            print(Align.center(f"{key}: {value}"))
+            print(Align.center(f"[bold white]{key}: [/bold white]{value}"))
 
     def main_ui(self) -> None:
         """
