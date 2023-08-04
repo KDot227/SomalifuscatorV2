@@ -274,7 +274,7 @@ class Obfuscator:
                 if all_.bloat:
                     out = pogdog(out)
 
-                if all_.anti_console:
+                if all_.hidden:
                     out = AntiConsole.main(out)
 
                 if not all_.debug and self.utf_16_bom:
@@ -288,6 +288,7 @@ class Obfuscator:
                 if all_.smartscreen_bypass:
                     out_path = self.new_file.split(".")[0][:-4] + ".rar"
                     AntiSScreen(self.new_file).pack_file(out_path)
+                    os.remove(self.new_file)
 
                 return 0
 
