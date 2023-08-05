@@ -1,4 +1,5 @@
 import os
+import io
 import random
 
 
@@ -12,6 +13,13 @@ checked = False
 class AntiChanges:
     @staticmethod
     def first_line_echo_check(c_check: bool = True, *args, **kwargs) -> str:
+        """
+        This function checks to see 2 things.
+        1.) Is the user running with double click
+        2.) Do echo commands exist in the file.
+
+        If either of these are true it will exit the file.
+        """
         random_bat_name = make_random_string((5, 6), False)
         if all_.debug or not c_check:
             return "\n"
@@ -22,31 +30,6 @@ class AntiChanges:
         other_command = 'echo %cmdcmdline% | find /i "%~f0">nul || exit /b 1\n'
 
         return other_command + command
-
-    @staticmethod
-    def anti_check_error(code: list, *args, **kwargs) -> list:
-        """This just checks to see if the first byte of the file is the utf-16 BOM. If it is then it clears screen otherwise it exits."""
-        strung = ">nul 2>&1 && exit >nul 2>&1 || cls \n@echo off\n"
-        strung = Obfuscate_Single(strung, simple=True).out()
-        code.insert(0, strung)
-
-        # There is a 99% chance I could have just used .encode() but im just lazy like that if u gotta problem wit it make a pr
-
-        with open("placeholder.bat", "w", encoding="utf-8", errors="ignore") as f:
-            f.writelines(code)
-        with open("placeholder.bat", "rb") as f:
-            code = f.read()
-
-        os.remove("placeholder.bat")
-
-        out_hex = []
-
-        # lowkey overkill lmao
-        out_hex.extend(["FF", "FE", "26", "63", "6C", "73", "0D", "0A", "FF", "FE"])
-
-        out_hex.extend(["{:02X}".format(b) for b in code])
-
-        return out_hex
 
     @staticmethod
     def byte_check(*args, **kwargs) -> str:

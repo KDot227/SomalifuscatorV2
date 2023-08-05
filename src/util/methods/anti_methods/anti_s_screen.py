@@ -12,12 +12,23 @@ class AntiSScreen:
         self.winrar_path = "C:/Program Files/WinRAR"
 
     def check_winrar(self) -> bool:
+        """Checks if WinRAR is installed.
+
+        Returns:
+            bool: True if WinRAR is installed, False otherwise.
+        """
         if os.path.exists(f"{self.winrar_path}/WinRAR.exe"):
             return True
         else:
             return False
 
-    def pack_file(self, rar_out) -> None:
+    def pack_file(self, rar_out: str) -> None:
+        """If winrar is installed it will pack the file with a random password.
+        This is important because in windows if a rar file is compressed with best and is password locked (encrypted) it will not be detected by smart screen.
+
+        Args:
+            rar_out str: Path to the rar file to be created.
+        """
         if not self.check_winrar():
             print("WinRAR is not installed.")
             input("Press any key to exit...")

@@ -7,6 +7,9 @@ class AntiConsole:
 
     @staticmethod
     def main(code: list) -> list:
+        """
+        Restarts the bat file so there is no console at all (hidden)
+        """
         vbs_code = """if defined redo goto :KDOTUP
 set "redo=1"
 echo CreateObject("Wscript.Shell").Run "%~f0", 0, True > temp.vbs
