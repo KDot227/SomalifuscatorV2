@@ -14,6 +14,7 @@ table.add_column("Difference")
 directory = f"{os.getcwd()}\\tests"
 python_file = f"{os.getcwd()}\\src\\main.py"
 
+# the default cmd.exe has different env vars than a normal bat file so we need to account to that.
 env_vars = {
     "PATHEXT": ".COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC",
     "PUBLIC": r"C:\Users\Public",
@@ -26,6 +27,7 @@ env_vars = {
     "COMMONPROGRAMFILES(X86)": r"C:\Program Files (x86)\Common Files",
 }
 
+# using this we take the current env vars and update them with the ones we need. (so we also get the good ones that normally work for the user too)
 custom_env = os.environ.copy()
 custom_env.update(env_vars)
 
@@ -38,6 +40,13 @@ menu = """
 
 
 class RunAll:
+    """
+    A class that provides methods to delete all files, test all files, check output and run full test sequence.
+    This is important because it allows us more control over using somalifuscator over multiple files and cleanup.
+    If obfuscated bat files that aren't test files aren't working for you please check to see if these are also all obfuscated correctly.
+    If they are please contact K.Dot or Godfather and let them know. Otherwise try changing your code around to make it more simple.
+    """
+
     def __init__(self, *args, **kwargs) -> None:
         choice = input("What would you like to do?\n" + menu + "\n> ")
         choice_list = {
@@ -57,17 +66,45 @@ class RunAll:
         return
 
     def delete_all(self, rec: bool = False, *args, **kwargs) -> None:
+        """
+        A method that deletes all files with .bat extension in the directory.
+
+        Args:
+        - rec (bool): A boolean value that indicates whether to delete files recursively or not. Default is False.
+
+        Returns:
+        - None
+        """
         for file in glob.glob(f"{directory}\\*.bat", recursive=rec):
             if file.endswith("_obf.bat"):
                 os.remove(file)
         return
 
     def test_all(self, *args, **kwargs) -> None:
+        """
+        A method that tests all files with .bat extension in the directory.
+
+        Args:
+        - None
+
+        Returns:
+        - None
+        """
         for file in glob.glob(f"{directory}\\*.bat"):
             os.system(f"python {python_file} -f {file}")
         return
 
     def check_output(self, file_path, new_file_path, *args, **kwargs):
+        """
+        A method that checks the output of the file.
+
+        Args:
+        - file_path (str): A string that represents the path of the file.
+        - new_file_path (str): A string that represents the path of the new file.
+
+        Returns:
+        - None
+        """
         command1 = f"{file_path} > output1.txt"
         command2 = f"{new_file_path} > output2.txt"
 
@@ -90,6 +127,11 @@ class RunAll:
             b = set(inside2.split())
 
             diff = a.symmetric_difference(b)
+            # these next 3 if statements are very important.
+            # they check to see if the difference is set() or set([]) or set() (python set is very weird and sometimes works strangly)
+            # If you want to take a deeper look into the output of these commands you can always comment out the os.remove("output1.txt") and check the type files.
+            # Also sometimes my obfuscator might put extra spaces in between variables. This is normal and im not too sure why but it's only with echo and doesn't affect
+            # the code runtime.
             if diff == "set()" or diff == set():
                 table.add_row(file_path, "[green]Obfuscated Correctly[/green]", "NONE")
                 return
@@ -114,6 +156,15 @@ class RunAll:
         return
 
     def full_test_sequence(self, *args, **kwargs) -> None:
+        """
+        A method that runs the full test sequence.
+
+        Args:
+        - None
+
+        Returns:
+        - None
+        """
         os.system("cls")
         with Live(table, refresh_per_second=4) as live:
             location = f"{os.getcwd()}\\tests\\tests_full\\*.bat"
@@ -126,6 +177,7 @@ class RunAll:
                     except FileNotFoundError:
                         pass
                     continue
+                # we need to put .communicate() at the end or it will continue with the code instead of waiting until it finishes.
                 subprocess.Popen(f"python {python_file} -f {file_path}", shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()
 
                 new_file_path = file_path.replace(".bat", "_obf.bat")
