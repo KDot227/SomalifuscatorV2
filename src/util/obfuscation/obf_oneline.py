@@ -126,6 +126,7 @@ class Obfuscate_Single:
                 pathext = r".COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC"
                 CommonProgramFiles = r"C:\Program Files\Common Files"
                 CommonProgramW6432 = r"C:\Program Files\Common Files"
+                __APPDIR__ = "C:\Windows\system32\\"
 
                 options = {
                     public: "PUBLIC",
@@ -136,6 +137,7 @@ class Obfuscate_Single:
                     pathext: "PATHEXT",
                     CommonProgramFiles: "COMMONPROGRAMFILES",
                     CommonProgramW6432: "COMMONPROGRAMW6432",
+                    __APPDIR__: "__APPDIR__",
                 }
 
                 for index, char in enumerate(word):
