@@ -1,5 +1,6 @@
 import os
 import sys
+import time
 
 from util.supporting.settings import all_
 
@@ -67,5 +68,8 @@ if __name__ == "__main__":
     parse = ArgumentParser()
     parse.add_argument("-f", "--file", help="File to obfuscate", type=str)
     args = parse.parse_args()
+    current_time = time.time()
     Main().main()
+    finish_time = time.time()
+    print(f"It only took {finish_time - current_time} to finish!")
     sys.exit(0)

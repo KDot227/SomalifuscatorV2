@@ -1,4 +1,6 @@
 from util.supporting.gens import c_val
+from util.supporting.settings import log
+
 from util.methods.common.common import *
 from util.methods.encryption_methods.cesar_cypher import CaesarCipher
 
@@ -126,6 +128,8 @@ def ran3(char, random_order: str, *args, **kwargs) -> str:
     :param random_order: A string used to seed the random number generator.
     :return: A string containing a valid environment variable with obfuscated code inserted.
     """
+    allowed_chars = string.ascii_letters + string.digits + "():\\"
+
     public = r"C:\Users\Public"
     weird = r"C:\Program Files (x86)\Common Files"
     program_1 = r"C:\Program Files"
@@ -171,6 +175,15 @@ def ran3(char, random_order: str, *args, **kwargs) -> str:
             ran2,
         ]
     )
+
+    if not char in allowed_chars:
+        # %public:C:\Users\Public=echo test%
+        random_corosponding = random.choice(corosponding)
+        coro_index = corosponding.index(random_corosponding)
+        all_list = list_of_all[coro_index]
+        out_start = f"%{random_corosponding}:{all_list}={char}%"
+        log.debug("ran3")
+        return out_start
 
     # Generate obfuscated code
 

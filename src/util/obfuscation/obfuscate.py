@@ -313,19 +313,15 @@ class Obfuscator:
                 f.writelines(array)
 
     def convert_code_chunk_and_write_bytes(self, code_chunk: list) -> None:
-        out_hex = []
-        out_hex.extend(["FF", "FE", "26", "63", "6C", "73", "0D", "0A", "FF", "FE"])
+        out_hex = ["FF", "FE", "26", "63", "6C", "73", "0D", "0A", "FF", "FE"]
 
-        self.write_code_chunk(code_chunk)
-
-        with open(self.new_file, "rb") as f:
-            code = f.read()
-
-        out_hex.extend(["{:02X}".format(b) for b in code])
+        # Convert code_chunk to bytes and append to out_hex
+        for array in code_chunk:
+            for string in array:
+                out_hex.extend(string.encode("utf-8").hex().upper())
 
         with open(self.new_file, "wb") as f:
-            for i in out_hex:
-                f.write(bytes.fromhex(i))
+            f.write(bytes.fromhex("".join(out_hex)))
 
     @staticmethod
     def gen_ran_special() -> str:
