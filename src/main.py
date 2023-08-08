@@ -44,7 +44,7 @@ class Main:
         # show main ui
         self.ui.main_ui()
 
-        # hot asf settings
+        # hot asf settingsz
         Ui.pretty_print_settings()
 
         # get file location
@@ -58,7 +58,7 @@ class Main:
             print("This is only available in the paid version of Somalifuscator.")
             input("Press any key to exit...")
         else:
-            Obfuscator(self.file_location)
+            Obfuscator(self.file_location, double_click_check=all_.double_click_check, utf_16_bom=all_.utf_16_bom)
             input("Press any key to exit...")
 
         return

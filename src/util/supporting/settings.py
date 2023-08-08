@@ -21,6 +21,8 @@ if not os.path.exists(conf_file):
     "bloat": true,
     "remove_blank_lines": true,
     "super_obf": false,
+    "double_click_check": false,
+    "utf_16_bom": true,
     "smartscreen_bypass": false,
     "hidden": false,
     "FUD": true,
