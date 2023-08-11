@@ -27,9 +27,6 @@ class Main:
     def main(self):
         super_obf = all_.super_obf
         if any([args.file]):
-            # with open(args.file, encoding="utf8", errors="ignore") as f:
-            #    file_content = f.read()
-            # print(Align.center(Panel.fit(file_content, title="Batch Content")))
             Obfuscator(args.file, double_click_check=False, utf_16_bom=False)
             return
 

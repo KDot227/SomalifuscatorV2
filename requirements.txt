@@ -2,5 +2,3 @@ rich
 BatchParse
 requests
 kdot
-pystyle
-colorama

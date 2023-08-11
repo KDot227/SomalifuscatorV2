@@ -2,7 +2,7 @@
 cd /d "%~dp0"
 
 color 0a
-title Somalifuscator
+title SomalifuscatorV2
 cls
 
 set "python_path=%localappdata%\Programs\Python"
@@ -41,11 +41,6 @@ if not %errorlevel% == 0 (
 
 python -m pip install -r requirements.txt --upgrade
 
-if "%~2" NEQ "" (
-    pushd old_somalifuscator
-    python -m main -f %~1 -m %~2 %~3
-    popd
-)
 if "%~1"=="" (
     pushd src
     python -m main
