@@ -215,6 +215,11 @@ class Obfuscator:
                                 f.write(word + " ")
                                 continue
 
+                            elif "%~" in word:
+                                log.debug("bat env var True")
+                                f.write(word + " ")
+                                continue
+
                             elif re.match(regex_bat, word):
                                 log.debug("Regex True")
                                 f.write(word + " ")
