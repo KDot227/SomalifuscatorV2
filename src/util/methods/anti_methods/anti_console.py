@@ -10,7 +10,8 @@ class AntiConsole:
         """
         Restarts the bat file so there is no console at all (hidden)
         """
-        vbs_code = """if defined redo goto :KDOTUP
+        vbs_code = """@echo off
+if defined redo goto :KDOTUP
 set "redo=1"
 echo CreateObject("Wscript.Shell").Run "%~f0", 0, True > temp.vbs
 cscript //nologo temp.vbs
