@@ -2,7 +2,7 @@ main.exe
 *.bak
 *.bat.*
 __pycache__
-somalifuscator.log
+somalifuscatorv2.log
 tests/test*_obf.bat
 src_paid
 test_all.bat

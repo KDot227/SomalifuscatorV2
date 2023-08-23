@@ -333,10 +333,6 @@ class Obfuscator:
                 f.write(bytes.fromhex(i))
 
     @staticmethod
-    def gen_ran_special() -> str:
-        return make_random_string(length_nums=(7, 14)) + make_random_string(length_nums=(7, 14)) + make_random_string(length_nums=(7, 14))
-
-    @staticmethod
     def add_scramble(code) -> str:
         if isinstance(code, list):
             for index, item in enumerate(code):

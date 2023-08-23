@@ -56,10 +56,7 @@ class RunAll:
             "4": self.delete_all,
         }
 
-        if choice_list[choice] == 4:
-            args1 = True
-        else:
-            args1 = None
+        args1 = True if choice == "4" else False
 
         choice_list[choice](args1)
 
@@ -75,9 +72,11 @@ class RunAll:
         Returns:
         - None
         """
-        for file in glob.glob(f"{directory}\\*.bat", recursive=rec):
-            if file.endswith("_obf.bat"):
-                os.remove(file)
+        remove_endings = ["_obf.bat", ".rar"]
+        for root, dirs, files in os.walk(directory, topdown=rec):
+            for file in files:
+                if any([file.endswith(x) for x in remove_endings]):
+                    os.remove(os.path.join(root, file))
         return
 
     def test_all(self, *args, **kwargs) -> None:
@@ -142,11 +141,14 @@ class RunAll:
                         table.add_row(file_path, "[green]Obfuscated Correctly[/green]", "NONE")
                         return
                 # check if first item is a string
-                if type(diff.pop()) == str:
-                    # check if first 2 letters of first item are numbers
-                    if diff.pop()[0:2].isdigit():
-                        table.add_row(file_path, "[green]Obfuscated Correctly[/green]", "NONE")
-                        return
+                try:
+                    if type(diff.pop()) == str:
+                        # check if first 2 letters of first item are numbers
+                        if diff.pop()[0:2].isdigit():
+                            table.add_row(file_path, "[green]Obfuscated Correctly[/green]", "NONE")
+                            return
+                except KeyError:
+                    pass
 
             table.add_row(file_path, "[red]Error[/red]", str(diff))
 
@@ -199,5 +201,7 @@ class RunAll:
 
 
 if __name__ == "__main__":
-    RunAll()
-    input("Press any key to exit...")
+    while True:
+        RunAll()
+        input("Press any key to continue...")
+        os.system("cls")

@@ -1,5 +1,7 @@
 @echo off
 
+pause
+
 echo test > test.txt
 type test.txt
 echo test >> test.txt

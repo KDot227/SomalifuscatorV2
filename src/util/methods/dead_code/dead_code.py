@@ -174,6 +174,8 @@ class DeadCode:
             "wscript /b",
             # "C:\Windows\System32\cmd.exe /D /C ''",
             "rundll32",
+            # This will also force clear command history
+            "doskey /listsize=0",
         ]
 
         return random.choice(commands)
