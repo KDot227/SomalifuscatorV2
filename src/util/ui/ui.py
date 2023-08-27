@@ -95,7 +95,7 @@ class Ui:
             # make sure file is bat file
             self.file_path = fd.askopenfilename(
                 title="Select a batch file",
-                filetypes=[("Batch Files", "*.bat")],
+                filetypes=[("Batch Files", ("*.bat", "*.cmd"))],
                 initialdir=os.getcwd(),
                 parent=root,
             )
