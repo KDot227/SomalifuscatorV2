@@ -20,14 +20,14 @@ install()
 from argparse import ArgumentParser
 
 
-__version__ = "2.1.2"
+__version__ = "2.1.3"
 
 
 class Main:
     def main(self):
-        current_time = time.time()
         super_obf = all_.super_obf
         if any([args.file]):
+            current_time = time.time()
             Obfuscator(args.file, double_click_check=False, utf_16_bom=False)
             finish_time = time.time()
             print(f"It only took {finish_time - current_time} to finish!")
@@ -49,6 +49,8 @@ class Main:
 
         # get file location
         file_location = self.ui.get_user_file()
+
+        current_time = time.time()
 
         # show inside of file (aesthetic trust)
         with open(file_location, encoding="utf8", errors="ignore") as f:

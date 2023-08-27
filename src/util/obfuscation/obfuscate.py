@@ -276,6 +276,7 @@ class Obfuscator:
 
                 out = [Obfuscate_Single("@echo off\n", simple=False).out()] + fuck_up_code
 
+                # sometimes this breaks the syntax of commands so be careful!!!
                 if all_.bloat:
                     out = pogdog(out)
 
