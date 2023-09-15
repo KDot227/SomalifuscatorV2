@@ -127,7 +127,7 @@ class RunAll:
 
             diff = a.symmetric_difference(b)
             # these next 3 if statements are very important.
-            # they check to see if the difference is set() or set([]) or set() (python set is very weird and sometimes works strangly)
+            # they check to see if the difference is set() or set([]) or set() (python set is very weird and sometimes works strangly (I also have no idea how it works ngl))
             # If you want to take a deeper look into the output of these commands you can always comment out the os.remove("output1.txt") and check the type files.
             # Also sometimes my obfuscator might put extra spaces in between variables. This is normal and im not too sure why but it's only with echo and doesn't affect
             # the code runtime.

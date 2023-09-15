@@ -18,7 +18,7 @@ if not os.path.exists(conf_file):
         f.write(
             """{
     "chinese": false,
-    "bloat": true,
+    "bloat": false,
     "remove_blank_lines": true,
     "super_obf": false,
     "double_click_check": false,

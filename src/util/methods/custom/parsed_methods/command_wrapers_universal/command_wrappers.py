@@ -95,7 +95,7 @@ class CommandWrappers:
             CommonProgramFiles_x86,
             CommonProgramW6432,
         ]
-        corosponding = [
+        corresponding = [
             "PUBLIC",
             "COMMONPROGRAMFILES(X86)",
             "PROGRAMFILES",
@@ -107,9 +107,9 @@ class CommandWrappers:
             "COMMONPROGRAMW6432",
         ]
 
-        random_path = random.choice(corosponding)
-        corosponding_index = corosponding.index(random_path)
-        out = list_of_all[corosponding_index]
+        random_path = random.choice(corresponding)
+        corresponding_index = corresponding.index(random_path)
+        out = list_of_all[corresponding_index]
         valid_text = f"%{random_path}:{out}=%{command}"
 
         return valid_text
