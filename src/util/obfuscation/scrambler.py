@@ -1,3 +1,4 @@
+import re
 import random
 
 from util.methods.math_methods.bit_math import Bit_Math
@@ -7,7 +8,7 @@ from util.methods.anti_methods.anti_changes import AntiChanges
 
 class Scrambler:
     def __init__(self):
-        pass
+        self.scramble_regex = r":[0-9]+"
 
     def scramble(self, code: list) -> list:
         """Take a list or arrays and scramble the ones that can be scrambled. This is the main function for this class.
@@ -40,6 +41,8 @@ class Scrambler:
 
         # we need to add "goto :EOF" that way the last line of code doesn't repeat forever
         self.before_code_array.append(f"{Obfuscate_Single('goto :EOF').out()}\n")
+
+        self.after_code_array = self.flood(self.after_code_array)
 
         return self.before_code_array + self.after_code_array
 
@@ -88,6 +91,27 @@ class Scrambler:
         for array in list_to_shuffle:
             out_array += str(array)
         return out_array
+
+    def flood(self, code_arrays: list) -> list:
+        self.good_values = {}
+        for index, array in enumerate(code_arrays):
+            main_string = array[0].splitlines()
+            for sub_string in main_string:
+                # see if self.scramble_regex matches the sub_string
+                if not re.match(self.scramble_regex, sub_string):
+                    continue
+                # last line has a space and we dont be liking that
+                self.good_values[index] = sub_string[:-1]
+        for key, value in self.good_values.items():
+            key_range = list(range(key + 1, len(code_arrays)))
+            if len(key_range) <= 3:
+                continue
+            # add value to random values in code_arrays that appear in the key range
+            random_ammount = random.randint(1, 3)
+            for _ in range(random_ammount):
+                random_index = random.choice(key_range)
+                code_arrays[random_index].append(value + "\n")
+        return code_arrays
 
     @staticmethod
     def random_anti_method() -> str:
