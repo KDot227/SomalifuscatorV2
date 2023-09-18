@@ -17,7 +17,7 @@ class SetBat:
         #    return Obfuscate_Single(CommandWrappers.outside_command(args)).out()
 
         methods = [
-            SetBat.for_loop,
+            # SetBat.for_loop,
             SetBat.if_statement,
             # SetBat.ads,
         ]
