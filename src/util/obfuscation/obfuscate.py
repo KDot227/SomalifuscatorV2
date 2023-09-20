@@ -48,6 +48,9 @@ class Obfuscator:
         self.new_file = f"{file[:-4]}_obf.bat"
         self.double_click = double_click_check
         self.utf_16_bom = utf_16_bom
+
+        self.echo_var = "@echo off" if not all_.debug else "@echo on"
+
         self.obfuscate(file)
 
     @staticmethod
@@ -82,6 +85,9 @@ class Obfuscator:
 
             with open(file, "r", encoding="utf8", errors="ignore") as f:
                 self.data = f.readlines()
+                # replace all instances of @echo off with the echo var
+                if all_.debug:
+                    self.data = [s.replace("@echo off", self.echo_var) for s in self.data]
                 if all_.remove_blank_lines:
                     self.data = list(filter(lambda x: x.strip() != "", self.data))
 
@@ -111,7 +117,7 @@ class Obfuscator:
                 characters = string.ascii_letters + string.digits
                 random_order = "".join(random.sample(characters, len(characters)))
 
-                f.write(Obfuscate_Single(code1, simple=False).out() + "\n")
+                f.write(Obfuscate_Single(code1.replace("@echo off", self.echo_var), simple=False).out() + "\n")
                 f.write(Obfuscate_Single(code2, simple=False).out() + "\n")
                 f.write(Obfuscate_Single(code3, simple=False).out() + "\n")
 
@@ -266,15 +272,17 @@ class Obfuscator:
 
                 # current_code = AntiChanges.ads_spammer(current_code)
 
-                if all_.debug:
-                    fuck_up_code = [s.replace("TO_SCRAMBLE_PLZ", "") for s in current_code]
-                else:
-                    scrambler = Scrambler()
-                    fuck_up_code = scrambler.scramble(current_code)
+                # if all_.debug:
+                #    fuck_up_code = [s.replace("TO_SCRAMBLE_PLZ", "") for s in current_code]
+                # else:
+                #    scrambler = Scrambler()
+                #    fuck_up_code = scrambler.scramble(current_code)
+                scrambler = Scrambler()
+                fuck_up_code = scrambler.scramble(current_code)
 
                 progress.update(task2, advance=100)
 
-                out = [Obfuscate_Single("@echo off\n", simple=False).out()] + fuck_up_code
+                out = [Obfuscate_Single(f"{self.echo_var}\n", simple=False).out()] + fuck_up_code
 
                 # sometimes this breaks the syntax of commands so be careful!!!
                 if all_.bloat:
