@@ -20,7 +20,7 @@ install()
 from argparse import ArgumentParser
 
 
-__version__ = "2.1.5"
+__version__ = "2.2.0"
 
 
 class Main:

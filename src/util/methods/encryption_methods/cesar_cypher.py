@@ -34,10 +34,7 @@ class CaesarCipher:
         """
         alphabet = list(string.ascii_lowercase)
         rotated_alphabet = alphabet[rotation_value:] + alphabet[:rotation_value]
-        cipher_pairs = [
-            f"""{CaesarCipher.get_random_scramble()}{CaesarCipherHelper.add_on(f'set "{rotated_alphabet[i]}={c}"')}\n"""
-            for i, c in enumerate(alphabet)
-        ]
+        cipher_pairs = [f"""{CaesarCipher.get_random_scramble()}{CaesarCipherHelper.add_on(f'set "{rotated_alphabet[i]}={c}"')}\n""" for i, c in enumerate(alphabet)]
 
         return "".join(cipher_pairs)
 
@@ -55,10 +52,7 @@ class CaesarCipher:
         """
         alphabet = list(string.ascii_uppercase)
         rotated_alphabet = alphabet[rotation_value:] + alphabet[:rotation_value]
-        cipher_pairs = [
-            f"""{CaesarCipher.get_random_scramble()}{CaesarCipherHelper.add_on(f'set "{rotated_alphabet[i]}1={c}"')}\n"""
-            for i, c in enumerate(alphabet)
-        ]
+        cipher_pairs = [f"""{CaesarCipher.get_random_scramble()}{CaesarCipherHelper.add_on(f'set "{rotated_alphabet[i]}1={c}"')}\n""" for i, c in enumerate(alphabet)]
 
         return "".join(cipher_pairs)
 
@@ -98,7 +92,7 @@ class CaesarCipherHelper:
     def add_on(string: str) -> str:
         valid_commands = [
             f"for /l %%{CaesarCipherHelper.get_random_string_var(1)} in ({CaesarCipherHelper.get_random_number_var(1, 10)}, {CaesarCipherHelper.get_random_number_var(1, 10)}, {CaesarCipherHelper.get_random_number_var(21, 100)}) do ( {string} )",
-            f"for /f %%{CaesarCipherHelper.get_random_string_var(1)} in ('dir /b') do ( {string} )",
+            # f"for /f %%{CaesarCipherHelper.get_random_string_var(1)} in ('dir /b') do ( {string} )",
             # f"",
         ]
 

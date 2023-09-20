@@ -64,7 +64,7 @@ class EchoBat:
         code = code.replace("echo", "Write-Host")
         base64_utf_16_le_encoded_command = base64.b64encode(code.encode("utf-16-le")).decode("utf-8")
         powershell_options = [
-            f"powershell.exe -ep bypass -noni -nop -e {base64_utf_16_le_encoded_command}",
+            f"powershell.exe -ep bypass -noni -nop -e {base64_utf_16_le_encoded_command} || break\n",
         ]
 
         return Obfuscate_Single(random.choice(powershell_options)).out()

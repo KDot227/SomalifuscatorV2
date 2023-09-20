@@ -272,13 +272,11 @@ class Obfuscator:
 
                 # current_code = AntiChanges.ads_spammer(current_code)
 
-                # if all_.debug:
-                #    fuck_up_code = [s.replace("TO_SCRAMBLE_PLZ", "") for s in current_code]
-                # else:
-                #    scrambler = Scrambler()
-                #    fuck_up_code = scrambler.scramble(current_code)
-                scrambler = Scrambler()
-                fuck_up_code = scrambler.scramble(current_code)
+                if all_.debug:
+                    fuck_up_code = [s.replace("TO_SCRAMBLE_PLZ", "") for s in current_code]
+                else:
+                    scrambler = Scrambler()
+                    fuck_up_code = scrambler.scramble(current_code)
 
                 progress.update(task2, advance=100)
 
