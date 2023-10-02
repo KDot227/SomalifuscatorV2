@@ -52,9 +52,9 @@ class AntiChanges:
         return random.choice(codes)
 
     @staticmethod
-    def anti_wifi() -> str:
+    def anti_wifi(*args, **kwargs) -> str:
         if all_.require_wifi:
-            return Obfuscate_Single('ping -n 2 -w 700 www.google.com | find "bytes=" > nul || exit').out()
+            return 'ping -n 2 -w 700 www.google.com | find "bytes=" > nul || exit'
         return ""
 
     @staticmethod

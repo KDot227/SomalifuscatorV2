@@ -25,7 +25,7 @@ if not os.path.exists(conf_file):
     "utf_16_bom": true,
     "smartscreen_bypass": false,
     "hidden": false,
-    "require_wifi": false,
+    "require_wifi": true,
     "FUD": true,
     "debug": false,
     "key": "NONE"

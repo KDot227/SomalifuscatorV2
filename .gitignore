@@ -10,3 +10,4 @@ fun_stuff/
 *.rar
 settings.json
 obf
+simple_debug.py

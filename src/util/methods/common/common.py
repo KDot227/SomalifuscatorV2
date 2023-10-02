@@ -82,19 +82,6 @@ def random_single_carrot(string):
         raise TypeError("string must be a string or bool")
 
 
-def random_oct_hex(ans: int):
-    choices = [hex(ans), oct(ans), ans]
-    decided = random.choice(choices)
-    if decided == oct(ans):
-        return f"0{str(decided[2:])}"
-    elif decided == hex(ans):
-        if random_quotes := random.choice([True, False]):
-            return f'"{str(decided)}"'
-        return decided
-    else:
-        return decided
-
-
 def random_semi_and_comma(string):
     symbols = [";", ",", " ", "     "]
     random_symbols = "".join(random.choice(symbols) for _ in range(random.randint(3, 7)))

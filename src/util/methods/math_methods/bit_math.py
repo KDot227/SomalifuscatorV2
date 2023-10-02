@@ -1,82 +1,41 @@
 import random
-
-from util.methods.common.common import random_oct_hex
+import primefac
 
 
 class Bit_Math:
     def generate_math_problem(self, answer: int) -> tuple:
-        """Entire point of this is to make a math problem for the set /a. We do this cause kids need a calculator but once they see that there are octals and hexadecimals they'll prolly give up lmao"""
-        # no division since we don't want floats BUT we can use division in the answer since its how you undo multiplication
-        # but im not gonna do this cause it still makes floats and im slow
-        operators = ["+", "-"]
-        opp1 = random.choice(operators)
-        opp2 = random.choice(operators)
-        num1 = random.randint(10000, 10000000)
-        num2 = random.randint(10000, 10000000)
+        # return 1 = problem, 2 = answer
 
-        # maybe add division and multiplication to the problem using even dividers and getting remainder to check if zero.
+        answer_nums = list(primefac.primefac(answer))
 
-        problem = f"{answer} {opp1} {num1} {opp2} {num2}"
-        ans = eval(problem)
+        for index, num in enumerate(answer_nums):
+            if num > 200:
+                answer_nums[index] = str(self.random_pick(num=num, hex_check=True))
 
-        # make new problem from original answer
+        num1 = answer_nums[0]
+        count = answer_nums.count(num1)
 
-        if opp1 == "+":
-            opp1 = "-"
-        else:
-            opp1 = "+"
+        if count >= 6:
+            # remove all occurences of num1
+            for _ in range(count):
+                answer_nums.remove(num1)
+            num1 = num1**count
+            answer_nums = [num1] + answer_nums
 
-        if opp2 == "+":
-            opp2 = "-"
-        else:
-            opp2 = "+"
+        result = " * ".join(str(i) for i in answer_nums)
 
-        # randomly do hex or oct to ans instead of all just hex
-        choices = [True, False]
-        problem2 = f"{random_oct_hex(ans) if random.choice(choices) else self.random_pick(ans)} {opp1} {random_oct_hex(num1) if random.choice(choices) else self.random_pick(num1)} {opp2} {random_oct_hex(num2) if random.choice(choices) else self.random_pick(num2)}"
-        problem23 = f"{ans} {opp1} {num1} {opp2} {num2}"
+        result = result.replace(" ", "")
 
-        ans2 = eval(problem23)
+        return (result, answer)
 
-        while ans < 0:
-            operators = ["+", "-"]
-            opp1 = random.choice(operators)
-            opp2 = random.choice(operators)
-            num1 = random.randint(10000, 10000000)
-            num2 = random.randint(10000, 10000000)
-
-            problem = f"{answer} {opp1} {num1} {opp2} {num2}"
-            ans = eval(problem)
-
-            # make new problem from original answer
-
-            if opp1 == "+":
-                opp1 = "-"
-            else:
-                opp1 = "+"
-
-            if opp2 == "+":
-                opp2 = "-"
-            else:
-                opp2 = "+"
-
-            # for some reason if number is negative only hex will work idk why and im not tryna figure it out
-            # mental health > octals
-            problem2 = f"{hex(ans)} {opp1} {random_oct_hex(num1)} {opp2} {random_oct_hex(num2)}"
-            problem23 = f"{ans} {opp1} {num1} {opp2} {num2}"
-
-            ans2 = eval(problem23)
-
-        return problem2, ans2
-
-    def random_pick(self, num) -> str:
+    def random_pick(self, num, hex_check=True) -> str:
         choices = [
             self.make_xor,
             self.make_not,
             # self.shift_left,
             # self.shift_right,
         ]
-        return random.choice(choices)(num)
+        return random.choice(choices)(num, hex_check=hex_check)
 
     @staticmethod
     def make_xor(number: int, hex_check: bool = True) -> str:
@@ -127,3 +86,29 @@ class Bit_Math:
 #
 #    num_return = ans << 1
 #    return f"{num_return}"
+
+
+def random_oct_hex(ans: int):
+    choices = [hex(ans), oct(ans)]
+    decided = random.choice(choices)
+    if decided == oct(ans):
+        return f"0{str(decided[2:])}"
+    elif decided == hex(ans):
+        if random.choice([True, False]):
+            return f'"{str(decided)}"'
+        return decided
+    else:
+        return decided
+
+
+if __name__ == "__main__":
+    numbers = list(range(100000, 10000000))
+    hundred_random = random.choices(numbers, k=10000)
+    for i in hundred_random:
+        equation = Bit_Math().generate_math_problem(i)
+        evaulated = eval(equation[0])
+        if i != evaulated:
+            print(equation)
+            print(evaulated)
+            print("ERROR")
+            break
