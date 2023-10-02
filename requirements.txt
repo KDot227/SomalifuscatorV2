@@ -2,3 +2,4 @@ rich
 BatchParse
 requests
 kdot
+primefac
