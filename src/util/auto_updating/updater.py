@@ -100,13 +100,11 @@ class AutoUpdate:
             self.prompt_for_update(new_version)
 
 if __name__ == "__main__":
-    # change these variables so the main script provides them :>
     CURRENT_VERSION = "1.0.0"
-    UPDATE_URL = "https://raw.githubusercontent.com/KDot227/SomalifuscatorV2/main/src/main.py"
-    GITHUB_URL = "https://github.com/KDot227/SomalifuscatorV2"
-    ZIP_URL = "https://github.com/KDot227/SomalifuscatorV2/archive/refs/tags/Bat2Exe_Method1.zip"
-    TAR_URL = "https://github.com/KDot227/SomalifuscatorV2/archive/refs/tags/Bat2Exe_Method1.tar.gz"
+    UPDATE_URL = "https://raw.githubusercontent.com/YourUsername/YourRepo/main/src/main.py"
+    GITHUB_URL = "https://github.com/YourUsername/YourRepo"
+    ZIP_URL = "https://github.com/YourUsername/YourRepo/archive/refs/tags/YourTag.zip"
+    TAR_URL = "https://github.com/YourUsername/YourRepo/archive/refs/tags/YourTag.tar.gz"
 
-    # this is just so uk how run it :>
     auto_updater = AutoUpdate(CURRENT_VERSION, UPDATE_URL, GITHUB_URL, ZIP_URL, TAR_URL)
     auto_updater.check_for_updates()
