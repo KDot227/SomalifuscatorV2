@@ -21,7 +21,7 @@ class AutoUpdate:
         try:
             response = requests.get(self.update_url)
             response.raise_for_status()
-            if "__version__" not in response.text:  # Edge Case 1
+            if "__version__" not in response.text:
                 print("Invalid update source: missing version information.")
                 return None
             return response.text
@@ -50,19 +50,19 @@ class AutoUpdate:
         try:
             response = requests.get(download_url)
             response.raise_for_status()
-            with open(archive_path, 'wb') as f:  # Logic Error Fix
+            with open(archive_path, 'wb') as f:
                 f.write(response.content)
 
             if platform.system() == 'Windows':
                 try:
-                    with zipfile.ZipFile(archive_path, 'r') as zip_ref:  # Edge Case 2
+                    with zipfile.ZipFile(archive_path, 'r') as zip_ref:
                         zip_ref.extractall('.')
                 except zipfile.BadZipFile:
                     print("Corrupted ZIP archive. Update failed.")
                     return
             else:
                 try:
-                    with tarfile.open(archive_path, 'r:gz') as tar_ref:  # Edge Case 2
+                    with tarfile.open(archive_path, 'r:gz') as tar_ref:
                         tar_ref.extractall('.')
                 except tarfile.ReadError:
                     print("Corrupted TAR.GZ archive. Update failed.")
@@ -70,7 +70,6 @@ class AutoUpdate:
 
             os.remove(archive_path)
 
-            # Edge Case 3
             if not os.path.exists(self.license):
                 print("Update failed: Files not properly extracted.")
                 return
@@ -83,7 +82,6 @@ class AutoUpdate:
         print(f"New version available: {new_version}")
         print("Please go to the GitHub page to download the new version.")
         
-        # Edge Case 4
         while True:
             choice = input("Would you like me to take you there or download it for you? (y/n/download): ").lower()
             if choice in ['y', 'n', 'download']:
