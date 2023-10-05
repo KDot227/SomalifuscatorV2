@@ -7,6 +7,7 @@ import zipfile
 import tarfile
 import platform
 import shutil
+from typing import Optional
 
 class AutoUpdate:
     def __init__(self, current_version: str, update_url: str, github_url: str, zip_url: str, tar_url: str) -> None:
@@ -15,9 +16,8 @@ class AutoUpdate:
         self.github_url = github_url
         self.zip_url = zip_url
         self.tar_url = tar_url
-        self.license = os.path.join(os.getcwd(), 'LICENSE')
 
-    def fetch_latest_code(self) -> str:
+    def fetch_latest_code(self) -> Optional[str]:
         try:
             response = requests.get(self.update_url)
             response.raise_for_status()
@@ -25,11 +25,11 @@ class AutoUpdate:
                 print("Invalid update source: missing version information.")
                 return None
             return response.text
-        except requests.RequestException:
-            print("Failed to fetch the latest code. Please check your internet connection.")
+        except requests.RequestException as e:
+            print(f"Failed to fetch the latest code: {e}")
             return None
 
-    def extract_version(self, code: str) -> str:
+    def extract_version(self, code: str) -> Optional[str]:
         version_string = "__version__ = "
         try:
             version = code.split(version_string)[1].split('"')[1]
@@ -38,7 +38,7 @@ class AutoUpdate:
             print("Failed to extract version from the fetched code.")
             return None
 
-    def download_and_extract(self):
+    def download_and_extract(self) -> None:
         archive_path = 'update_archive'
         if platform.system() == 'Windows':
             archive_path += '.zip'
@@ -54,29 +54,20 @@ class AutoUpdate:
                 f.write(response.content)
 
             if platform.system() == 'Windows':
-                try:
-                    with zipfile.ZipFile(archive_path, 'r') as zip_ref:
-                        zip_ref.extractall('.')
-                except zipfile.BadZipFile:
-                    print("Corrupted ZIP archive. Update failed.")
-                    return
+                with zipfile.ZipFile(archive_path, 'r') as zip_ref:
+                    zip_ref.extractall('.')
             else:
-                try:
-                    with tarfile.open(archive_path, 'r:gz') as tar_ref:
-                        tar_ref.extractall('.')
-                except tarfile.ReadError:
-                    print("Corrupted TAR.GZ archive. Update failed.")
-                    return
-
+                with tarfile.open(archive_path, 'r:gz') as tar_ref:
+                    tar_ref.extractall('.')
+            
             os.remove(archive_path)
 
-            if not os.path.exists(self.license):
+            if not any(os.path.isfile(os.path.join(root, 'LICENSE')) for root, _, files in os.walk('.')):
                 print("Update failed: Files not properly extracted.")
                 return
 
-        except requests.RequestException:
-            print("Failed to download the update archive.")
-            return
+        except (requests.RequestException, zipfile.BadZipFile, tarfile.ReadError) as e:
+            print(f"Failed to download or extract the update archive: {e}")
 
     def prompt_for_update(self, new_version: str) -> None:
         print(f"New version available: {new_version}")
@@ -89,23 +80,20 @@ class AutoUpdate:
             print("Invalid option. Please enter y, n, or download.")
 
         if choice == 'y':
-            print("Taking you there...")
-            time.sleep(1)
             webbrowser.open(self.github_url)
             sys.exit(0)
         elif choice == 'download':
-            print("Downloading and extracting the new version...")
             self.download_and_extract()
             print("Update complete. Please restart the application.")
             sys.exit(0)
 
     def check_for_updates(self) -> None:
         latest_code = self.fetch_latest_code()
-        if not latest_code:
+        if latest_code is None:
             return
         
         new_version = self.extract_version(latest_code)
-        if not new_version:
+        if new_version is None:
             return
 
         if new_version != self.current_version:
