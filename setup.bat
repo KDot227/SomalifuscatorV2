@@ -49,7 +49,7 @@ if "%~1"=="" (
     pushd src
     python -m main -f %~1
     popd
+    pause
 )
 
-pause
 exit /b 0
