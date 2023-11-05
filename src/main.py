@@ -28,7 +28,7 @@ class Main:
         super_obf = all_.super_obf
         if any([args.file]):
             current_time = time.time()
-            Obfuscator(args.file, double_click_check=False, utf_16_bom=False)
+            Obfuscator(args.file, double_click_check=False, utf_16_bom=True)
             finish_time = time.time()
             print(f"It only took {finish_time - current_time} to finish!")
             return
