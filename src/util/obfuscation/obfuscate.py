@@ -256,6 +256,9 @@ class Obfuscator:
                                             ran2(char, random_order=random_order),
                                             ran3(char, random_order=random_order),
                                         ]
+                                        if "%CAPITALIZATION%" in line:
+                                            random_obf.pop(1)
+                                            random_obf.pop(1)
                                         f.write(random.choice(random_obf))
                                         pass
                                 f.write(" ")
