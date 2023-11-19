@@ -185,7 +185,7 @@ class Obfuscator:
                         parsed_dict = parsed_line[1]
 
                         methods_to_call = {
-                            "echo": EchoBat.echo_bat,
+                            #"echo": EchoBat.echo_bat,
                             # "for": ForBat.for_bat,
                             # "if": IfBat.if_bat,
                             # "set": SetBat.set_bat,
@@ -354,3 +354,8 @@ class Obfuscator:
                 item = item.replace(item, "TO_SCRAMBLE_PLZ" + item)
                 code[index] = item
             return "\n".join(code)
+
+
+if __name__ == "__main__":
+    print("KDot this is a message to yourself to grow a brain and stop running the wrong file.")
+    os._exit(1)
