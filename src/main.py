@@ -28,7 +28,7 @@ class Main:
         super_obf = all_.super_obf
         if any([args.file]):
             current_time = time.time()
-            Obfuscator(args.file, double_click_check=False, utf_16_bom=True)
+            Obfuscator(args.file, double_click_check=False, utf_16_bom=not args.no_utf_16_bom)
             finish_time = time.time()
             print(f"It only took {finish_time - current_time} to finish!")
             return
@@ -69,6 +69,7 @@ class Main:
 if __name__ == "__main__":
     parse = ArgumentParser()
     parse.add_argument("-f", "--file", help="File to obfuscate", type=str)
+    parse.add_argument("-nu", "--no-utf-16-bom", help="No UTF-16 BOM", action="store_true")
     args = parse.parse_args()
     Main().main()
     sys.exit(0)
