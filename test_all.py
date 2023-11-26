@@ -1,6 +1,7 @@
 import os
 import glob
 import time
+import difflib
 import subprocess
 
 from rich.live import Live
@@ -111,46 +112,22 @@ class RunAll:
         t2 = subprocess.Popen(command2, shell=True, env=custom_env, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
         # wait for process to finish
-        out1, err1 = t1.communicate()
-        out2, err2 = t2.communicate()
+        _, _ = t1.communicate()
+        _, _ = t2.communicate()
 
         with open("output1.txt", "r", encoding="utf8") as f:
-            inside1 = f.read().strip()
+            a = [line.rstrip("\n") for line in f]
         with open("output2.txt", "r", encoding="utf8") as f:
-            inside2 = f.read().strip()
+            b = [line.rstrip("\n") for line in f]
 
-        if inside1 == inside2:
+        differ = difflib.unified_diff(a, b, lineterm="")
+        differences = list(differ)
+
+        if not differences:
             table.add_row(file_path, "[green]Obfuscated Correctly[/green]", "NONE")
         else:
-            a = set(inside1.split())
-            b = set(inside2.split())
-
-            diff = a.symmetric_difference(b)
-            # these next 3 if statements are very important.
-            # they check to see if the difference is set() or set([]) or set() (python set is very weird and sometimes works strangly (I also have no idea how it works ngl))
-            # If you want to take a deeper look into the output of these commands you can always comment out the os.remove("output1.txt") and check the type files.
-            # Also sometimes my obfuscator might put extra spaces in between variables. This is normal and im not too sure why but it's only with echo and doesn't affect
-            # the code runtime.
-            if diff == "set()" or diff == set():
-                table.add_row(file_path, "[green]Obfuscated Correctly[/green]", "NONE")
-                return
-            # check if diff is type set
-            if type(diff) == set:
-                if len(diff) == 1:
-                    if diff.pop() == "0":
-                        table.add_row(file_path, "[green]Obfuscated Correctly[/green]", "NONE")
-                        return
-                # check if first item is a string
-                try:
-                    if type(diff.pop()) == str:
-                        # check if first 2 letters of first item are numbers
-                        if diff.pop()[0:2].isdigit():
-                            table.add_row(file_path, "[green]Obfuscated Correctly[/green]", "NONE")
-                            return
-                except KeyError:
-                    pass
-
-            table.add_row(file_path, "[red]Error[/red]", str(diff))
+            differences = "\n".join(differences)
+            table.add_row(file_path, "[red]Obfuscated Incorrectly[/red]", differences)
 
         os.remove("output1.txt")
         os.remove("output2.txt")
