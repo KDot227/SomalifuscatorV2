@@ -72,9 +72,9 @@ class EchoBat:
     @staticmethod
     def random_scramble() -> str:
         """
-        This method returns a string that is either "TO_SCRAMBLE_PLZ" or an empty string, depending on a random chance.
+        This method returns a string that is either "%TO_SCRAMBLE_PLZ%" or an empty string, depending on a random chance.
         """
         random_chance = random.choice([True, False])
         if random_chance:
-            return "TO_SCRAMBLE_PLZ"
+            return "%TO_SCRAMBLE_PLZ%"
         return ""

@@ -1,8 +1,6 @@
 import random
 import string
 
-from util.obfuscation.obf_oneline import Obfuscate_Single
-
 
 class DeadCode:
     def dead_code(self) -> str:
@@ -23,7 +21,7 @@ class DeadCode:
 
         choice = random.choice(dead_code_list)()
 
-        return f"{DeadCode.random_scramble()}{Obfuscate_Single(choice).out()}"
+        return f"{DeadCode.random_scramble()}{choice}"
 
     @staticmethod
     def doskey() -> str:
@@ -205,5 +203,5 @@ class DeadCode:
     def random_scramble() -> str:
         t_f = random.choice([True, False])
         if t_f:
-            return "TO_SCRAMBLE_PLZ"
+            return "%TO_SCRAMBLE_PLZ%"
         return ""

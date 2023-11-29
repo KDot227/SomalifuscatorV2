@@ -82,9 +82,9 @@ class AntiChanges:
                 random_point = make_random_string((5, 6), False)
                 while random_point in ads_points:
                     random_point = make_random_string((5, 6), False)
-                command = f"TO_SCRAMBLE_PLZ{Obfuscate_Single('echo').out()} {line} > %~f0:{random_point}\n"
+                command = f"%TO_SCRAMBLE_PLZ%{Obfuscate_Single('echo').out()} {line} > %~f0:{random_point}\n"
                 random_letter = make_random_string((1, 1), False)
-                out_command = f'TO_SCRAMBLE_PLZfor /f "usebackq delims=φ" %%{random_letter} in (%~f0:{random_point}) do %%{random_letter}\n'
+                out_command = f'%TO_SCRAMBLE_PLZ%for /f "usebackq delims=φ" %%{random_letter} in (%~f0:{random_point}) do %%{random_letter}\n'
 
                 # command = Obfuscate_Single(command, simple=False).out()
                 # out_command = Obfuscate_Single(out_command, simple=False).out()

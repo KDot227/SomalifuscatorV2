@@ -22,6 +22,11 @@ class Bit_Math:
             num1 = num1**count
             answer_nums = [num1] + answer_nums
 
+        for item in answer_nums:
+            if isinstance(item, int):
+                index = answer_nums.index(item)
+                answer_nums[index] = random_oct_hex(int(item))
+
         result = " * ".join(str(i) for i in answer_nums)
 
         result = result.replace(" ", "")
@@ -32,9 +37,9 @@ class Bit_Math:
         choices = [
             self.make_xor,
             self.make_not,
-            # self.shift_left,
-            # self.shift_right,
+            self.random_bit_shift,
         ]
+        # chances 2 to 1
         return random.choice(choices)(num, hex_check=hex_check)
 
     @staticmethod
@@ -58,11 +63,14 @@ class Bit_Math:
         fixed2 = random2 ^ ans
         if hex_check:
             return f"({random_oct_hex(random2)} ^^ {random_oct_hex(fixed2)})"
+            # random2 = X
+            # fixed2 = Y
+            # return f"({random2} ^| {fixed2}) - ({random2} ^& {fixed2})"
         else:
             return f"({hex(random2)} ^^ {hex(fixed2)})"
 
     @staticmethod
-    def make_not(number: int, hex_check: bool = True) -> str:
+    def make_not(number: int, *args, **kwargs) -> str:
         """makes and key"""
 
         ans = number
@@ -71,24 +79,29 @@ class Bit_Math:
             return random_oct_hex(number)
 
         num_return = -ans - 1
-        return f"~{num_return}"
+        return f"~{random_oct_hex(num_return)}"
 
-    # @staticmethod
-    # def shift_left(number: int, hex_check: bool = True) -> str:
-    #    """makes shift left key"""
+    @staticmethod
+    def random_bit_shift(number: int, hex_check: bool = True) -> str:
+        """makes shift left key"""
+        ans = number
 
+        if ans < 0:
+            return random_oct_hex(number)
 
-#
-#    ans = number
-#
-#    if ans < 0:
-#        return random_oct_hex(number)
-#
-#    num_return = ans << 1
-#    return f"{num_return}"
+        random_number_through = random.choice(list(range(2, 10)))
+
+        generated = ans << random_number_through
+
+        if generated > 25:
+            generated = Bit_Math.make_xor(generated, hex_check=True)
+
+        return f"({generated} ^>^> {random_number_through})"
 
 
 def random_oct_hex(ans: int):
+    if ans < 3:
+        return str(ans)
     choices = [hex(ans), oct(ans)]
     decided = random.choice(choices)
     if decided == oct(ans):

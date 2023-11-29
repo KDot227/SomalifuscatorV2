@@ -20,7 +20,7 @@ def escape_batch(code: str) -> str:
 
 def random_scramble() -> str:
     if random.choice([True, False]):
-        return "TO_SCRAMBLE_PLZ"
+        return "%TO_SCRAMBLE_PLZ%"
     return ""
 
 

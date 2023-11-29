@@ -27,8 +27,8 @@ class Scrambler:
         self.code = code
         for line in self.code:
             # Do other important checks here
-            if line.startswith("TO_SCRAMBLE_PLZ"):
-                line2 = line.replace("TO_SCRAMBLE_PLZ", "")
+            if line.startswith("%TO_SCRAMBLE_PLZ%"):
+                line2 = line.replace("%TO_SCRAMBLE_PLZ%", "")
                 output = self.full_scramble(line2)
                 self.before_code_array.append(output)
                 continue
@@ -40,7 +40,7 @@ class Scrambler:
             self.shuffler(self.after_code_array)
 
         # we need to add "goto :EOF" that way the last line of code doesn't repeat forever
-        self.before_code_array.append(f"{Obfuscate_Single('goto :EOF').out()}\n")
+        self.before_code_array.append(f"goto :EOF\n")
 
         self.after_code_array = self.flood(self.after_code_array)
 
@@ -66,15 +66,15 @@ class Scrambler:
         math_problem = set_command_values[0]
 
         # first value we add in before code this goes to the code and allows it to go back to the normal part of the script
-        set_command = Obfuscate_Single(f"set /a ans={math_problem}\ngoto %ans%\n:{self.escape_label}\n").out()
+        set_command = Obfuscate_Single(f"set /a ans={math_problem}\ngoto %ans%\n:{self.escape_label}\n", simple=False).out()
 
         # first value we add in after code
         out_command_values = self.bit_math.generate_math_problem(self.escape_label)
         math_problem2 = out_command_values[0]
-        second_set_command = Obfuscate_Single(f":{pointer_value}\n").out()
+        second_set_command = Obfuscate_Single(f":{pointer_value}\n", simple=False).out()
         lined = f"{line}\n"
 
-        last = Obfuscate_Single(f"set /a ans={math_problem2}\n{self.random_anti_method()}goto %ans%\n").out()
+        last = Obfuscate_Single(f"set /a ans={math_problem2}\n{self.random_anti_method()}goto %ans%\n", simple=False).out()
         # we make this a array so we can scramble it later and so it won't interfere with any of the other code and stay in its own place
         label_code = [second_set_command + lined + last]
 

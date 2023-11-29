@@ -31,11 +31,11 @@ from rich.progress import SpinnerColumn, Progress, TimeElapsedColumn
 
 letter_assignments_cypher = CaesarCipher.both(c_val.value)
 
-code1 = f"TO_SCRAMBLE_PLZ@echo off"
+code1 = f"%TO_SCRAMBLE_PLZ%@echo off"
 code2 = f"{CaesarCipher.both(c_val.value)}"
-code3 = "TO_SCRAMBLE_PLZchcp 65001 > nul"
+code3 = "%TO_SCRAMBLE_PLZ%chcp 65001 > nul"
 
-# TO_SCRAMBLE_PLZ
+# %TO_SCRAMBLE_PLZ%
 
 
 class Obfuscator:
@@ -124,13 +124,13 @@ class Obfuscator:
                 # if not all_.super_obf:
                 #    f.write(
                 #        Obfuscate_Single(
-                #            f'TO_SCRAMBLE_PLZif not defined KDOT ( set KDOT={random_order} & cmd /c "%~f0" %* )',
+                #            f'%TO_SCRAMBLE_PLZ%if not defined KDOT ( set KDOT={random_order} & cmd /c "%~f0" %* )',
                 #            simple=False,
                 #        ).out()
                 #        + "\n"
                 #    )
                 # else:
-                f.write(f"TO_SCRAMBLE_PLZset KDOT={random_order}\n")
+                f.write(f"%TO_SCRAMBLE_PLZ%set KDOT={random_order}\n")
 
                 regex_bat = re.compile(r"\w+=[^=]*%\w+%\b|\w+=[^=]*%\w+%\B")
                 regex2 = re.compile(r"%(\w+)%")
@@ -185,7 +185,7 @@ class Obfuscator:
                         parsed_dict = parsed_line[1]
 
                         methods_to_call = {
-                            #"echo": EchoBat.echo_bat,
+                            # "echo": EchoBat.echo_bat,
                             # "for": ForBat.for_bat,
                             # "if": IfBat.if_bat,
                             # "set": SetBat.set_bat,
@@ -252,9 +252,9 @@ class Obfuscator:
 
                                     else:
                                         random_obf = [
-                                            ran1(char),
+                                            # ran1(char),
                                             ran2(char, random_order=random_order),
-                                            ran3(char, random_order=random_order),
+                                            # ran3(char, random_order=random_order),
                                         ]
                                         if "%CAPITALIZATION%" in line:
                                             random_obf.pop(1)
@@ -276,7 +276,7 @@ class Obfuscator:
                 # current_code = AntiChanges.ads_spammer(current_code)
 
                 if all_.debug:
-                    fuck_up_code = [s.replace("TO_SCRAMBLE_PLZ", "") for s in current_code]
+                    fuck_up_code = [s.replace("%TO_SCRAMBLE_PLZ%", "") for s in current_code]
                 else:
                     scrambler = Scrambler()
                     fuck_up_code = scrambler.scramble(current_code)
@@ -346,15 +346,15 @@ class Obfuscator:
     def add_scramble(code) -> str:
         if isinstance(code, list):
             for index, item in enumerate(code):
-                # replace the string with TO_SCRAMBLE_PLZ + the string and apply it to add_scramble
-                item = item.replace(item, "TO_SCRAMBLE_PLZ" + item)
+                # replace the string with %TO_SCRAMBLE_PLZ% + the string and apply it to add_scramble
+                item = item.replace(item, "%TO_SCRAMBLE_PLZ%" + item)
                 code[index] = item
             return "\n".join(code)
         else:
             code = code.split("\n")
             for index, item in enumerate(code):
-                # replace the string with TO_SCRAMBLE_PLZ + the string and apply it to add_scramble
-                item = item.replace(item, "TO_SCRAMBLE_PLZ" + item)
+                # replace the string with %TO_SCRAMBLE_PLZ% + the string and apply it to add_scramble
+                item = item.replace(item, "%TO_SCRAMBLE_PLZ%" + item)
                 code[index] = item
             return "\n".join(code)
 

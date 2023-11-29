@@ -7,6 +7,8 @@ cls
 
 set "python_path=%localappdata%\Programs\Python"
 
+echo %python_path%
+
 if not exist "%python_path%" (
     echo "would you like to install python? (y/n)"
     set /p "install_python="
@@ -41,15 +43,12 @@ if not %errorlevel% == 0 (
 
 python -m pip install -r requirements.txt --upgrade
 
-if "%~1"=="" (
-    pushd src
-    python -m main
-    popd
-    pause
-) else (
-    pushd src
-    python -m main -f %~1
-    popd
+pushd src
+python -m main
+popd
+
+if %USERNAME%==this1 (
+    pyclean .
 )
 
 exit /b 0

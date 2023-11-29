@@ -80,7 +80,7 @@ class CaesarCipher:
         """
         random_choice = random.choice([True, False])
         if random_choice:
-            return "TO_SCRAMBLE_PLZ"
+            return "%TO_SCRAMBLE_PLZ%"
         return ""
 
 
@@ -93,7 +93,7 @@ class CaesarCipherHelper:
         valid_commands = [
             f"for /l %%{CaesarCipherHelper.get_random_string_var(1)} in ({CaesarCipherHelper.get_random_number_var(1, 10)}, {CaesarCipherHelper.get_random_number_var(1, 10)}, {CaesarCipherHelper.get_random_number_var(21, 100)}) do ( {string} )",
             # f"for /f %%{CaesarCipherHelper.get_random_string_var(1)} in ('dir /b') do ( {string} )",
-            # f"",
+            f"{string}",
         ]
 
         return random.choice(valid_commands)

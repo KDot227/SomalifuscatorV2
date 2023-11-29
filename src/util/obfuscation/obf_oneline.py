@@ -33,17 +33,17 @@ class Obfuscate_Single:
         if isinstance(self.code, list):
             if self.simple:
                 for line in self.code:
-                    if "TO_SCRAMBLE_PLZ" in line:
-                        line = line.replace("TO_SCRAMBLE_PLZ", "")
-                        self.out_code += "TO_SCRAMBLE_PLZ" + self.obfuscate_simple(line) + "\n"
+                    if "%TO_SCRAMBLE_PLZ%" in line:
+                        line = line.replace("%TO_SCRAMBLE_PLZ%", "")
+                        self.out_code += "%TO_SCRAMBLE_PLZ%" + self.obfuscate_simple(line) + "\n"
                     else:
                         self.out_code += self.obfuscate_simple(line) + "\n"
                 return self.out_code
             else:
                 for line in self.code:
-                    if "TO_SCRAMBLE_PLZ" in line:
-                        line = line.replace("TO_SCRAMBLE_PLZ", "")
-                        self.out_code += "TO_SCRAMBLE_PLZ" + self.obfuscate_normal(line) + "\n"
+                    if "%TO_SCRAMBLE_PLZ%" in line:
+                        line = line.replace("%TO_SCRAMBLE_PLZ%", "")
+                        self.out_code += "%TO_SCRAMBLE_PLZ%" + self.obfuscate_normal(line) + "\n"
                     else:
                         self.out_code += self.obfuscate_normal(line) + "\n"
                 return self.out_code
@@ -52,30 +52,30 @@ class Obfuscate_Single:
                 if self.code.count("\n") > 1:
                     self.code = self.code.splitlines()
                     for line in self.code:
-                        if "TO_SCRAMBLE_PLZ" in line:
-                            line = line.replace("TO_SCRAMBLE_PLZ", "")
-                            self.out_code += "TO_SCRAMBLE_PLZ" + self.obfuscate_simple(line) + "\n"
+                        if "%TO_SCRAMBLE_PLZ%" in line:
+                            line = line.replace("%TO_SCRAMBLE_PLZ%", "")
+                            self.out_code += "%TO_SCRAMBLE_PLZ%" + self.obfuscate_simple(line) + "\n"
                         else:
                             self.out_code += self.obfuscate_simple(line) + "\n"
                     return self.out_code
-                if "TO_SCRAMBLE_PLZ" in self.code:
-                    self.code = self.code.replace("TO_SCRAMBLE_PLZ", "")
-                    return "TO_SCRAMBLE_PLZ" + self.obfuscate_simple(self.code) + "\n"
+                if "%TO_SCRAMBLE_PLZ%" in self.code:
+                    self.code = self.code.replace("%TO_SCRAMBLE_PLZ%", "")
+                    return "%TO_SCRAMBLE_PLZ%" + self.obfuscate_simple(self.code) + "\n"
                 else:
                     return self.obfuscate_simple(self.code) + "\n"
             else:
                 if self.code.count("\n") > 1:
                     self.code = self.code.splitlines()
                     for line in self.code:
-                        if "TO_SCRAMBLE_PLZ" in line:
-                            line = line.replace("TO_SCRAMBLE_PLZ", "")
-                            self.out_code += "TO_SCRAMBLE_PLZ" + self.obfuscate_normal(line) + "\n"
+                        if "%TO_SCRAMBLE_PLZ%" in line:
+                            line = line.replace("%TO_SCRAMBLE_PLZ%", "")
+                            self.out_code += "%TO_SCRAMBLE_PLZ%" + self.obfuscate_normal(line) + "\n"
                         else:
                             self.out_code += self.obfuscate_normal(line) + "\n"
                     return self.out_code
-                if "TO_SCRAMBLE_PLZ" in self.code:
-                    self.code = self.code.replace("TO_SCRAMBLE_PLZ", "")
-                    return "TO_SCRAMBLE_PLZ" + self.obfuscate_normal(self.code) + "\n"
+                if "%TO_SCRAMBLE_PLZ%" in self.code:
+                    self.code = self.code.replace("%TO_SCRAMBLE_PLZ%", "")
+                    return "%TO_SCRAMBLE_PLZ%" + self.obfuscate_normal(self.code) + "\n"
                 else:
                     return self.obfuscate_normal(self.code) + "\n"
 
@@ -187,7 +187,7 @@ class Obfuscate_Single:
         regex_bat = re.compile(r"\w+=[^=]*%\w+%\b|\w+=[^=]*%\w+%\B")
         regex2 = re.compile(r"%(\w+)%")
         for word in char_line.split():
-            if word.startswith("TO_SCRAMBLE_PLZ"):
+            if word.startswith("%TO_SCRAMBLE_PLZ%"):
                 final_string += f"{word} "
                 continue
             if word.startswith(":"):
