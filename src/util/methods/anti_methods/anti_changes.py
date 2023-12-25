@@ -2,7 +2,6 @@ import random
 
 
 from util.methods.common.common import make_random_string
-from util.obfuscation.obf_oneline import Obfuscate_Single
 from util.supporting.settings import all_
 
 checked = False
@@ -36,8 +35,8 @@ class AntiChanges:
             """powershell -NoLogo -NoProfile -ExecutionPolicy Bypass -Command \"$bytes = [System.IO.File]::ReadAllBytes('%~f0') ; if (($bytes[0] -ne 0xFF) -or ($bytes[1] -ne 0xFE) -or ($bytes[2] -ne 0x26)) { Write-Host 'The first 3 bytes of the file are not FF FE 0A.' ; taskkill /F /IM cmd.exe }\"""",
         ]
 
-        choice = random.choice(choices)
-        return choice
+        # choice = random.choice(choices)
+        return choices[0]
 
     @staticmethod
     def vm_test(*args, **kwargs):
@@ -49,7 +48,8 @@ class AntiChanges:
             # """powershell.exe -NoLogo -NoProfile -ExecutionPolicy Bypass -Command "$tr=(Get-WmiObject Win32_ComputerSystem).TotalPhysicalMemory / 1KB ; $trgb=[math]::Round($tr / 1024, 2) ; if ($trgb -lt 8) { Write-Host 'Less than 8gb ram exiting' ; pause }\""""
         ]
         # ill add more one day
-        return random.choice(codes)
+        # return random.choice(codes)
+        return codes[0]
 
     @staticmethod
     def anti_wifi(*args, **kwargs) -> str:
@@ -64,38 +64,15 @@ class AntiChanges:
             AntiChanges.first_line_echo_check,
         ]
 
-        if all_.require_wifi:
-            choices.append(AntiChanges.anti_wifi)
+        # if all_.require_wifi:
+        #    choices.append(AntiChanges.anti_wifi)
         # if all_.utf_16_bom:
         #    choices.append(AntiChanges.byte_check)
 
-        return random.choice(choices)(False)
-
-    @staticmethod
-    def ads_spammer(code: list, *args, **kwargs) -> list:
-        ads_points = {}
-        for index, line in enumerate(code):
-            random_chance = random.randint(1, 10)
-            if random_chance == 1:
-                # replace the line with a ads method that points towards its own scramble
-                line.replace("|", "^|").replace(">", "^>").replace("<", "^<").replace("&", "^&").replace("%", "%%")
-                random_point = make_random_string((5, 6), False)
-                while random_point in ads_points:
-                    random_point = make_random_string((5, 6), False)
-                command = f"%TO_SCRAMBLE_PLZ%{Obfuscate_Single('echo').out()} {line} > %~f0:{random_point}\n"
-                random_letter = make_random_string((1, 1), False)
-                out_command = f'%TO_SCRAMBLE_PLZ%for /f "usebackq delims=φ" %%{random_letter} in (%~f0:{random_point}) do %%{random_letter}\n'
-
-                # command = Obfuscate_Single(command, simple=False).out()
-                # out_command = Obfuscate_Single(out_command, simple=False).out()
-
-                together = command + out_command
-
-                print(together)
-
-                # replace the current line of code with this and rewrite it
-                code[index] = together
-        return code
+        # return the name of the function used too
+        choice = random.choice(choices)
+        output = choice()
+        return (output, choice.__name__)
 
     @staticmethod
     def anti_edit(*args, **kwargs):

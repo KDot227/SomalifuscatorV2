@@ -1,6 +1,8 @@
 import string
 import random
 
+from util.methods.common.common import random_semi_and_comma, random_single_carrot, random_space_ammount
+
 
 class CaesarCipher:
     @staticmethod
@@ -52,6 +54,7 @@ class CaesarCipher:
         """
         alphabet = list(string.ascii_uppercase)
         rotated_alphabet = alphabet[rotation_value:] + alphabet[:rotation_value]
+        # cipher_pairs = [f"""{CaesarCipher.get_random_scramble()}{CaesarCipherHelper.add_on(f'{random_semi_and_comma()}{random_single_carrot('set')}{random_space_ammount()}"{rotated_alphabet[i]}1={c}"')}\n""" for i, c in enumerate(alphabet)]
         cipher_pairs = [f"""{CaesarCipher.get_random_scramble()}{CaesarCipherHelper.add_on(f'set "{rotated_alphabet[i]}1={c}"')}\n""" for i, c in enumerate(alphabet)]
 
         return "".join(cipher_pairs)
@@ -90,8 +93,10 @@ class CaesarCipherHelper:
 
     @staticmethod
     def add_on(string: str) -> str:
+        random_num = CaesarCipherHelper.get_random_number_var(1, 1000)
+        random_var = CaesarCipherHelper.get_random_string_var(1)
         valid_commands = [
-            f"for /l %%{CaesarCipherHelper.get_random_string_var(1)} in ({CaesarCipherHelper.get_random_number_var(1, 10)}, {CaesarCipherHelper.get_random_number_var(1, 10)}, {CaesarCipherHelper.get_random_number_var(21, 100)}) do ( {string} )",
+            f"for /l %%{random_var} in ({random_num}, {random_num}, {random_num}) do ( {string} )",
             # f"for /f %%{CaesarCipherHelper.get_random_string_var(1)} in ('dir /b') do ( {string} )",
             f"{string}",
         ]

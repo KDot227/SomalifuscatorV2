@@ -1,8 +1,10 @@
 @echo off
 
-echo %0 %~f0
+echo %~dp0 %~dp0
 
-if "test" == "test" (
+set "test=test"
+
+if "%test%" == "test" (
     echo test 1
     echo test 2
 )

@@ -126,7 +126,7 @@ class Obfuscate_Single:
                 pathext = r".COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC"
                 CommonProgramFiles = r"C:\Program Files\Common Files"
                 CommonProgramW6432 = r"C:\Program Files\Common Files"
-                __APPDIR__ = "C:\Windows\system32\\"
+                __APPDIR__ = "C:\\Windows\\system32\\"
 
                 options = {
                     public: "PUBLIC",
@@ -189,28 +189,22 @@ class Obfuscate_Single:
         for word in char_line.split():
             if word.startswith("%TO_SCRAMBLE_PLZ%"):
                 final_string += f"{word} "
-                continue
-            if word.startswith(":"):
+            elif word.startswith(":"):
                 final_string += f"{word} "
-                continue
-            if word.startswith("%"):
+            elif word.startswith("%"):
                 final_string += f"{word} "
-                continue
-            if word.find("%~") != -1:
+            elif word.find("%~") != -1:
                 final_string += f"{word} "
-                continue
-            if word.startswith("^") and not self.ignore_carrots:
+            elif word.startswith("^") and not self.ignore_carrots:
                 final_string += f"{word} "
-                continue
-            if word.startswith("::"):
-                continue
-            if re.match(regex_bat, word):
+            elif word.startswith("::"):
+                pass
+            elif re.match(regex_bat, word):
                 final_string += f"{word} "
-                continue
-            if re.match(regex2, word):
+            elif re.match(regex2, word):
                 final_string += f"{word} "
-                continue
-            for char in word:
-                final_string += f"%{make_random_string((7, 9), special_chars=False)}%{char}%{make_random_string((7, 9), special_chars=False)}%"
+            else:
+                for char in word:
+                    final_string += f"%{make_random_string((7, 9), special_chars=False)}%{char}%{make_random_string((7, 9), special_chars=False)}%"
             final_string += " "
         return final_string

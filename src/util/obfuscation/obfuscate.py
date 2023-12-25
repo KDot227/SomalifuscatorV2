@@ -3,10 +3,8 @@ import re
 import random
 import string
 
-import BatchParse
-
 from util.obfuscation.obf_oneline import Obfuscate_Single
-from util.obfuscation.rans import ran1, ran2, ran3
+from util.obfuscation.rans import ran1, ran2
 from util.obfuscation.scrambler import Scrambler
 
 from util.supporting.gens import c_val
@@ -19,11 +17,6 @@ from util.methods.anti_methods.anti_console import AntiConsole
 from util.methods.common.common import make_random_string, random_capitalization, pogdog
 
 from util.methods.encryption_methods.cesar_cypher import CaesarCipher
-
-from util.methods.custom.parsed_methods.echo_bat import EchoBat
-from util.methods.custom.parsed_methods.for_bat import ForBat
-from util.methods.custom.parsed_methods.if_bat import IfBat
-from util.methods.custom.parsed_methods.set_bat import SetBat
 
 from util.methods.dead_code.dead_code import DeadCode
 
@@ -99,7 +92,7 @@ class Obfuscator:
 
             # fmt: off
             self.common_env_vars = [
-                r"%ALLUSERSPROFILE%", r"%APPDATA%", r"%CD%", r"%CMDCMDLINE%", r"%CMDEXTVERSION%", r"%COMPUTERNAME%", r"%COMSPEC%", r"%DATE%", r"%ERRORLEVEL%", r"%HOMEDRIVE%", r"%HOMEPATH%", r"%NUMBER_OF_PROCESSORS%", r"%OS%", r"%PATH%", r"%PATHEXT%", r"%PROCESSOR_ARCHITECTURE%", r"%PROCESSOR_LEVEL%", r"%PROCESSOR_REVISION%", r"%PROMPT%", r"%RANDOM%", r"%SYSTEMDRIVE%", r"%SYSTEMROOT%", r"%TMP%", r"%TEMP%", r"%TIME%", r"%USERDOMAIN%", r"%USERNAME%", r"%USERPROFILE%", r"%WINDIR%", 
+                r"%ALLUSERSPROFILE%", r"%APPDATA%", r"%CD%", r"%CMDCMDLINE%", r"%CMDEXTVERSION%", r"%COMPUTERNAME%", r"%COMSPEC%", r"%DATE%", r"%ERRORLEVEL%", r"%HOMEDRIVE%", r"%HOMEPATH%", r"%NUMBER_OF_PROCESSORS%", r"%OS%", r"%PATH%", r"%PATHEXT%", r"%PROCESSOR_ARCHITECTURE%", r"%PROCESSOR_LEVEL%", r"%PROCESSOR_REVISION%", r"%PROMPT%", r"%RANDOM%", r"%SYSTEMDRIVE%", r"%SYSTEMROOT%", r"%TMP%", r"%TEMP%", r"%TIME%", r"%USERDOMAIN%", r"%USERNAME%", r"%USERPROFILE%", r"%WINDIR%",  r"%localappdata%",
                 r"%0", r"%1", r"%2", r"%3", r"%4", r"%5", r"%6", r"%7", r"%8", r"%9", r"%*", r"%~dp0", r"%~dp1", r"%~dp2", r"%~dp3", r"%~dp4", r"%~dp5", r"%~dp6", r"%~dp7", r"%~dp8", r"%~dp9", r"%~f0", r"%~f1", r"%~f2", r"%~f3", r"%~f4", r"%~f5", r"%~f6", r"%~f7", r"%~f8", r"%~f9", r"%~nx0", r"%~nx1", r"%~nx2", r"%~nx3", r"%~nx4", r"%~nx5", r"%~nx6", r"%~nx7", r"%~nx8", r"%~nx9", r"%~s0", r"%~s1", r"%~s2", r"%~s3", r"%~s4", r"%~s5", r"%~s6", r"%~s7", r"%~s8", r"%~s9", r"%~t0", r"%~t1", r"%~t2", r"%~t3", r"%~t4", r"%~t5", r"%~t6", r"%~t7", r"%~t8", r"%~t9", r"%~x0", r"%~x1", r"%~x2", r"%~x3", r"%~x4", r"%~x5", r"%~x6", r"%~x7", r"%~x8", r"%~x9", r"%~a0",
                 r"%~dpn0",r"%~dpnx0",
             ]
@@ -107,10 +100,9 @@ class Obfuscator:
 
             self.used_env_vars = []
 
-            for env_var in self.common_env_vars:
-                if env_var in self.data:
-                    log.info(f"Found env var: {env_var}")
-                    self.used_env_vars.append(env_var)
+            for line in self.data:
+                if any(env_var.lower() in line.lower() for env_var in self.common_env_vars):
+                    self.used_env_vars.append([env_var for env_var in self.common_env_vars if env_var.lower() in line.lower()][0])
 
             with open(self.new_file, "a+", encoding="utf8", errors="ignore") as f:
                 f.write(random_capitalization("\n::Made by K.Dot using SomalifuscatorV2\n"))
@@ -134,8 +126,7 @@ class Obfuscator:
 
                 regex_bat = re.compile(r"\w+=[^=]*%\w+%\b|\w+=[^=]*%\w+%\B")
                 regex2 = re.compile(r"%(\w+)%")
-
-                PARSE_CODE = BatchParse.parse_heavy(self.data, bsplit_and=False)
+                regex_batch_variable = re.compile(r"(?<!\\)%[^%\s]+%")
 
                 for index, line in enumerate(self.data):
                     log.debug(f"Processing line {index}")
@@ -178,26 +169,7 @@ class Obfuscator:
                     random_dead_code = random.choice(range(1, 2))
                     if random_dead_code == 1 and not echo_check123 and not indents:
                         log.debug("Random dead code True")
-                        f.write(DeadCode().dead_code() + "\n")
-
-                    try:
-                        parsed_line = PARSE_CODE[index]
-                        parsed_dict = parsed_line[1]
-
-                        methods_to_call = {
-                            # "echo": EchoBat.echo_bat,
-                            # "for": ForBat.for_bat,
-                            # "if": IfBat.if_bat,
-                            # "set": SetBat.set_bat,
-                        }
-
-                        if parsed_dict["method"] in methods_to_call and not echo_check123 and not "&" in line:
-                            log.debug("Custom method True")
-                            f.write(methods_to_call[parsed_dict["method"]](parsed_dict) + "\n")
-                            continue
-
-                    except IndexError:
-                        pass
+                        f.write(Obfuscate_Single(DeadCode().dead_code() + "\n").out())
 
                     if line.startswith("::"):
                         log.debug("Comment True")
@@ -211,8 +183,15 @@ class Obfuscator:
 
                     else:
                         for word in line.split():
+                            # check if any of self.used_env_vars are in the line
                             if any(env_var.lower() in word.lower() for env_var in self.used_env_vars):
-                                log.debug("Env var True")
+                                log.debug("env var True")
+                                f.write(word + " ")
+                                continue
+
+                            elif re.search(regex_batch_variable, word):
+                                # had to bust out chat gpt for this one
+                                log.debug("ai is better than me")
                                 f.write(word + " ")
                                 continue
 
@@ -226,12 +205,12 @@ class Obfuscator:
                                 f.write(word + " ")
                                 continue
 
-                            elif re.match(regex_bat, word):
+                            elif re.search(regex_bat, word):
                                 log.debug("Regex True")
                                 f.write(word + " ")
                                 continue
 
-                            elif re.match(regex2, word):
+                            elif re.search(regex2, word):
                                 log.debug("regex2 True")
                                 f.write(word + " ")
                                 continue
@@ -252,7 +231,7 @@ class Obfuscator:
 
                                     else:
                                         random_obf = [
-                                            # ran1(char),
+                                            ran1(char),
                                             ran2(char, random_order=random_order),
                                             # ran3(char, random_order=random_order),
                                         ]
@@ -270,24 +249,20 @@ class Obfuscator:
                 # I could have just use an array for all of this but I like the readability of just writing to files and how easy it is. I could have also used touples but idc that much
                 current_code = self.get_current_code()
 
-                if not all_.super_obf:
-                    current_code.insert(1, Obfuscate_Single(AntiChanges.first_line_echo_check(self.double_click), simple=False).out())
+                current_code.insert(1, Obfuscate_Single(AntiChanges.first_line_echo_check(self.double_click), simple=False).out())
 
                 # current_code = AntiChanges.ads_spammer(current_code)
 
-                if all_.debug:
-                    fuck_up_code = [s.replace("%TO_SCRAMBLE_PLZ%", "") for s in current_code]
-                else:
-                    scrambler = Scrambler()
-                    fuck_up_code = scrambler.scramble(current_code)
+                scrambler = Scrambler()
+                fuck_up_code = scrambler.scramble(current_code, self.double_click)
 
                 progress.update(task2, advance=100)
 
                 out = [Obfuscate_Single(f"{self.echo_var}\n", simple=False).out()] + fuck_up_code
 
                 # sometimes this breaks the syntax of commands so be careful!!!
-                if all_.bloat:
-                    out = pogdog(out)
+                # if all_.bloat and not all_.debug:
+                #    out = pogdog(out)
 
                 if all_.hidden:
                     out = AntiConsole.main(out)
@@ -328,19 +303,17 @@ class Obfuscator:
                 f.writelines(array)
 
     def convert_code_chunk_and_write_bytes(self, code_chunk: list) -> None:
-        out_hex = []
-        out_hex.extend(["FF", "FE", "26", "63", "6C", "73", "0D", "0A", "FF", "FE"])
+        out_hex = ["FF", "FE", "26", "63", "6C", "73", "0D", "0A", "FF", "FE"]
 
         self.write_code_chunk(code_chunk)
 
         with open(self.new_file, "rb") as f:
             code = f.read()
 
-        out_hex.extend(["{:02X}".format(b) for b in code])
+        code = bytes.fromhex("".join(out_hex)) + code
 
         with open(self.new_file, "wb") as f:
-            for i in out_hex:
-                f.write(bytes.fromhex(i))
+            f.write(code)
 
     @staticmethod
     def add_scramble(code) -> str:

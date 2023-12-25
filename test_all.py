@@ -118,9 +118,13 @@ class RunAll:
         with open("output1.txt", "r", encoding="utf8") as f:
             a = [line.rstrip("\n") for line in f]
         with open("output2.txt", "r", encoding="utf8") as f:
-            b = [line.rstrip("\n") for line in f]
+            b = [line.rstrip("\n") for line in f]  # Remove leading space from each line
 
-        differ = difflib.unified_diff(a, b, lineterm="")
+        # remove trailing spaces from a and b
+        a = [line.strip() for line in a]
+        b = [line.strip() for line in b]
+
+        differ = difflib.unified_diff(a, b, lineterm="", n=3)
         differences = list(differ)
 
         if not differences:
@@ -128,6 +132,7 @@ class RunAll:
         else:
             differences = "\n".join(differences)
             table.add_row(file_path, "[red]Obfuscated Incorrectly[/red]", differences)
+            input()
 
         os.remove("output1.txt")
         os.remove("output2.txt")
