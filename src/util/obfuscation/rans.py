@@ -63,7 +63,7 @@ def ran2(char, random_order: str, return_ran1: bool = True, *args, **kwargs) -> 
     CommonProgramFiles = r"C:\Program Files\Common Files"
     CommonProgramFiles_x86 = r"C:\Program Files (x86)\Common Files"
     CommonProgramW6432 = r"C:\Program Files\Common Files"
-    __APPDIR__ = "C:\\WINDOWS\\system32\\"
+    # __APPDIR__ = "C:\\WINDOWS\\system32\\"
     list_of_all = [
         public,
         weird,

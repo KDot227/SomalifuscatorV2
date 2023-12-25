@@ -235,11 +235,7 @@ class Obfuscator:
                                             ran2(char, random_order=random_order),
                                             # ran3(char, random_order=random_order),
                                         ]
-                                        if "%CAPITALIZATION%" in line:
-                                            random_obf.pop(1)
-                                            random_obf.pop(1)
                                         f.write(random.choice(random_obf))
-                                        pass
                                 f.write(" ")
                         f.write(" ")
                     f.write("\n")
@@ -260,7 +256,6 @@ class Obfuscator:
 
                 out = [Obfuscate_Single(f"{self.echo_var}\n", simple=False).out()] + fuck_up_code
 
-                # sometimes this breaks the syntax of commands so be careful!!!
                 # if all_.bloat and not all_.debug:
                 #    out = pogdog(out)
 
