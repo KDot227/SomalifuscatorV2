@@ -8,7 +8,7 @@ from util.obfuscation.rans import ran1, ran2
 from util.obfuscation.scrambler import Scrambler
 
 from util.supporting.gens import c_val
-from util.supporting.settings import log, all_
+from util.supporting.settings import log, Settings
 
 from util.methods.anti_methods.anti_changes import AntiChanges
 from util.methods.anti_methods.anti_s_screen import AntiSScreen
@@ -42,7 +42,7 @@ class Obfuscator:
         self.double_click = double_click_check
         self.utf_16_bom = utf_16_bom
 
-        self.echo_var = "@echo off" if not all_.debug else "@echo on"
+        self.echo_var = "@echo off" if not Settings.debug else "@echo on"
 
         self.obfuscate(file)
 
@@ -79,9 +79,9 @@ class Obfuscator:
             with open(file, "r", encoding="utf8", errors="ignore") as f:
                 self.data = f.readlines()
                 # replace all instances of @echo off with the echo var
-                if all_.debug:
+                if Settings.debug:
                     self.data = [s.replace("@echo off", self.echo_var) for s in self.data]
-                if all_.remove_blank_lines:
+                if Settings.remove_blank_lines:
                     self.data = list(filter(lambda x: x.strip() != "", self.data))
 
             self.cesar_value = c_val.value
@@ -109,9 +109,9 @@ class Obfuscator:
                 characters = string.ascii_letters + string.digits
                 random_order = "".join(random.sample(characters, len(characters)))
 
-                f.write(Obfuscate_Single(code1.replace("@echo off", self.echo_var), simple=False).out() + "\n")
-                f.write(Obfuscate_Single(code2, simple=False).out() + "\n")
-                f.write(Obfuscate_Single(code3, simple=False).out() + "\n")
+                f.write(Obfuscate_Single(code1.replace("@echo off", self.echo_var)).out() + "\n")
+                f.write(Obfuscate_Single(code2).out() + "\n")
+                f.write(Obfuscate_Single(code3).out() + "\n")
 
                 # if not all_.super_obf:
                 #    f.write(
@@ -122,7 +122,7 @@ class Obfuscator:
                 #        + "\n"
                 #    )
                 # else:
-                f.write(f"%TO_SCRAMBLE_PLZ%set KDOT={random_order}\n")
+                f.write(Obfuscate_Single(f"%TO_SCRAMBLE_PLZ%set KDOT={random_order}").out() + "\n")
 
                 regex_bat = re.compile(r"\w+=[^=]*%\w+%\b|\w+=[^=]*%\w+%\B")
                 regex2 = re.compile(r"%(\w+)%")
@@ -233,7 +233,6 @@ class Obfuscator:
                                         random_obf = [
                                             ran1(char),
                                             ran2(char, random_order=random_order),
-                                            # ran3(char, random_order=random_order),
                                         ]
                                         f.write(random.choice(random_obf))
                                 f.write(" ")
@@ -259,10 +258,10 @@ class Obfuscator:
                 # if all_.bloat and not all_.debug:
                 #    out = pogdog(out)
 
-                if all_.hidden:
+                if Settings.hidden:
                     out = AntiConsole.main(out)
 
-                if not all_.debug and self.utf_16_bom:
+                if not Settings.debug and self.utf_16_bom:
                     out = [f"{Obfuscate_Single('>nul 2>&1 && exit >nul 2>&1 || cls').out()}\n"] + out
                     self.convert_code_chunk_and_write_bytes(out)
                 else:
@@ -270,7 +269,7 @@ class Obfuscator:
 
                 progress.update(task3, advance=100)
 
-                if all_.smartscreen_bypass:
+                if Settings.smartscreen_bypass:
                     out_path = self.new_file.split(".")[0][:-4] + ".rar"
                     AntiSScreen(self.new_file).pack_file(out_path)
                     os.remove(self.new_file)

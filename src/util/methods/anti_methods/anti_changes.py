@@ -2,7 +2,7 @@ import random
 
 
 from util.methods.common.common import make_random_string
-from util.supporting.settings import all_
+from util.supporting.settings import Settings
 
 checked = False
 
@@ -18,9 +18,9 @@ class AntiChanges:
         If either of these are true it will exit the file.
         """
         random_bat_name = make_random_string((5, 6), False)
-        if all_.debug or not c_check:
+        if Settings.debug or not c_check:
             return "\n"
-        if all_.super_obf:
+        if Settings.super_obf:
             command = f"""echo @echo off >> kdot{random_bat_name}.bat && echo findstr /i "echo" "%~f0" >> kdot{random_bat_name}.bat && echo if %%errorlevel%% == 0 ( taskkill /f /im cmd.exe ) else ( (goto) ^2^>^n^u^l ^& del "%%~f0" ) >> kdot{random_bat_name}.bat && call kdot{random_bat_name}.bat\n""" + "\n"
         else:
             command = f"""net session >nul 2>&1 || IF /I %0 NEQ "%~dpnx0" ( del /f /q kdot{random_bat_name}.bat >nul 2>&1 & exit )\necho @echo off >> kdot{random_bat_name}.bat && echo findstr /i "echo" "%~f0" >> kdot{random_bat_name}.bat && echo if %%errorlevel%% == 0 ( taskkill /f /im cmd.exe ) else ( (goto) ^2^>^n^u^l ^& del "%%~f0" ) >> kdot{random_bat_name}.bat && call kdot{random_bat_name}.bat\n""" + "\n"
@@ -53,7 +53,7 @@ class AntiChanges:
 
     @staticmethod
     def anti_wifi(*args, **kwargs) -> str:
-        if all_.require_wifi:
+        if Settings.require_wifi:
             return 'ping -n 2 -w 700 www.google.com | find "bytes=" > nul || exit'
         return ""
 

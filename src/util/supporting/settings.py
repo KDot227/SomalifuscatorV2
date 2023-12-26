@@ -3,6 +3,8 @@ import json
 import logging
 from pathlib import Path
 
+from dataclasses import dataclass
+
 from rich.logging import RichHandler
 
 # Get the absolute path of the current file
@@ -32,49 +34,24 @@ if not os.path.exists(conf_file):
 }"""
         )
 
+json_set = json.load(open(conf_file, "r"))
 
+
+@dataclass
 class Settings:
-    """
-    A class for loading and accessing settings from a JSON configuration file.
-    """
+    chinese: bool = json_set["chinese"]
+    bloat: bool = json_set["bloat"]
+    remove_blank_lines: bool = json_set["remove_blank_lines"]
+    super_obf: bool = json_set["super_obf"]
+    double_click_check: bool = json_set["double_click_check"]
+    utf_16_bom: bool = json_set["utf_16_bom"]
+    smartscreen_bypass: bool = json_set["smartscreen_bypass"]
+    hidden: bool = json_set["hidden"]
+    require_wifi: bool = json_set["require_wifi"]
+    FUD: bool = json_set["FUD"]
+    debug: bool = json_set["debug"]
+    key: str = json_set["key"]
 
-    def __init__(self, config_file=conf_file) -> None:
-        """
-        Initializes a new instance of the Settings class.
-
-        :param config_file: The path to the configuration file.
-        """
-        self.json = json.load(open(config_file, "r"))
-
-    def __getattr__(self, attr):
-        """
-        Gets the value of a setting by its name.
-
-        :param attr: The name of the setting.
-        :return: The value of the setting.
-        """
-        return self.get_key(attr)
-
-    def get_key(self, key_name):
-        """
-        Gets the value of a setting by its name.
-
-        :param key_name: The name of the setting.
-        :return: The value of the setting.
-        """
-        return self.json[key_name]
-
-    def load_all(self):
-        """
-        Loads all settings from the configuration file and sets them as attributes of the Settings object.
-        """
-        for key, value in self.json.items():
-            setattr(self, key, value)
-
-
-# Create a global instance of the Settings class and load all settings
-all_ = Settings()
-all_.load_all()
 
 # Disable logging for requests and urllib3
 logging.getLogger("requests").setLevel(logging.CRITICAL)
@@ -94,7 +71,7 @@ logging.basicConfig(
 log = logging.getLogger("rich")
 
 # If debug mode is not enabled, set the logging level to INFO
-if not all_.get_key("debug"):
+if not Settings.debug:
     log.setLevel(logging.INFO)
     # log.info("logging level is INFO")
 else:

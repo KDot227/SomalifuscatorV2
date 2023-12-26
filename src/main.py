@@ -3,7 +3,7 @@ import sys
 import time
 import cProfile
 
-from util.supporting.settings import all_
+from util.supporting.settings import Settings
 
 from util.ui.ui import Ui, UiLinux
 from util.obfuscation.obfuscate import Obfuscator
@@ -21,12 +21,12 @@ install()
 from argparse import ArgumentParser
 
 
-__version__ = "2.6.0"
+__version__ = "2.7.0"
 
 
 class Main:
     def main(self):
-        super_obf = all_.super_obf
+        super_obf = Settings.super_obf
         if any([args.file]):
             current_time = time.time()
             Obfuscator(args.file, double_click_check=False, utf_16_bom=False)
@@ -61,7 +61,7 @@ class Main:
             print("This is only available in the paid version of Somalifuscator.")
             input("Press any key to exit...")
         else:
-            Obfuscator(file_location, double_click_check=all_.double_click_check, utf_16_bom=all_.utf_16_bom)
+            Obfuscator(file_location, double_click_check=Settings.double_click_check, utf_16_bom=Settings.utf_16_bom)
             finish_time = time.time()
             print(f"It only took {finish_time - current_time} to finish!")
             input("Press any key to exit...")

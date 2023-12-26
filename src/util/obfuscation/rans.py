@@ -54,71 +54,70 @@ def ran2(char, random_order: str, return_ran1: bool = True, *args, **kwargs) -> 
     if one_in_five and char in string.ascii_letters:
         random_order_index = random_order.index(char)
         return f"%KDOT:~{random_order_index},1%"
-    public = r"C:\Users\Public"
-    weird = r"C:\Program Files (x86)\Common Files"
-    program_1 = r"C:\Program Files"
-    program_2 = r"C:\Program Files (x86)"
-    driver_stuff = r"C:\Windows\System32\Drivers\DriverData"
-    pathext = r".COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC"
-    CommonProgramFiles = r"C:\Program Files\Common Files"
-    CommonProgramFiles_x86 = r"C:\Program Files (x86)\Common Files"
-    CommonProgramW6432 = r"C:\Program Files\Common Files"
-    # __APPDIR__ = "C:\\WINDOWS\\system32\\"
-    list_of_all = [
-        public,
-        weird,
-        program_1,
-        program_2,
-        driver_stuff,
-        pathext,
-        CommonProgramFiles,
-        CommonProgramFiles_x86,
-        CommonProgramW6432,
-        # __APPDIR__,
-    ]
-    corosponding = [
-        "PUBLIC",
-        "COMMONPROGRAMFILES(X86)",
-        "PROGRAMFILES",
-        "PROGRAMFILES(X86)",
-        "DRIVERDATA",
-        "PATHEXT",
-        "COMMONPROGRAMFILES",
-        "COMMONPROGRAMFILES(X86)",
-        "COMMONPROGRAMW6432",
-        # "__APPDIR__",
-    ]
-    new_lists = []
-    char_counter = 0
-    for i in list_of_all:
-        if char in i:
-            new_lists.append(i)
-            char_counter += i.count(char)
-    random_posotive_negative = False
-    if len(new_lists) > 0:
-        if char == " ":
-            return char
-        new = random.choice(new_lists)
+
+    public = "C:\\Users\\Public"
+    weird = "C:\\Program Files (x86)\\Common Files"
+    program_1 = "C:\\Program Files"
+    program_2 = "C:\\Program Files (x86)"
+    driver_stuff = "C:\\Windows\\System32\\Drivers\\DriverData"
+    pathext = ".COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC"
+    CommonProgramFiles = "C:\\Program Files\\Common Files"
+    CommonProgramFiles_x86 = "C:\\Program Files (x86)\\Common Files"
+    CommonProgramW6432 = "C:\\Program Files\\Common Files"
+
+    key_vars = {
+        "PUBLIC": (public, "None"),
+        "COMMONPROGRAMFILES(X86)": (weird, "None"),
+        "PROGRAMFILES": (program_1, "None"),
+        "PROGRAMFILES(X86)": (program_2, "None"),
+        "DRIVERDATA": (driver_stuff, "None"),
+        "PATHEXT": (pathext, "None"),
+        "COMMONPROGRAMFILES": (CommonProgramFiles, "None"),
+        "COMMONPROGRAMFILES(X86)": (CommonProgramFiles_x86, "None"),
+        "COMMONPROGRAMW6432": (CommonProgramW6432, "None"),
+        "USERPROFILE": ("C:\\Users\\", "R"),
+        "TEMP": ("\\AppData\\Local\\Temp", "L"),
+        "TMP": ("\\AppData\\Local\\Temp", "L"),
+        "LOCALAPPDATA": ("\\AppData\\Local", "L"),
+        "APPDATA": ("\\AppData\\Roaming", "L"),
+    }
+
+    # see if the first value of any of the keys contains the char
+    possible_vars = []
+    for key, value in key_vars.items():
+        if char in value[0]:
+            possible_vars.append(key)
+    if len(possible_vars) > 0:
+        random_var = random.choice(possible_vars)
+        value, modifier = key_vars[random_var]
+        valid_indexs = [i for i, letter in enumerate(value) if letter == char]
+        if modifier == "None":
+            # NONE means both work
+            positive_index = random.choice([True, False])
+            if positive_index:
+                random_positive_index = random.choice(valid_indexs)
+                return f"%{random_var}:~{random_positive_index},1%"
+            else:
+                random_positive_index = random.choice(valid_indexs)
+                negative_index = random_positive_index - len(value)
+                return f"%{random_var}:~{negative_index},1%"
+        elif modifier == "R":
+            random_positive_index = random.choice(valid_indexs)
+            log.info(f"Right index being used")
+            return f"%{random_var}:~{random_positive_index},1%"
+
+        elif modifier == "L":
+            random_positive_index = random.choice(valid_indexs)
+            negative_index = random_positive_index - len(value)
+            log.info(f"Left index being used")
+            return f"%{random_var}:~{negative_index},1%"
+    if return_ran1:
+        return ran1(char)
+    else:
         if char not in string.ascii_letters:
             return char
-        if char in new:
-            if random_posotive_negative:
-                random_index = random.choice([i for i, letter in enumerate(new) if letter == char])
-                new2 = corosponding[list_of_all.index(new)]
-                negative_index = random_index - len(new)
-                return f"%{random_capitalization(new2)}:~{negative_index},1%"
-            else:
-                random_index = random.choice([i for i, letter in enumerate(new) if letter == char])
-                new = corosponding[list_of_all.index(new)]
-                return f"%{random_capitalization(new)}:~{random_index},1%"
-    else:
-        if return_ran1:
-            return ran1(char)
-        else:
-            if char not in string.ascii_letters:
-                return char
-            random_order_index = random_order.index(char)
-            return f"%KDOT:~{random_order_index},1%"
+        random_order_index = random_order.index(char)
+        return f"%KDOT:~{random_order_index},1%"
 
 
 def ran3(char, random_order: str, *args, **kwargs) -> str:

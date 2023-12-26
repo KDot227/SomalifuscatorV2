@@ -3,7 +3,7 @@ import random
 
 from typing import List, Union
 
-from util.supporting.settings import all_
+from util.supporting.settings import Settings
 from util.methods.common.common import make_random_string, random_capitalization
 from util.methods.custom.decorators.custom_decorators import check_string_length
 
@@ -23,7 +23,7 @@ class Obfuscate_Single:
 
     @check_string_length
     def out(self) -> str:
-        if all_.debug:
+        if Settings.debug:
             return self.code
         """returns the desired obfuscated code
 
@@ -80,7 +80,7 @@ class Obfuscate_Single:
                     return self.obfuscate_normal(self.code) + "\n"
 
     def obfuscate_normal(self, line: str) -> str:
-        if all_.FUD:
+        if Settings.FUD:
             return self.obfuscate_simple(line)
         """Obfuscates code but this method is very simple and made for small lines of code that needs to be obfuscated
 

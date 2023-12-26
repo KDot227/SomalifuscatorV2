@@ -24,7 +24,7 @@ class Code_Console1(Static):
 
 class Code_Console2(Static):
     def compose(self) -> ComposeResult:
-        with open("tests\\test_1.bat", "r") as f:
+        with open("C:\\Users\\this1\\Desktop\\Software\\SomalifuscatorV2\\tests\\test_1.bat", "r") as f:
             code = f.read()
         yield Static(
             Syntax(code, "bat", theme="monokai", line_numbers=True, word_wrap=True),
