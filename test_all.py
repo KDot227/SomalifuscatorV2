@@ -173,8 +173,6 @@ class RunAll:
                 except FileNotFoundError:
                     pass
 
-        time.sleep(3)
-
         try:
             os.remove("output1.txt")
             os.remove("output2.txt")

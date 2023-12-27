@@ -80,7 +80,14 @@ def ran2(char, random_order: str, return_ran1: bool = True, *args, **kwargs) -> 
         "TMP": ("\\AppData\\Local\\Temp", "L"),
         "LOCALAPPDATA": ("\\AppData\\Local", "L"),
         "APPDATA": ("\\AppData\\Roaming", "L"),
+        "ONEDRIVE": ("\\OneDrive", "L"),
+        "ONEDRIVECONSUMER": ("\\OneDrive", "L"),
+        "OS": ("Windows_NT", "None"),
+        "SYSTEMDRIVE": ("C:", "None"),
     }
+
+    if Settings.double_click_check:
+        key_vars["SESSIONNAME"] = ("Console", "None")
 
     # see if the first value of any of the keys contains the char
     possible_vars = []
@@ -103,13 +110,11 @@ def ran2(char, random_order: str, return_ran1: bool = True, *args, **kwargs) -> 
                 return f"%{random_var}:~{negative_index},1%"
         elif modifier == "R":
             random_positive_index = random.choice(valid_indexs)
-            log.info(f"Right index being used")
             return f"%{random_var}:~{random_positive_index},1%"
 
         elif modifier == "L":
             random_positive_index = random.choice(valid_indexs)
             negative_index = random_positive_index - len(value)
-            log.info(f"Left index being used")
             return f"%{random_var}:~{negative_index},1%"
     if return_ran1:
         return ran1(char)
