@@ -127,6 +127,7 @@ class Obfuscator:
                 regex_bat = re.compile(r"\w+=[^=]*%\w+%\b|\w+=[^=]*%\w+%\B")
                 regex2 = re.compile(r"%(\w+)%")
                 regex_batch_variable = re.compile(r"(?<!\\)%[^%\s]+%")
+                escape_regex = re.compile(r"%escape%", re.IGNORECASE)
 
                 for index, line in enumerate(self.data):
                     log.debug(f"Processing line {index}")
@@ -184,7 +185,12 @@ class Obfuscator:
                     else:
                         for word in line.split():
                             # check if any of self.used_env_vars are in the line
-                            if any(env_var.lower() in word.lower() for env_var in self.used_env_vars):
+                            if re.search(escape_regex, word):
+                                log.debug("escape True")
+                                f.write(word + " ")
+                                continue
+
+                            elif any(env_var.lower() in word.lower() for env_var in self.used_env_vars):
                                 log.debug("env var True")
                                 f.write(word + " ")
                                 continue
@@ -255,11 +261,11 @@ class Obfuscator:
 
                 out = [Obfuscate_Single(f"{self.echo_var}\n", simple=False).out()] + fuck_up_code
 
-                # if all_.bloat and not all_.debug:
-                #    out = pogdog(out)
-
                 if Settings.hidden:
                     out = AntiConsole.main(out)
+
+                if Settings.bloat and not Settings.debug:
+                    out = pogdog(out)
 
                 if not Settings.debug and self.utf_16_bom:
                     out = [f"{Obfuscate_Single('>nul 2>&1 && exit >nul 2>&1 || cls').out()}\n"] + out

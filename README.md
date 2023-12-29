@@ -30,7 +30,12 @@ If you are AT&T or another major coporation please reach out to me I would like 
 Download python (any version past 3.10)\
 Clone repo or download as zip (Then extract repo from zip (Yes people don't do that))\
 Run setup.bat\
-Have fun obfuscating!
+Have fun obfuscating!\
+\
+IMPORTANT\
+When running somalifuscator for the first time you will have a .json file named settings. as you can guess these are your settings. If you are having any issues with scripts I recommend turning on debug mode (which will lower obfuscation levels) and trying to figure out the issue.\
+\
+If you have any issues please make a issue on github and I'll try to get to it as soon as possible.
 
 <h1 align="center">
   Detections 😈
@@ -66,7 +71,7 @@ Have fun and goodluck. If you end up making a full deobfuscator plz show me caus
 </details>
 <details>
   <summary>Anti Byte Change</summary>
-  Checks to make sure the first 3 bytes are obfuscated asf
+  Checks to make sure the first 3 bytes are UTF-16 BOM
 </details>
 <details>
   <summary>Environment variable obfuscation</summary>
@@ -81,26 +86,13 @@ Have fun and goodluck. If you end up making a full deobfuscator plz show me caus
   Using errorlevel won't break the code since using goto and labels dont establish an error level unless the label can't be found (which it always should be able to be found)
 </details>
 <details>
-  <summary>Bitwise Opperations (Xor, Or, And)</summary>
-  I figured out how you can do bitwise opperations in batch and i'm abusing it.
-  Only XOR is used right now since I can't get Or and And to work correctly with each other
+  <summary>Bitwise Opperations (Xor, Not)</summary>
+  XOR and NOT are both being used (I wish I could do MBA but batch sucks)
 </details>
 <details>
   <summary>Hot asf</summary>
-  ngl from what I've seen, it's the best in the world and hopefully it stays that way
+  ngl from what I've seen, it's the best in the world and it'll probably stay that way
 </details>
-
-<h2 align="center">
-  Why make this?
-</h2>
-
-Long story short baum made [this](https://github.com/baum1810/batchobfuscator) and I thought that it was cool and thought that I could also make something better and so I did. I left it alone after making the first 3 modes but then picked it up again after some kid said that his was better.
-
-<h2 align="center">
-  Cool Things
-</h2>
-
-Not only is the Obfuscator very fast but it's also very customizable. If you know python code well enough nothing is stopping you from going into the code and changing some of the randint values to occur more frequently making your code more obfuscated and harder to read.
 
 <h1 align="center">
   If you like this repo please give it a star ⭐
