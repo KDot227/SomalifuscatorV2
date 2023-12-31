@@ -1,11 +1,12 @@
 import os
+import sys
 import glob
-import time
 import difflib
 import subprocess
 
 from rich.live import Live
 from rich.table import Table
+from concurrent.futures import ThreadPoolExecutor, as_completed
 
 table = Table()
 table.add_column("File Name")
@@ -32,53 +33,10 @@ env_vars = {
 custom_env = os.environ.copy()
 custom_env.update(env_vars)
 
-menu = """
-1.) Delete all obfuscated files
-2.) Obfuscate all files
-3.) Run all tests
-4.) Delete all obfuscated files in ALL test directories
-"""
-
 
 class RunAll:
-    """
-    A class that provides methods to delete all files, test all files, check output and run full test sequence.
-    This is important because it allows us more control over using somalifuscator over multiple files and cleanup.
-    If obfuscated bat files that aren't test files aren't working for you please check to see if these are also all obfuscated correctly.
-    If they are please contact K.Dot or Godfather and let them know. Otherwise try changing your code around to make it more simple.
-    """
-
-    def __init__(self, *args, **kwargs) -> None:
-        choice = input("What would you like to do?\n" + menu + "\n> ")
-        choice_list = {
-            "1": self.delete_all,
-            "2": self.test_all,
-            "3": self.full_test_sequence,
-            "4": self.delete_all,
-        }
-
-        args1 = True if choice == "4" else False
-
-        choice_list[choice](args1)
-
-        return
-
-    def delete_all(self, rec: bool = False, *args, **kwargs) -> None:
-        """
-        A method that deletes all files with .bat extension in the directory.
-
-        Args:
-        - rec (bool): A boolean value that indicates whether to delete files recursively or not. Default is False.
-
-        Returns:
-        - None
-        """
-        remove_endings = ["_obf.bat", ".rar"]
-        for root, dirs, files in os.walk(directory, topdown=rec):
-            for file in files:
-                if any([file.endswith(x) for x in remove_endings]):
-                    os.remove(os.path.join(root, file))
-        return
+    def __init__(self) -> None:
+        self.failed = False
 
     def test_all(self, *args, **kwargs) -> None:
         """
@@ -105,37 +63,51 @@ class RunAll:
         Returns:
         - None
         """
-        command1 = f"{file_path} > output1.txt"
-        command2 = f"{new_file_path} > output2.txt"
+        subprocess.Popen(f"python {python_file} -f {file_path}", shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()
+
+        command1 = f"{file_path} > {file_path}.txt"
+        command2 = f"{new_file_path} > {new_file_path}.txt"
 
         t1 = subprocess.Popen(command1, shell=True, env=custom_env, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        t2 = subprocess.Popen(command2, shell=True, env=custom_env, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        t2 = None
 
-        # wait for process to finish
-        _, _ = t1.communicate()
-        _, _ = t2.communicate()
+        try:
+            t2 = subprocess.Popen(command2, shell=True, env=custom_env, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
-        with open("output1.txt", "r", encoding="utf8") as f:
-            a = [line.rstrip("\n") for line in f]
-        with open("output2.txt", "r", encoding="utf8") as f:
-            b = [line.rstrip("\n") for line in f]  # Remove leading space from each line
+            # wait for process to finish
+            _, _ = t1.communicate()
+            _, _ = t2.communicate()
 
-        # remove trailing spaces from a and b
-        a = [line.strip() for line in a]
-        b = [line.strip() for line in b]
+            with open(f"{file_path}.txt", "r", encoding="utf8") as f:
+                a = [line.rstrip("\n") for line in f]
+            with open(f"{new_file_path}.txt", "r", encoding="utf8") as f:
+                b = [line.rstrip("\n") for line in f]  # Remove leading space from each line
 
-        differ = difflib.unified_diff(a, b, lineterm="", n=3)
-        differences = list(differ)
+            # remove trailing spaces from a and b
+            a = [line.strip() for line in a]
+            b = [line.strip() for line in b]
 
-        if not differences:
-            table.add_row(file_path, "[green]Obfuscated Correctly[/green]", "NONE")
-        else:
-            differences = "\n".join(differences)
-            table.add_row(file_path, "[red]Obfuscated Incorrectly[/red]", differences)
-            input()
+            differ = difflib.unified_diff(a, b, lineterm="", n=3)
+            differences = list(differ)
 
-        os.remove("output1.txt")
-        os.remove("output2.txt")
+            if not differences:
+                table.add_row(file_path, "[green]Obfuscated Correctly[/green]", "NONE")
+            else:
+                self.failed = True
+                differences = "\n".join(differences)
+                # table.add_row(file_path, "[red]Obfuscated Incorrectly[/red]", differences)
+                table.add_row(file_path, "[red]Obfuscated Incorrectly[/red]", "N/A")
+
+        except Exception as e:
+            self.failed = True
+            table.add_row(file_path, "[red]Obfuscated Incorrectly[/red]", "Error occurred during execution")
+
+        finally:
+            if t2 is not None and t2.poll() is None:
+                t2.kill()
+
+            os.remove(f"{file_path}.txt")
+            os.remove(f"{new_file_path}.txt")
 
         return
 
@@ -150,38 +122,76 @@ class RunAll:
         - None
         """
         os.system("cls")
+        self.remove_all_obf_files()
         with Live(table, refresh_per_second=4) as live:
             location = f"{os.getcwd()}\\tests\\tests_full\\*.bat"
             files = glob.glob(location, recursive=True)
-            for file in files:
-                file_path = os.path.join(os.getcwd(), file)
-                if file.endswith("_obf.bat"):
-                    try:
-                        os.remove(file_path)
-                    except FileNotFoundError:
-                        pass
-                    continue
-                # we need to put .communicate() at the end or it will continue with the code instead of waiting until it finishes.
-                subprocess.Popen(f"python {python_file} -f {file_path}", shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()
+            threads = []
+            with ThreadPoolExecutor() as executor:
+                futures = [executor.submit(self.controller, file) for file in files]
+                for future in as_completed(futures):
+                    threads.append(future.result())
 
-                new_file_path = file_path.replace(".bat", "_obf.bat")
+        return self.failed
 
-                self.check_output(file_path, new_file_path)
+    def remove_all_obf_files(self, *args, **kwargs) -> None:
+        """
+        A method that removes all obf files.
 
-                try:
-                    os.remove(new_file_path)
-                except FileNotFoundError:
-                    pass
+        Args:
+        - None
+
+        Returns:
+        - None
+        """
+        for file in glob.glob(f"{directory}\\tests_full\\*.bat"):
+            if file.endswith("_obf.bat"):
+                print(file)
+                os.remove(file)
+        for file in glob.glob(f"{directory}\\tests_full\\*.txt"):
+            if file.endswith(".bat.txt"):
+                print(file)
+                os.remove(file)
+        return
+
+    def controller(self, file):
+        file_path = os.path.join(os.getcwd(), file)
+        if file.endswith("_obf.bat"):
+            try:
+                os.remove(file_path)
+            except FileNotFoundError:
+                pass
+            return
+
+        new_file_path = file_path.replace(".bat", "_obf.bat")
+
+        self.check_output(file_path, new_file_path)
 
         try:
-            os.remove("output1.txt")
-            os.remove("output2.txt")
+            os.remove(new_file_path)
         except FileNotFoundError:
             pass
 
+        return
+
+
+def test_everything():
+    """
+    A method that tests everything.
+
+    Args:
+    - None
+
+    Returns:
+    - None
+    """
+    new = RunAll()
+    assert new.full_test_sequence() == False
+
 
 if __name__ == "__main__":
-    while True:
-        RunAll()
-        input("Press any key to continue...")
-        os.system("cls")
+    new = RunAll()
+    if new.full_test_sequence():
+        print("Failed")
+    else:
+        print("Passed")
