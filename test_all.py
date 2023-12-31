@@ -95,8 +95,8 @@ class RunAll:
             else:
                 self.failed = True
                 differences = "\n".join(differences)
-                # table.add_row(file_path, "[red]Obfuscated Incorrectly[/red]", differences)
-                table.add_row(file_path, "[red]Obfuscated Incorrectly[/red]", "N/A")
+                table.add_row(file_path, "[red]Obfuscated Incorrectly[/red]", differences)
+                # table.add_row(file_path, "[red]Obfuscated Incorrectly[/red]", "N/A")
 
         except Exception as e:
             self.failed = True
