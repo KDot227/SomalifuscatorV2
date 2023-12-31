@@ -5,6 +5,8 @@ from util.methods.math_methods.bit_math import Bit_Math
 from util.obfuscation.obf_oneline import Obfuscate_Single
 from util.methods.anti_methods.anti_changes import AntiChanges
 
+from util.methods.common.common import random_semi_and_comma, random_single_carrot, random_capitalization, random_spaces
+
 from util.supporting.settings import log
 
 
@@ -69,7 +71,7 @@ class Scrambler:
         math_problem = set_command_values[0]
 
         # first value we add in before code this goes to the code and allows it to go back to the normal part of the script
-        set_command = Obfuscate_Single(f"set /a ans={math_problem}\ngoto %ans%\n:{self.escape_label}\n", simple=False).out()
+        set_command = Obfuscate_Single(f"{random_semi_and_comma()}{random_single_carrot('set')}{Scrambler.random_single_space()}{random_single_carrot('/a')} {random_single_carrot(random_capitalization('ans') + '=')}{math_problem}\n{random_semi_and_comma()}{random_single_carrot(random_capitalization('goto'))} {random_semi_and_comma()} {random_single_carrot(True)}%{random_capitalization('ans')}%\n:{self.escape_label}\n", simple=False).out()
 
         # first value we add in after code
         out_command_values = self.bit_math.generate_math_problem(self.escape_label)
@@ -123,4 +125,11 @@ class Scrambler:
             use = AntiChanges.tests()
             log.debug(f"Using {use[1]} as anti method")
             return f"{use[0]}\n"
+        return ""
+
+    @staticmethod
+    def random_single_space() -> str:
+        random_chance = random.randint(1, 5)
+        if not random_chance == 1:
+            return " "
         return ""
