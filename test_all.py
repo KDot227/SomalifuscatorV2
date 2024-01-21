@@ -8,10 +8,11 @@ from rich.live import Live
 from rich.table import Table
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
-table = Table()
-table.add_column("File Name")
-table.add_column("Level")
-table.add_column("Difference")
+if not "pytest" in sys.modules:
+    table = Table()
+    table.add_column("File Name")
+    table.add_column("Level")
+    table.add_column("Difference")
 
 directory = f"{os.getcwd()}\\tests"
 python_file = f"{os.getcwd()}\\src\\main.py"
@@ -52,7 +53,7 @@ class RunAll:
             os.system(f"python {python_file} -f {file}")
         return
 
-    def check_output(self, file_path, new_file_path, *args, **kwargs):
+    def check_output(self, file_path, new_file_path, hide_stuff, *args, **kwargs):
         """
         A method that checks the output of the file.
 
@@ -110,22 +111,35 @@ class RunAll:
             differences = list(differ)
 
             if not differences:
-                table.add_row(file_path, "[green]Obfuscated Correctly[/green]", "NONE")
+                if not hide_stuff:
+                    table.add_row(
+                        file_path, "[green]Obfuscated Correctly[/green]", "NONE"
+                    )
+                else:
+                    print("Obfuscated Correctly")
             else:
                 self.failed = True
                 differences = "\n".join(differences)
-                table.add_row(
-                    file_path, "[red]Obfuscated Incorrectly[/red]", differences
-                )
+                if not hide_stuff:
+                    table.add_row(
+                        file_path, "[red]Obfuscated Incorrectly[/red]", differences
+                    )
+                else:
+                    print("Obfuscated Incorrectly")
+                    print(differences)
+                    print("")
                 # table.add_row(file_path, "[red]Obfuscated Incorrectly[/red]", "N/A")
 
         except Exception as e:
             self.failed = True
-            table.add_row(
-                file_path,
-                "[red]Obfuscated Incorrectly[/red]",
-                "Error occurred during execution",
-            )
+            if not hide_stuff:
+                table.add_row(
+                    file_path,
+                    "[red]Obfuscated Incorrectly[/red]",
+                    "Error occurred during execution",
+                )
+            else:
+                print("Obfuscated Incorrectly\nError occurred during execution\n")
 
         finally:
             if t2 is not None and t2.poll() is None:
@@ -136,7 +150,7 @@ class RunAll:
 
         return
 
-    def full_test_sequence(self, *args, **kwargs) -> None:
+    def full_test_sequence(self, hide_stuff, *args, **kwargs) -> None:
         """
         A method that runs the full test sequence.
 
@@ -148,14 +162,28 @@ class RunAll:
         """
         os.system("cls")
         self.remove_all_obf_files()
-        with Live(table, refresh_per_second=4) as live:
+        if hide_stuff:
             location = f"{os.getcwd()}\\tests\\tests_full\\*.bat"
             files = glob.glob(location, recursive=True)
             threads = []
             with ThreadPoolExecutor() as executor:
-                futures = [executor.submit(self.controller, file) for file in files]
+                futures = [
+                    executor.submit(self.controller, file, hide_stuff) for file in files
+                ]
                 for future in as_completed(futures):
                     threads.append(future.result())
+        else:
+            with Live(table, refresh_per_second=4) as live:
+                location = f"{os.getcwd()}\\tests\\tests_full\\*.bat"
+                files = glob.glob(location, recursive=True)
+                threads = []
+                with ThreadPoolExecutor() as executor:
+                    futures = [
+                        executor.submit(self.controller, file, hide_stuff)
+                        for file in files
+                    ]
+                    for future in as_completed(futures):
+                        threads.append(future.result())
 
         return self.failed
 
@@ -179,7 +207,7 @@ class RunAll:
                 os.remove(file)
         return
 
-    def controller(self, file):
+    def controller(self, file, hide_stuff):
         file_path = os.path.join(os.getcwd(), file)
         if file.endswith("_obf.bat"):
             try:
@@ -190,7 +218,7 @@ class RunAll:
 
         new_file_path = file_path.replace(".bat", "_obf.bat")
 
-        self.check_output(file_path, new_file_path)
+        self.check_output(file_path, new_file_path, hide_stuff)
 
         try:
             os.remove(new_file_path)
@@ -211,12 +239,12 @@ def test_everything():
     - None
     """
     new = RunAll()
-    assert new.full_test_sequence() == False
+    assert new.full_test_sequence(True) == False
 
 
 if __name__ == "__main__":
     new = RunAll()
-    if new.full_test_sequence():
+    if new.full_test_sequence(False):
         print("Failed")
     else:
         print("Passed")
