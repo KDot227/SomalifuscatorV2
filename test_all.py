@@ -228,6 +228,27 @@ class RunAll:
         return
 
 
+def env_var_test():
+    GOOD_ENV_VARS = {
+        "PATHEXT": ".COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC",
+        "PUBLIC": r"C:\Users\Public",
+        "COMMONPROGRAMFILES(X86)": r"C:\Program Files (x86)\Common Files",
+        "PROGRAMFILES": r"C:\Program Files",
+        "PROGRAMFILES(X86)": r"C:\Program Files (x86)",
+        "DRIVERDATA": r"C:\Windows\System32\Drivers\DriverData",
+        "COMMONPROGRAMFILES": r"C:\Program Files\Common Files",
+        "COMMONPROGRAMW6432": r"C:\Program Files\Common Files",
+        "COMMONPROGRAMFILES(X86)": r"C:\Program Files (x86)\Common Files",
+    }
+
+    users_env_vars = os.environ.copy()
+    for env_var, value in GOOD_ENV_VARS.items():
+        if users_env_vars[env_var] != value:
+            print(f"{env_var} is not set correctly")
+            return False
+    return True
+
+
 def test_everything():
     """
     A method that tests everything.
@@ -240,6 +261,19 @@ def test_everything():
     """
     new = RunAll()
     assert new.full_test_sequence(True) == False
+
+
+def test_env_vars():
+    """
+    A method that tests the env vars.
+
+    Args:
+    - None
+
+    Returns:
+    - None
+    """
+    assert env_var_test() == True
 
 
 if __name__ == "__main__":
