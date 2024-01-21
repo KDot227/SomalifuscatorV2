@@ -63,16 +63,33 @@ class RunAll:
         Returns:
         - None
         """
-        subprocess.Popen(f"python {python_file} -f {file_path}", shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()
+        subprocess.Popen(
+            f"python {python_file} -f {file_path}",
+            shell=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        ).communicate()
 
         command1 = f"{file_path} > {file_path}.txt"
         command2 = f"{new_file_path} > {new_file_path}.txt"
 
-        t1 = subprocess.Popen(command1, shell=True, env=custom_env, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        t1 = subprocess.Popen(
+            command1,
+            shell=True,
+            env=custom_env,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        )
         t2 = None
 
         try:
-            t2 = subprocess.Popen(command2, shell=True, env=custom_env, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            t2 = subprocess.Popen(
+                command2,
+                shell=True,
+                env=custom_env,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+            )
 
             # wait for process to finish
             _, _ = t1.communicate()
@@ -81,7 +98,9 @@ class RunAll:
             with open(f"{file_path}.txt", "r", encoding="utf8") as f:
                 a = [line.rstrip("\n") for line in f]
             with open(f"{new_file_path}.txt", "r", encoding="utf8") as f:
-                b = [line.rstrip("\n") for line in f]  # Remove leading space from each line
+                b = [
+                    line.rstrip("\n") for line in f
+                ]  # Remove leading space from each line
 
             # remove trailing spaces from a and b
             a = [line.strip() for line in a]
@@ -95,12 +114,18 @@ class RunAll:
             else:
                 self.failed = True
                 differences = "\n".join(differences)
-                table.add_row(file_path, "[red]Obfuscated Incorrectly[/red]", differences)
+                table.add_row(
+                    file_path, "[red]Obfuscated Incorrectly[/red]", differences
+                )
                 # table.add_row(file_path, "[red]Obfuscated Incorrectly[/red]", "N/A")
 
         except Exception as e:
             self.failed = True
-            table.add_row(file_path, "[red]Obfuscated Incorrectly[/red]", "Error occurred during execution")
+            table.add_row(
+                file_path,
+                "[red]Obfuscated Incorrectly[/red]",
+                "Error occurred during execution",
+            )
 
         finally:
             if t2 is not None and t2.poll() is None:
@@ -195,3 +220,4 @@ if __name__ == "__main__":
         print("Failed")
     else:
         print("Passed")
+    input("Press enter to exit...")

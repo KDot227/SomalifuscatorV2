@@ -1,7 +1,8 @@
 import os
-import re
 import json
 from dataclasses import dataclass
+
+from util.auto_updating.updater import AutoUpdate
 
 from util.obfuscation.obfuscate import Obfuscator as OBF
 
@@ -23,6 +24,8 @@ from textual.binding import Binding
 from textual import work
 from rich.syntax import Syntax
 from rich.text import Text
+
+__version__ = "2.8.1"
 
 
 @dataclass
@@ -154,5 +157,6 @@ if __name__ == "__main__":
             utf_16_bom=False,
         )
         exit(0)
+    AutoUpdate(__version__)
     SomalifuscatorV2().run()
     exit(0)
