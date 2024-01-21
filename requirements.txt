@@ -4,3 +4,4 @@ requests
 kdot
 primefac
 pytest
+textual
