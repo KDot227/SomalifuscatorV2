@@ -5,7 +5,7 @@ from pathlib import Path
 
 from dataclasses import dataclass
 
-from rich.logging import RichHandler
+from util.supporting.logger import SomalifuscatorLogger
 
 # Get the absolute path of the current file
 current_file_path = Path(__file__).resolve()
@@ -62,9 +62,7 @@ FORMAT = "%(message)s"
 logging.basicConfig(
     level="NOTSET",
     format=FORMAT,
-    handlers=[
-        RichHandler(show_time=False),
-    ],
+    handlers=[SomalifuscatorLogger()],
 )
 
 # Get the logger for the Rich library
@@ -86,4 +84,4 @@ else:
     file_handler.setFormatter(format2)
     log.addHandler(file_handler)
     log.setLevel(logging.DEBUG)
-    # log.info("logging level is DEBUG")
+    log.info("logging level is DEBUG")

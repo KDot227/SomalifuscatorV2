@@ -1,16 +1,21 @@
-Screen {
-    overflow: auto;
+Code_Display {
+    border: solid $primary-background-lighten-3;
+    overflow: scroll scroll;
 }
 
-Horizontal {
-    height: 80%;
-    width: auto;
-    align: center middle;
+Code_Display:focus {
+    border: solid $accent;
 }
 
-Obfuscator {
-    width: 100%;
-    height: 20%;
-    align: center middle;
-    display: block;
+RichLog {
+    border: solid $primary-background-lighten-3;
+    overflow: scroll scroll;
+}
+
+RichLog:focus {
+    border: solid $accent;
+}
+
+Center {
+    padding: 2;
 }

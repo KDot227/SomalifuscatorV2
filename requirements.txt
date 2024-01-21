@@ -3,3 +3,4 @@ BatchParse
 requests
 kdot
 primefac
+pytest

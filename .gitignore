@@ -1,13 +1,9 @@
 main.exe
 *.bak
-*.bat.*
+*_obf.bat
 __pycache__
 somalifuscatorv2.log
-tests/test*_obf.bat
 src_paid
 test_all.bat
 fun_stuff/
-*.rar
 settings.json
-obf
-simple_debug.py

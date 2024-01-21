@@ -38,9 +38,7 @@ class Bit_Math:
         if ans < 0:
             return random_oct_hex(ans)
 
-        binary_string = bin(ans)[2:]
-        random_binary = [random.choice([0, 1]) for _ in range(len(binary_string))]
-        random2 = int("".join(str(i) for i in random_binary), 2)
+        random2 = random.getrandbits(ans.bit_length())
         fixed2 = random2 ^ ans
 
         if hex_check:
@@ -50,13 +48,7 @@ class Bit_Math:
 
     @staticmethod
     def make_not(number: int, *args, **kwargs) -> str:
-        ans = number
-
-        if ans < 0:
-            return random_oct_hex(number)
-
-        num_return = -ans - 1
-        return f"~{random_oct_hex(num_return)}"
+        return f"~{random_oct_hex(~number)}"
 
     @staticmethod
     def random_bit_shift(number: int, hex_check: bool = True) -> str:
@@ -65,7 +57,7 @@ class Bit_Math:
         if ans < 0:
             return random_oct_hex(number)
 
-        random_number_through = random.choice(list(range(2, 10)))
+        random_number_through = random.randint(2, 9)
         generated = ans << random_number_through
 
         if generated > 25:
@@ -77,16 +69,13 @@ class Bit_Math:
 def random_oct_hex(ans: int):
     if ans < 3:
         return str(ans)
-    choices = [hex(ans), oct(ans)]
-    decided = random.choice(choices)
+
+    decided = random.choice([hex(ans), oct(ans)])
+
     if decided == oct(ans):
         return f"0{str(decided[2:])}"
-    elif decided == hex(ans):
-        if random.choice([True, False]):
-            return f'"{str(decided)}"'
-        return decided
-    else:
-        return decided
+
+    return decided
 
 
 if __name__ == "__main__":
