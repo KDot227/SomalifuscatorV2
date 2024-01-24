@@ -31,7 +31,6 @@ __version__ = "2.8.1"
 @dataclass
 class settings:
     file: str = ""
-    debug: bool = False
 
 
 class Code_Display(ScrollableContainer):
@@ -72,10 +71,10 @@ class SomalifuscatorV2(App):
         yield Footer()
 
     def action_toggle_debug(self) -> None:
-        settings.debug = not settings.debug
-        color = "red" if not settings.debug else "green"
+        Settings.debug = not Settings.debug
+        color = "red" if not Settings.debug else "green"
         debug_msg = Text.from_markup(
-            f"Debug is now [{color} italic]{settings.debug}[/]"
+            f"Debug is now [{color} italic]{Settings.debug}[/]"
         )
         self.query_one(RichLog).write(debug_msg)
 
