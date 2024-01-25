@@ -1,12 +1,14 @@
 from util.obfuscation.obf_oneline import Obfuscate_Single
 
+from util.supporting.types import Code_Block
+
 
 class AntiConsole:
     def __init__(self) -> None:
         pass
 
     @staticmethod
-    def main(code: list) -> list:
+    def main(code: list) -> Code_Block:
         """
         Restarts the bat file so there is no console at all (hidden)
         """

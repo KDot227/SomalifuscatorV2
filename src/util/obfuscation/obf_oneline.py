@@ -1,9 +1,11 @@
 import re
 import random
 
-from typing import List, Union
+from typing import List, Union, NewType
 
 from util.supporting.settings import Settings
+from util.supporting.types import Obfuscated_String
+
 from util.methods.common.common import make_random_string, random_capitalization
 from util.methods.custom.decorators.custom_decorators import check_string_length
 
@@ -22,7 +24,7 @@ class Obfuscate_Single:
         self.out_code = ""
 
     @check_string_length
-    def out(self) -> str:
+    def out(self) -> Obfuscated_String:
         if Settings.debug:
             return self.code
         """returns the desired obfuscated code
@@ -35,7 +37,9 @@ class Obfuscate_Single:
                 for line in self.code:
                     if "%TO_SCRAMBLE_PLZ%" in line:
                         line = line.replace("%TO_SCRAMBLE_PLZ%", "")
-                        self.out_code += "%TO_SCRAMBLE_PLZ%" + self.obfuscate_simple(line) + "\n"
+                        self.out_code += (
+                            "%TO_SCRAMBLE_PLZ%" + self.obfuscate_simple(line) + "\n"
+                        )
                     else:
                         self.out_code += self.obfuscate_simple(line) + "\n"
                 return self.out_code
@@ -43,7 +47,9 @@ class Obfuscate_Single:
                 for line in self.code:
                     if "%TO_SCRAMBLE_PLZ%" in line:
                         line = line.replace("%TO_SCRAMBLE_PLZ%", "")
-                        self.out_code += "%TO_SCRAMBLE_PLZ%" + self.obfuscate_normal(line) + "\n"
+                        self.out_code += (
+                            "%TO_SCRAMBLE_PLZ%" + self.obfuscate_normal(line) + "\n"
+                        )
                     else:
                         self.out_code += self.obfuscate_normal(line) + "\n"
                 return self.out_code
@@ -54,7 +60,9 @@ class Obfuscate_Single:
                     for line in self.code:
                         if "%TO_SCRAMBLE_PLZ%" in line:
                             line = line.replace("%TO_SCRAMBLE_PLZ%", "")
-                            self.out_code += "%TO_SCRAMBLE_PLZ%" + self.obfuscate_simple(line) + "\n"
+                            self.out_code += (
+                                "%TO_SCRAMBLE_PLZ%" + self.obfuscate_simple(line) + "\n"
+                            )
                         else:
                             self.out_code += self.obfuscate_simple(line) + "\n"
                     return self.out_code
@@ -69,7 +77,9 @@ class Obfuscate_Single:
                     for line in self.code:
                         if "%TO_SCRAMBLE_PLZ%" in line:
                             line = line.replace("%TO_SCRAMBLE_PLZ%", "")
-                            self.out_code += "%TO_SCRAMBLE_PLZ%" + self.obfuscate_normal(line) + "\n"
+                            self.out_code += (
+                                "%TO_SCRAMBLE_PLZ%" + self.obfuscate_normal(line) + "\n"
+                            )
                         else:
                             self.out_code += self.obfuscate_normal(line) + "\n"
                     return self.out_code
@@ -79,7 +89,7 @@ class Obfuscate_Single:
                 else:
                     return self.obfuscate_normal(self.code) + "\n"
 
-    def obfuscate_normal(self, line: str) -> str:
+    def obfuscate_normal(self, line: str) -> Obfuscated_String:
         if Settings.FUD:
             return self.obfuscate_simple(line)
         """Obfuscates code but this method is very simple and made for small lines of code that needs to be obfuscated
@@ -153,7 +163,9 @@ class Obfuscate_Single:
                     filtered_lists = [i for i in new_lists if char in i]
 
                     if len(filtered_lists) == 0:
-                        final_string += f"{char}%{make_random_string(special_chars=False)}%"
+                        final_string += (
+                            f"{char}%{make_random_string(special_chars=False)}%"
+                        )
                         continue
 
                     new = random.choice(filtered_lists)
@@ -163,16 +175,20 @@ class Obfuscate_Single:
                         random_index = random.choice(ammount)
                         new2 = options[new]
                         negative_index = random_index - len(new)
-                        final_string += f"%{random_capitalization(new2)}:~{negative_index},1%"
+                        final_string += (
+                            f"%{random_capitalization(new2)}:~{negative_index},1%"
+                        )
                     else:
                         ammount = [i for i, letter in enumerate(new) if letter == char]
                         random_index = random.choice(ammount)
                         new2 = options[new]
-                        final_string += f"%{random_capitalization(new2)}:~{random_index},1%"
+                        final_string += (
+                            f"%{random_capitalization(new2)}:~{random_index},1%"
+                        )
             final_string += " "
         return final_string
 
-    def obfuscate_simple(self, char_line: str) -> str:
+    def obfuscate_simple(self, char_line: str) -> Obfuscated_String:
         """Very simple obfuscated method for chars that aren't in any arrays
 
         Args:

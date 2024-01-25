@@ -25,7 +25,7 @@ from textual import work
 from rich.syntax import Syntax
 from rich.text import Text
 
-__version__ = "2.8.1"
+__version__ = "2.8.2"
 
 
 @dataclass
@@ -51,7 +51,10 @@ class Code_Display(ScrollableContainer):
 
 class SomalifuscatorV2(App):
     CSS_PATH = "util\\ui\\style.tcss"
-    BINDINGS = [Binding("d", "toggle_debug", "Toggle Debug")]
+    BINDINGS = [
+        Binding("d", "toggle_debug", "Toggle Debug"),
+        Binding("q", "quit", "Quit"),
+    ]
 
     def on_button_pressed(self, _: Button.Pressed) -> None:
         OBF(
@@ -77,6 +80,9 @@ class SomalifuscatorV2(App):
             f"Debug is now [{color} italic]{Settings.debug}[/]"
         )
         self.query_one(RichLog).write(debug_msg)
+
+    def action_quit(self) -> None:
+        self.exit()
 
     def on_print(self, event: Print) -> None:
         self.query_one(RichLog).write(Text.from_markup(event.text.strip()))
