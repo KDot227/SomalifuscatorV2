@@ -10,10 +10,7 @@ from util.supporting.types import Code_Block
 console = Console()
 settings = Settings()
 
-if Settings.chinese:
-    chinese_characters = "苑范腕勝滕贖值債價償責直真賭哀衰衷袁忠棄業停亨享亭亮閏闊閒闌聞門閂閃閉開閑間閘閡閣閥閨閩閱閹閻闃闔闕闖關闡募幕慕壞壤讓鑲"
-else:
-    chinese_characters = string.ascii_letters + string.digits
+chinese_characters = string.ascii_letters + string.digits
 
 
 def escape_batch(code: str) -> str:

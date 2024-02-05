@@ -20,7 +20,6 @@ class Obfuscate_Single:
         self.code = code
         self.simple = simple
         self.ignore_carrots = ignore_carrots
-        self.ignore_carrots = False
         self.out_code = ""
 
     @check_string_length
@@ -196,6 +195,7 @@ class Obfuscate_Single:
         Returns:
             str: returns obfuscated line / char
         """
+        # return char_line
         char_line = char_line.strip()
         if len(char_line) == 1:
             return f"%{make_random_string((7, 9), special_chars=False)}%{char_line}%{make_random_string((7, 9), special_chars=False)}%"

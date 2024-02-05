@@ -25,7 +25,7 @@ from textual import work
 from rich.syntax import Syntax
 from rich.text import Text
 
-__version__ = "2.8.2"
+__version__ = "2.9.0"
 
 
 @dataclass
@@ -156,10 +156,12 @@ if __name__ == "__main__":
     )
     args = parse.parse_args()
     if any([args.file]):
+        Settings.utf_16_bom = False
+        Settings.double_click_check = False
         OBF(
             args.file,
-            double_click_check=False,
-            utf_16_bom=False,
+            double_click_check=Settings.double_click_check,
+            utf_16_bom=Settings.utf_16_bom,
         )
         exit(0)
     AutoUpdate(__version__)

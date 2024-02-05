@@ -19,7 +19,6 @@ if not os.path.exists(conf_file):
     with open("settings.json", "+w", encoding="utf8", errors="ignore") as f:
         f.write(
             """{
-    "chinese": false,
     "bloat": true,
     "remove_blank_lines": true,
     "super_obf": false,
@@ -30,7 +29,7 @@ if not os.path.exists(conf_file):
     "require_wifi": true,
     "FUD": true,
     "debug": false,
-    "key": "NONE"
+    "verbose": false
 }"""
         )
 
@@ -39,18 +38,20 @@ json_set = json.load(open(conf_file, "r"))
 
 @dataclass
 class Settings:
-    chinese: bool = json_set["chinese"]
-    bloat: bool = json_set["bloat"]
-    remove_blank_lines: bool = json_set["remove_blank_lines"]
-    super_obf: bool = json_set["super_obf"]
-    double_click_check: bool = json_set["double_click_check"]
-    utf_16_bom: bool = json_set["utf_16_bom"]
-    smartscreen_bypass: bool = json_set["smartscreen_bypass"]
-    hidden: bool = json_set["hidden"]
-    require_wifi: bool = json_set["require_wifi"]
-    FUD: bool = json_set["FUD"]
-    debug: bool = json_set["debug"]
-    key: str = json_set["key"]
+    try:
+        bloat: bool = json_set["bloat"]
+        remove_blank_lines: bool = json_set["remove_blank_lines"]
+        super_obf: bool = json_set["super_obf"]
+        double_click_check: bool = json_set["double_click_check"]
+        utf_16_bom: bool = json_set["utf_16_bom"]
+        smartscreen_bypass: bool = json_set["smartscreen_bypass"]
+        hidden: bool = json_set["hidden"]
+        require_wifi: bool = json_set["require_wifi"]
+        FUD: bool = json_set["FUD"]
+        debug: bool = json_set["debug"]
+        verbose: bool = json_set["verbose"]
+    except KeyError:
+        raise KeyError("The settings.json file is missing a required key.")
 
 
 # Disable logging for requests and urllib3
@@ -69,19 +70,23 @@ logging.basicConfig(
 log = logging.getLogger("rich")
 
 # If debug mode is not enabled, set the logging level to INFO
-if not Settings.debug:
+if not Settings.debug and not Settings.verbose:
     log.setLevel(logging.INFO)
     # log.info("logging level is INFO")
-else:
-    # If debug mode is enabled, create a log file and set the logging level to DEBUG
+elif Settings.verbose and not Settings.debug:
+    log.setLevel(logging.DEBUG)
+    log.info("logging level is VERBOSE ONLY")
+elif Settings.debug:
     try:
         os.remove("somalifuscatorv2.log")
     except FileNotFoundError:
         pass
-
-    file_handler = logging.FileHandler("somalifuscatorv2.log")
     format2 = logging.Formatter("%(asctime)s - %(levelname)s - %(message)s")
+    file_handler = logging.FileHandler("somalifuscatorv2.log")
     file_handler.setFormatter(format2)
     log.addHandler(file_handler)
     log.setLevel(logging.DEBUG)
     log.info("logging level is DEBUG")
+else:
+    print("logging level is NOTSET")
+    log.setLevel(logging.NOTSET)

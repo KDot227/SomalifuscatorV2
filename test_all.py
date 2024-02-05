@@ -211,7 +211,8 @@ class RunAll:
         file_path = os.path.join(os.getcwd(), file)
         if file.endswith("_obf.bat"):
             try:
-                os.remove(file_path)
+                # os.remove(file_path)
+                pass
             except FileNotFoundError:
                 pass
             return
@@ -221,7 +222,8 @@ class RunAll:
         self.check_output(file_path, new_file_path, hide_stuff)
 
         try:
-            os.remove(new_file_path)
+            # os.remove(new_file_path)
+            pass
         except FileNotFoundError:
             pass
 
@@ -276,10 +278,17 @@ def test_env_vars():
     assert env_var_test() == True
 
 
+def test_mult_inter():
+    through = []
+    for _ in range(10):
+        new = RunAll()
+        through.append(new.full_test_sequence(True))
+    assert all(through) == False
+
+
 if __name__ == "__main__":
     new = RunAll()
     if new.full_test_sequence(False):
         print("Failed")
     else:
         print("Passed")
-    input("Press enter to exit...")

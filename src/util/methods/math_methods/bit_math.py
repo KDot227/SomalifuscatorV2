@@ -16,7 +16,10 @@ class Bit_Math:
         if count >= 6:
             answer_nums = [num1**count] + answer_nums[count:]
 
-        answer_nums = [random_oct_hex(int(item)) if isinstance(item, int) else item for item in answer_nums]
+        answer_nums = [
+            random_oct_hex(int(item)) if isinstance(item, int) else item
+            for item in answer_nums
+        ]
 
         result = " * ".join(str(i) for i in answer_nums)
         result = result.replace(" ", "")

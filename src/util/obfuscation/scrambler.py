@@ -78,7 +78,7 @@ class Scrambler:
 
         # first value we add in before code this goes to the code and allows it to go back to the normal part of the script
         set_command = Obfuscate_Single(
-            f"{random_semi_and_comma()}{random_single_carrot('set')}{Scrambler.random_single_space()}{random_single_carrot('/a')} {random_single_carrot(random_capitalization('ans') + '=')}{math_problem}\n{random_semi_and_comma()}{random_single_carrot(random_capitalization('goto'))} {random_semi_and_comma()} {random_single_carrot(True)}%{random_capitalization('ans')}%\n:{self.escape_label}\n",
+            f"s{random_single_carrot('et')}{Scrambler.random_single_space()}/{random_single_carrot('a')} a{random_single_carrot(random_capitalization('ns') + '=')}{math_problem}\ng{random_single_carrot(random_capitalization('oto'))} {random_semi_and_comma()} %{random_capitalization('ans')}%\n:{self.escape_label}\n",
             simple=False,
         ).out()
 

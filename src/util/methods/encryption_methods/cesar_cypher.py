@@ -1,7 +1,11 @@
 import string
 import random
 
-from util.methods.common.common import random_semi_and_comma, random_single_carrot, random_space_ammount
+from util.methods.common.common import (
+    random_semi_and_comma,
+    random_single_carrot,
+    random_space_ammount,
+)
 
 
 class CaesarCipher:
@@ -18,7 +22,9 @@ class CaesarCipher:
         Returns:
             str: The rotated character.
         """
-        alphabet = list(string.ascii_uppercase) if upper else list(string.ascii_lowercase)
+        alphabet = (
+            list(string.ascii_uppercase) if upper else list(string.ascii_lowercase)
+        )
         rotated_alphabet = alphabet[rotation_value:] + alphabet[:rotation_value]
         return rotated_alphabet[alphabet.index(char)]
 
@@ -36,7 +42,10 @@ class CaesarCipher:
         """
         alphabet = list(string.ascii_lowercase)
         rotated_alphabet = alphabet[rotation_value:] + alphabet[:rotation_value]
-        cipher_pairs = [f"""{CaesarCipher.get_random_scramble()}{CaesarCipherHelper.add_on(f'set "{rotated_alphabet[i]}={c}"')}\n""" for i, c in enumerate(alphabet)]
+        cipher_pairs = [
+            f"""{CaesarCipher.get_random_scramble()}{CaesarCipherHelper.add_on(f'set "{rotated_alphabet[i]}={c}"')}\n"""
+            for i, c in enumerate(alphabet)
+        ]
 
         return "".join(cipher_pairs)
 
@@ -54,7 +63,10 @@ class CaesarCipher:
         """
         alphabet = list(string.ascii_uppercase)
         rotated_alphabet = alphabet[rotation_value:] + alphabet[:rotation_value]
-        cipher_pairs = [f"""{CaesarCipher.get_random_scramble()}{CaesarCipherHelper.add_on(f'{random_semi_and_comma()}{random_single_carrot("set")}{random_space_ammount()}"{rotated_alphabet[i]}1={c}"')}\n""" for i, c in enumerate(alphabet)]
+        cipher_pairs = [
+            f"""{CaesarCipher.get_random_scramble()}{CaesarCipherHelper.add_on(f's{random_single_carrot("et")}{random_space_ammount()}"{rotated_alphabet[i]}1={c}"')}\n"""
+            for i, c in enumerate(alphabet)
+        ]
         # cipher_pairs = [f"""{CaesarCipher.get_random_scramble()}{CaesarCipherHelper.add_on(f'set "{rotated_alphabet[i]}1={c}"')}\n""" for i, c in enumerate(alphabet)]
 
         return "".join(cipher_pairs)

@@ -7,3 +7,4 @@ src_paid
 test_all.bat
 fun_stuff/
 settings.json
+.venv
