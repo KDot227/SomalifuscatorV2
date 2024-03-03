@@ -25,7 +25,7 @@ from textual import work
 from rich.syntax import Syntax
 from rich.text import Text
 
-__version__ = "2.9.0"
+__version__ = "2.9.1"
 
 
 @dataclass

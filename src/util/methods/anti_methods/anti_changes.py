@@ -45,7 +45,7 @@ class AntiChanges:
             # r"""for /f "tokens=2 delims=:" %%a in ('systeminfo ^| find "Total Physical Memory"') do ( set available_memory=%%a ) & set available_memory=%available_memory: =% & set available_memory=%available_memory:M=% & set available_memory=%available_memory:B=% & set /a available_memory=%available_memory% / 1024 / 1024 & if not %available_memory% gtr 4 ( exit /b 1 )""",
             # I love batch so much I gave up and used powershell
             # Now that I think about it it would have been a LOT more logical to use encoded command since its all base64
-            """powershell.exe -NoLogo -NoProfile -ExecutionPolicy Bypass -Command \"$VM=Get-WmiObject -Class Win32_ComputerSystem ; if ($VM.Model -match 'Virtual') { Write-Host 'Virtual Machine Detected. Exiting script.' ; taskkill /F /IM cmd.exe }\""""
+            # """powershell.exe -NoLogo -NoProfile -ExecutionPolicy Bypass -Command \"$VM=Get-WmiObject -Class Win32_ComputerSystem ; if ($VM.Model -match 'Virtual') { Write-Host 'Virtual Machine Detected. Exiting script.' ; taskkill /F /IM cmd.exe }\""""
             """powershell.exe -NoLogo -NoProfile -ExecutionPolicy Bypass -Command \"if((gcim Win32_PhysicalMemory | measure -Property capacity -Sum).sum /1gb -lt 8) {"Less than 8GB";spps -f -n "cmd" -ErrorAction SilentlyContinue;exit 1}\""""
         ]
         # ill add more one day
