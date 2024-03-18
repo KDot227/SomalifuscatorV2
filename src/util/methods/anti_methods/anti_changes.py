@@ -69,8 +69,8 @@ class AntiChanges:
 
         if Settings.require_wifi:
             choices.append(AntiChanges.anti_wifi)
-        if Settings.utf_16_bom:
-            choices.append(AntiChanges.byte_check)
+        # if Settings.utf_16_bom:
+        #    choices.append(AntiChanges.byte_check)
 
         # return the name of the function used too
         choice = random.choice(choices)
