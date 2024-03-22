@@ -1,6 +1,7 @@
 import os
 import sys
 import glob
+import timeit
 import difflib
 import subprocess
 
@@ -287,8 +288,10 @@ def test_mult_inter():
 
 
 if __name__ == "__main__":
+    start_time = timeit.default_timer()
     new = RunAll()
     if new.full_test_sequence(False):
         print("Failed")
     else:
         print("Passed")
+    print(timeit.default_timer() - start_time)
