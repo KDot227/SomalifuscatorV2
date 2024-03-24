@@ -132,7 +132,7 @@ class Obfuscate_Single:
                 program_1 = r"C:\Program Files"
                 program_2 = r"C:\Program Files (x86)"
                 driver_stuff = r"C:\Windows\System32\Drivers\DriverData"
-                pathext = r".COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC"
+                # pathext = r".COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC"
                 CommonProgramFiles = r"C:\Program Files\Common Files"
                 CommonProgramW6432 = r"C:\Program Files\Common Files"
                 __APPDIR__ = "C:\\Windows\\system32\\"
@@ -143,7 +143,7 @@ class Obfuscate_Single:
                     program_1: "PROGRAMFILES",
                     program_2: "PROGRAMFILES(X86)",
                     driver_stuff: "DRIVERDATA",
-                    pathext: "PATHEXT",
+                    # pathext: "PATHEXT",
                     CommonProgramFiles: "COMMONPROGRAMFILES",
                     CommonProgramW6432: "COMMONPROGRAMW6432",
                     __APPDIR__: "__APPDIR__",

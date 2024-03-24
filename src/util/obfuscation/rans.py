@@ -27,7 +27,9 @@ def ran1(char, *args, **kwargs) -> str:
     randomed = random.choice(choices)
     if char in string.ascii_letters:
         if char.islower():
-            coded0 = CaesarCipher.get(char=char, rotation_value=c_val.value, upper=False)
+            coded0 = CaesarCipher.get(
+                char=char, rotation_value=c_val.value, upper=False
+            )
             coded = coded0.replace(coded0, f"%{coded0}%")
             return f"{coded}%{randomed}%"
         else:
@@ -60,7 +62,7 @@ def ran2(char, random_order: str, return_ran1: bool = True, *args, **kwargs) -> 
     program_1 = "C:\\Program Files"
     program_2 = "C:\\Program Files (x86)"
     driver_stuff = "C:\\Windows\\System32\\Drivers\\DriverData"
-    pathext = ".COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC"
+    # pathext = ".COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC"
     CommonProgramFiles = "C:\\Program Files\\Common Files"
     CommonProgramFiles_x86 = "C:\\Program Files (x86)\\Common Files"
     CommonProgramW6432 = "C:\\Program Files\\Common Files"
@@ -71,7 +73,7 @@ def ran2(char, random_order: str, return_ran1: bool = True, *args, **kwargs) -> 
         "PROGRAMFILES": (program_1, "None"),
         "PROGRAMFILES(X86)": (program_2, "None"),
         "DRIVERDATA": (driver_stuff, "None"),
-        "PATHEXT": (pathext, "None"),
+        # "PATHEXT": (pathext, "None"),
         "COMMONPROGRAMFILES": (CommonProgramFiles, "None"),
         "COMMONPROGRAMFILES(X86)": (CommonProgramFiles_x86, "None"),
         "COMMONPROGRAMW6432": (CommonProgramW6432, "None"),
@@ -142,7 +144,7 @@ def ran3(char, random_order: str, *args, **kwargs) -> str:
     program_1 = r"C:\Program Files"
     program_2 = r"C:\Program Files (x86)"
     driver_stuff = r"C:\Windows\System32\Drivers\DriverData"
-    pathext = r".COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC"
+    # pathext = r".COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC"
     CommonProgramFiles = r"C:\Program Files\Common Files"
     CommonProgramFiles_x86 = r"C:\Program Files (x86)\Common Files"
     CommonProgramW6432 = r"C:\Program Files\Common Files"
@@ -152,7 +154,7 @@ def ran3(char, random_order: str, *args, **kwargs) -> str:
         program_1,
         program_2,
         driver_stuff,
-        pathext,
+        # pathext,
         CommonProgramFiles,
         CommonProgramFiles_x86,
         CommonProgramW6432,
@@ -163,7 +165,7 @@ def ran3(char, random_order: str, *args, **kwargs) -> str:
         "PROGRAMFILES",
         "PROGRAMFILES(X86)",
         "DRIVERDATA",
-        "PATHEXT",
+        # "PATHEXT",
         "COMMONPROGRAMFILES",
         "COMMONPROGRAMFILES(X86)",
         "COMMONPROGRAMW6432",
