@@ -15,10 +15,27 @@ if %errorlevel%==0 (
 
 python -m pip install -r requirements.txt --upgrade
 
+if "%1"=="" (
+    goto :normal
+) else (
+    goto :build
+)
+
+:build
+pushd src
+python -m main -f %1
+popd
+goto :out
+
+
+:normal
 pushd src
 python -m main
 popd
+goto :out
 
+
+:out
 if %USERNAME%==this1 (
     pyclean .
 )
