@@ -65,6 +65,7 @@ class RunAll:
         Returns:
         - None
         """
+
         subprocess.Popen(
             f"python {python_file} -f {file_path}",
             shell=True,
@@ -200,11 +201,11 @@ class RunAll:
         """
         for file in glob.glob(f"{directory}\\tests_full\\*.bat"):
             if file.endswith("_obf.bat"):
-                print(file)
+                # print(file)
                 os.remove(file)
         for file in glob.glob(f"{directory}\\tests_full\\*.txt"):
             if file.endswith(".bat.txt"):
-                print(file)
+                # print(file)
                 os.remove(file)
         return
 
@@ -245,9 +246,11 @@ def env_var_test():
     }
 
     users_env_vars = os.environ.copy()
+    # replace the current PATHEXT with the one we need due to issues with pytest
+    users_env_vars["PATHEXT"] = GOOD_ENV_VARS["PATHEXT"]
     for env_var, value in GOOD_ENV_VARS.items():
         if users_env_vars[env_var] != value:
-            print(f"{env_var} is not set correctly")
+            print(f"{env_var} is not set correctly", users_env_vars[env_var])
             return False
     return True
 
@@ -294,4 +297,5 @@ if __name__ == "__main__":
         print("Failed")
     else:
         print("Passed")
+    new.remove_all_obf_files()
     print(timeit.default_timer() - start_time)
