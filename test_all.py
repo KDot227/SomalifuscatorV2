@@ -25,7 +25,7 @@ env_vars = {
     "COMMONPROGRAMFILES(X86)": r"C:\Program Files (x86)\Common Files",
     "PROGRAMFILES": r"C:\Program Files",
     "PROGRAMFILES(X86)": r"C:\Program Files (x86)",
-    "DRIVERDATA": r"C:\Windows\System32\Drivers\DriverData",
+    # "DRIVERDATA": r"C:\Windows\System32\Drivers\DriverData",
     "COMMONPROGRAMFILES": r"C:\Program Files\Common Files",
     "COMMONPROGRAMW6432": r"C:\Program Files\Common Files",
     "COMMONPROGRAMFILES(X86)": r"C:\Program Files (x86)\Common Files",
