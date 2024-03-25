@@ -82,8 +82,8 @@ def ran2(char, random_order: str, return_ran1: bool = True, *args, **kwargs) -> 
         "TMP": ("\\AppData\\Local\\Temp", "L"),
         "LOCALAPPDATA": ("\\AppData\\Local", "L"),
         "APPDATA": ("\\AppData\\Roaming", "L"),
-        "ONEDRIVE": ("\\OneDrive", "L"),
-        "ONEDRIVECONSUMER": ("\\OneDrive", "L"),
+        # "ONEDRIVE": ("\\OneDrive", "L"),
+        # "ONEDRIVECONSUMER": ("\\OneDrive", "L"),
         "OS": ("Windows_NT", "None"),
         "SYSTEMDRIVE": ("C:", "None"),
     }
