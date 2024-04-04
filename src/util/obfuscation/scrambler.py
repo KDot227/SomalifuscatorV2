@@ -134,7 +134,7 @@ class Scrambler:
 
     @staticmethod
     def random_anti_method() -> str:
-        random_chance = random.randint(1, 5)
+        random_chance = random.randint(1, 3)
         if random_chance == 1:
             use = AntiChanges.tests()
             log.debug(f"Using {use[1]} as anti method")

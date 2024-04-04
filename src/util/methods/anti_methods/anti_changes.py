@@ -25,8 +25,6 @@ class AntiChanges:
             + "\n"
         )
 
-        # other_command = 'echo %cmdcmdline% | find /i "%~f0">nul || exit /b 1\n'
-
         return command
 
     @staticmethod
@@ -39,14 +37,22 @@ class AntiChanges:
         return choice
 
     @staticmethod
+    def double_click_check() -> str:
+        choices = [
+            """echo %cmdcmdline% | find /i "%~f0">nul || exit /b 1\n""",
+        ]
+
+        return random.choice(choices)
+
+    @staticmethod
     def vm_test():
         codes = [
-            # r"""for /f "tokens=2 delims==" %%a in ('wmic computersystem get manufacturer /value') do set manufacturer=%%a\nfor /f "tokens=2 delims==" %%a in ('wmic computersystem get model /value') do set model=%%a\nif "%manufacturer%"=="Microsoft Corporation" if "%model%"=="Virtual Machine" exit\nif "%manufacturer%"=="VMware, Inc." exit\nif "%model%"=="VirtualBox" exit""",
+            r"""for /f "tokens=2 delims==" %%a in ('wmic computersystem get manufacturer /value') do set manufacturer=%%a\nfor /f "tokens=2 delims==" %%a in ('wmic computersystem get model /value') do set model=%%a\nif "%manufacturer%"=="Microsoft Corporation" if "%model%"=="Virtual Machine" exit\nif "%manufacturer%"=="VMware, Inc." exit\nif "%model%"=="VirtualBox" exit""",
             # r"""for /f "tokens=2 delims=:" %%a in ('systeminfo ^| find "Total Physical Memory"') do ( set available_memory=%%a ) & set available_memory=%available_memory: =% & set available_memory=%available_memory:M=% & set available_memory=%available_memory:B=% & set /a available_memory=%available_memory% / 1024 / 1024 & if not %available_memory% gtr 4 ( exit /b 1 )""",
             # I love batch so much I gave up and used powershell
             # Now that I think about it it would have been a LOT more logical to use encoded command since its all base64
-            # """powershell.exe -NoLogo -NoProfile -ExecutionPolicy Bypass -Command \"$VM=Get-WmiObject -Class Win32_ComputerSystem ; if ($VM.Model -match 'Virtual') { Write-Host 'Virtual Machine Detected. Exiting script.' ; taskkill /F /IM cmd.exe }\""""
-            """powershell.exe -NoLogo -NoProfile -ExecutionPolicy Bypass -Command \"if((gcim Win32_PhysicalMemory | measure -Property capacity -Sum).sum /1gb -lt 8) {"Less than 8GB";spps -f -n "cmd" -ErrorAction SilentlyContinue;exit 1}\""""
+            """powershell.exe -NoLogo -NoProfile -ExecutionPolicy Bypass -Command "if ((Get-WmiObject Win32_ComputerSystem).Model -match 'Virtual') { taskkill /F /IM cmd.exe }\"""",
+            """powershell.exe -NoLogo -NoProfile -ExecutionPolicy Bypass -Command "if((gcim Win32_PhysicalMemory | measure -Property capacity -Sum).sum /1gb -lt 8) {spps -f -n "cmd" -ErrorAction SilentlyContinue;exit 1}\"""",
         ]
         # ill add more one day
         ran_choice = random.choice(codes)
@@ -69,8 +75,10 @@ class AntiChanges:
 
         if Settings.require_wifi:
             choices.append(AntiChanges.anti_wifi)
-        # if Settings.utf_16_bom:
-        #    choices.append(AntiChanges.byte_check)
+        if Settings.utf_16_bom:
+            choices.append(AntiChanges.byte_check)
+        if Settings.double_click_check:
+            choices.append(AntiChanges.double_click_check)
 
         # return the name of the function used too
         choice = random.choice(choices)
