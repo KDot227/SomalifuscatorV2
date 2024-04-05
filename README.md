@@ -98,4 +98,11 @@ Have fun and goodluck. If you end up making a full deobfuscator plz show me caus
   If you like this repo please give it a star ⭐
 </h1>
 
+<h3 align="center">
+  Credits
+</h3>
+
+KDot227 (literally everything)\
+Baum (Inspiration for the idea of the project)
+
 Also @ John Hammond cause he's cool and I wanna see him deobfuscate this
