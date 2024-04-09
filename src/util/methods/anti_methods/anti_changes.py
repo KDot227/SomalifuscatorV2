@@ -75,9 +75,9 @@ class AntiChanges:
 
         if Settings.require_wifi:
             choices.append(AntiChanges.anti_wifi)
-        if Settings.utf_16_bom:
+        if Settings.utf_16_bom and not Settings.debug:
             choices.append(AntiChanges.byte_check)
-        if Settings.double_click_check:
+        if Settings.double_click_check and not Settings.debug:
             choices.append(AntiChanges.double_click_check)
 
         # return the name of the function used too
