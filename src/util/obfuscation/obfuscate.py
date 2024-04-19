@@ -251,8 +251,12 @@ class Obfuscator:
                                 else:
                                     random_obf = [
                                         ran1(char),
-                                        ran2(char, random_order=random_order),
+                                        # ran2(char, random_order=random_order),
                                     ]
+                                    if not Settings.FUD:
+                                        random_obf.append(
+                                            ran2(char, random_order=random_order)
+                                        )
                                     f.write(random.choice(random_obf))
                                     # f.write(char)
                             f.write(" ")
