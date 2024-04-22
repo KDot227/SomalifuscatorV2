@@ -73,10 +73,7 @@ class Code_Display(ScrollableContainer):
 
 
 class SomalifuscatorV2(App):
-    if not os.path.exists("style.tcss"):
-        with open("style.tcss", "w") as f:
-            f.write(css)
-    CSS_PATH = "style.tcss"
+    CSS = css
     BINDINGS = [
         Binding("d", "toggle_debug", "Toggle Debug"),
         Binding("q", "quit", "Quit"),
