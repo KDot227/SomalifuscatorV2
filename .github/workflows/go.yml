@@ -1,0 +1,81 @@
+name: Build Grabber
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+
+    strategy:
+      matrix:
+        python-version: ["3.12"]
+
+    runs-on: windows-latest
+    permissions:
+      contents: write
+      pull-requests: write
+      repository-projects: write
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ matrix.python-version }}
+  # You can test your matrix by printing the current Python version
+    - name: Display Python version
+      run: python -c "import sys; print(sys.version)"
+
+    - name: Change directory to src
+      run : cd src
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+    
+    - name: Install PyInstaller
+      run: |
+        pip install pyinstaller
+    
+    - name: Build Grabber
+      run: |
+        pyinstaller --onefile main.py
+
+    # Delete-tag-and-release new
+    - name: Delete-tag-and-release
+      uses: dev-drprasad/delete-tag-and-release@v1.1
+      with:
+        tag_name: AutoBuild #(required) - The name of the tag to delete. This is expected to be solely the tag name, not the name of a git reference.
+        delete_release: true #(optional) default: true - also delete all releases and their assets that are associated to the tag name
+        github_token: ${{ secrets.GITHUB_TOKEN }} # (required) - a GitHub token with write access to the repo where tags and releases will be searched and deleted
+  
+  
+    
+    # Create Release
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@latest
+      env:
+        GITHUB_TOKEN: ${{ secrets.github_token }}
+      with:
+        tag_name: AutoBuild
+        release_name: AutoBuild
+        body: ${{ steps.changelog.outputs.changelog }}
+        draft: false
+        prerelease: true
+        
+    # Upload Release Asset
+    - name: Upload Release Asset
+      id: upload-release-asset 
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.github_token }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: src\dist\main.exe
+        asset_name: main.exe
+        asset_content_type: application/zip
