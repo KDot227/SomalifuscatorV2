@@ -67,7 +67,7 @@ jobs:
         release_name: AutoBuild
         body: ${{ steps.changelog.outputs.changelog }}
         draft: false
-        prerelease: true
+        prerelease: false
         
     # Upload Release Asset
     - name: Upload Release Asset
