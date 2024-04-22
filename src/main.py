@@ -27,6 +27,29 @@ from rich.text import Text
 
 __version__ = "2.10.2"
 
+css = """
+Code_Display {
+    border: solid $primary-background-lighten-3;
+    overflow: scroll scroll;
+}
+
+Code_Display:focus {
+    border: solid $accent;
+}
+
+RichLog {
+    border: solid $primary-background-lighten-3;
+    overflow: scroll scroll;
+}
+
+RichLog:focus {
+    border: solid $accent;
+}
+
+Center {
+    padding: 2;
+}"""
+
 
 @dataclass
 class settings:
@@ -50,7 +73,10 @@ class Code_Display(ScrollableContainer):
 
 
 class SomalifuscatorV2(App):
-    CSS_PATH = "util\\ui\\style.tcss"
+    if not os.path.exists("style.tcss"):
+        with open("style.tcss", "w") as f:
+            f.write(css)
+    CSS_PATH = "style.tcss"
     BINDINGS = [
         Binding("d", "toggle_debug", "Toggle Debug"),
         Binding("q", "quit", "Quit"),
