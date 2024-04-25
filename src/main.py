@@ -177,10 +177,13 @@ if __name__ == "__main__":
     parse.add_argument(
         "-nu", "--no-utf-16-bom", help="No UTF-16 BOM", action="store_true"
     )
+    parse.add_argument(
+        "-dc", "--double-click-check", help="Double Click Check", action="store_true"
+    )
     args = parse.parse_args()
     if any([args.file]):
-        Settings.utf_16_bom = False
-        Settings.double_click_check = False
+        Settings.utf_16_bom = not args.no_utf_16_bom
+        Settings.double_click_check = args.double_click_check
         OBF(
             args.file,
             double_click_check=Settings.double_click_check,
