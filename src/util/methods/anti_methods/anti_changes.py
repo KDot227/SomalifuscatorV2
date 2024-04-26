@@ -61,9 +61,9 @@ class AntiChanges:
 
     @staticmethod
     def anti_wifi() -> str:
-        if Settings.require_wifi:
-            # Ping request could not find host www.google.com. Please check the name and try again.
-            return 'ping -n 1 -w 700 www.google.com | find "Pinging" > nul || exit'
+        # if Settings.require_wifi:
+        #    # Ping request could not find host www.google.com. Please check the name and try again.
+        #    return 'ping -n 1 -w 700 www.google.com | find "Pinging" > nul || exit'
         return ""
 
     @staticmethod
