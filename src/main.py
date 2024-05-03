@@ -1,4 +1,5 @@
 import os
+import sys
 import json
 from dataclasses import dataclass
 
@@ -189,7 +190,7 @@ if __name__ == "__main__":
             double_click_check=Settings.double_click_check,
             utf_16_bom=Settings.utf_16_bom,
         )
-        exit(0)
+        sys.exit(0)
     AutoUpdate(__version__)
     SomalifuscatorV2().run()
-    exit(0)
+    sys.exit(0)
