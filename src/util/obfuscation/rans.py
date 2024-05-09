@@ -105,26 +105,30 @@ def ran2(char, random_order: str, return_ran1: bool = True, *args, **kwargs) -> 
             positive_index = random.choice([True, False])
             if positive_index:
                 random_positive_index = random.choice(valid_indexs)
-                return f"%{random_var}:~{random_positive_index},1%"
+                random_var = random_capitalization(random_var)
+                return f"%{random_var}:~{random_positive_index},{random_spaces()}1%"
             else:
                 random_positive_index = random.choice(valid_indexs)
                 negative_index = random_positive_index - len(value)
-                return f"%{random_var}:~{negative_index},1%"
+                random_var = random_capitalization(random_var)
+                return f"%{random_var}:~{negative_index},{random_spaces()}1%"
         elif modifier == "R":
             random_positive_index = random.choice(valid_indexs)
-            return f"%{random_var}:~{random_positive_index},1%"
+            random_var = random_capitalization(random_var)
+            return f"%{random_var}:~{random_positive_index},{random_spaces()}1%"
 
         elif modifier == "L":
             random_positive_index = random.choice(valid_indexs)
             negative_index = random_positive_index - len(value)
-            return f"%{random_var}:~{negative_index},1%"
+            random_var = random_capitalization(random_var)
+            return f"%{random_var}:~{negative_index},{random_spaces()}1%"
     if return_ran1:
         return ran1(char)
     else:
         if char not in string.ascii_letters:
             return char
         random_order_index = random_order.index(char)
-        return f"%KDOT:~{random_order_index},1%"
+        return f"%{random_capitalization('KDOT')}:~{random_order_index},{random_spaces()}1%"
 
 
 def ran3(char, random_order: str, *args, **kwargs) -> str:

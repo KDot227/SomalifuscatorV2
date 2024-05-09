@@ -56,7 +56,7 @@ def create_hex_string(characters) -> str:
 
 
 def random_spaces() -> str:
-    spaces = random.randint(1, 5)
+    spaces = random.randint(3, 20)
     return " " * spaces
 
 
