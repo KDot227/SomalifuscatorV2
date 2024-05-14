@@ -21,7 +21,6 @@ if not os.path.exists(conf_file):
             """{
     "bloat": true,
     "remove_blank_lines": true,
-    "super_obf": false,
     "double_click_check": false,
     "utf_16_bom": true,
     "smartscreen_bypass": false,
@@ -41,7 +40,6 @@ class Settings:
     try:
         bloat: bool = json_set["bloat"]
         remove_blank_lines: bool = json_set["remove_blank_lines"]
-        super_obf: bool = json_set["super_obf"]
         double_click_check: bool = json_set["double_click_check"]
         utf_16_bom: bool = json_set["utf_16_bom"]
         smartscreen_bypass: bool = json_set["smartscreen_bypass"]

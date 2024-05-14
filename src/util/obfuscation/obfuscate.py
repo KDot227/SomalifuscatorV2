@@ -6,7 +6,6 @@ import string
 from util.obfuscation.obf_oneline import Obfuscate_Single
 from util.obfuscation.rans import ran1, ran2
 from util.obfuscation.scrambler import Scrambler
-from util.obfuscation.null_parser import NullParse
 
 from util.supporting.gens import c_val
 from util.supporting.settings import log, Settings
