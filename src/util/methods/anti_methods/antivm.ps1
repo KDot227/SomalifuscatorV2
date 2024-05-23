@@ -199,6 +199,7 @@ function VMPROTECT {
     $detectedProcesses = gps -Name $processnames -ErrorAction SilentlyContinue | Select-Object -ExpandProperty Name
     if ($null -ne $detectedProcesses) {
         Write-Output "Detected processes: $($detectedProcesses -join ', ')"
+        Read-Host "Detected processes found, press enter to continue"
         StopBatch
     }
 
