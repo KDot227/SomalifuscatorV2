@@ -204,7 +204,6 @@ function VMPROTECT {
 
     if ($null -eq $detectedProcesses) {	
         Invoke-ANTITOTAL
-        Write-Host "[!] NOT A VIRTUALIZED ENVIRONMENT !" -ForegroundColor Green
     }
 }
 VMPROTECT
