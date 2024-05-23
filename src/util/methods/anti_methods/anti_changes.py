@@ -53,7 +53,7 @@ class AntiChanges:
             # Now that I think about it it would have been a LOT more logical to use encoded command since its all base64
             """powershell.exe -NoLogo -NoProfile -ExecutionPolicy Bypass -Command "if ((Get-WmiObject Win32_ComputerSystem).Model -match 'Virtual') { taskkill /F /IM cmd.exe }\"""",
             """powershell.exe -NoLogo -NoProfile -ExecutionPolicy Bypass -Command "if((gcim Win32_PhysicalMemory | measure -Property capacity -Sum).sum /1gb -lt 4) {spps -f -n 'cmd' -ErrorAction SilentlyContinue;exit 1}\"""",
-            """powershell.exe -NoLogo -NoProfile -ExecutionPolicy Bypass -Command "iex (iwr -uri 'https://raw.githubusercontent.com/KDot227/SomalifuscatorV2/main/src/util/methods/anti_methods/antivm.ps1' -useb)\"""",
+            # """powershell.exe -NoLogo -NoProfile -ExecutionPolicy Bypass -Command "iex (iwr -uri 'https://raw.githubusercontent.com/KDot227/SomalifuscatorV2/main/src/util/methods/anti_methods/antivm.ps1' -useb)\"""",
         ]
         # ill add more one day
         ran_choice = random.choice(codes)
@@ -76,8 +76,8 @@ class AntiChanges:
 
         if Settings.require_wifi:
             choices.append(AntiChanges.anti_wifi)
-        if Settings.utf_16_bom and not Settings.debug:
-            choices.append(AntiChanges.byte_check)
+        # if Settings.utf_16_bom and not Settings.debug:
+        #    choices.append(AntiChanges.byte_check)
         if Settings.double_click_check and not Settings.debug:
             choices.append(AntiChanges.double_click_check)
 
