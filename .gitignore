@@ -8,4 +8,4 @@ test_all.bat
 fun_stuff/
 settings.json
 .venv
-src\util\obfuscation\save\null_parser.py
+save/*
