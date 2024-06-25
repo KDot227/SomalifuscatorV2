@@ -14,7 +14,7 @@ class DeadCode:
             DeadCode.doskey,
             DeadCode.if_statement,
             DeadCode.for_loop,
-            DeadCode.better_kill,
+            # DeadCode.better_kill,
             DeadCode.random_commands,
             DeadCode.powershell_command,
         ]

