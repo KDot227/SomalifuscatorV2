@@ -19,10 +19,10 @@ if not os.path.exists(conf_file):
     with open("settings.json", "+w", encoding="utf8", errors="ignore") as f:
         f.write(
             """{
-    "bloat": true,
+    "bloat": false,
     "remove_blank_lines": true,
     "double_click_check": false,
-    "utf_16_bom": true,
+    "utf_16_bom": false,
     "smartscreen_bypass": false,
     "hidden": false,
     "require_wifi": true,
