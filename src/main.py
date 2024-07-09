@@ -26,6 +26,8 @@ from textual import work
 from rich.syntax import Syntax
 from rich.text import Text
 
+from rich import print
+
 __version__ = "2.10.2"
 
 css = """

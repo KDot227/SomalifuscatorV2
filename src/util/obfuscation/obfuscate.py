@@ -250,7 +250,7 @@ class Obfuscator:
                                         ran1(char),
                                         # ran2(char, random_order=random_order),
                                     ]
-                                    if not Settings.FUD:
+                                    if random.randint(1, 10) == 1:
                                         random_obf.append(
                                             ran2(char, random_order=random_order)
                                         )
