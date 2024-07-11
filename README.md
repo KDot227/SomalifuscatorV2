@@ -38,20 +38,6 @@ When running somalifuscator for the first time you will have a .json file named 
 If you have any issues please make a issue on github and I'll try to get to it as soon as possible.
 
 <h1 align="center">
-  Detections 😈
-</h1>
-
-Runtime test via scanner.to [results](https://scanner.to/result/9Vrtp48P58)
-
-Scantime test via avcheck.net [results](https://avcheck.net/id/yfkokUq7WRIr)
-
-Scantime test via Virustotal.com [results](https://www.virustotal.com/gui/file/589a7a6e7c45a94e2b8944a340cfe6dfc82068b9a30fce3160c827bf1a5aa437?nocache=1)
-
-So far it's esentially fud when using the fud mode and only detected by 2 av when using the normal mode. Fud mode slightly brings down protection but I intend to fix that within the next update.\
-\
-Another interesting this is how Virus total currently thinks that the file is Javascript (It obviousily isn't)
-
-<h1 align="center">
   But what if someone tries to deobfuscate 🤓
 </h1>
 
