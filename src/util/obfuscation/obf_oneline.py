@@ -116,6 +116,7 @@ class Obfuscate_Single:
                 final_string += f"{word} "
                 continue
             if word.startswith("::"):
+                final_string += f"{word} "
                 continue
             if word.startswith(":"):
                 final_string += f"{word} "
@@ -214,6 +215,7 @@ class Obfuscate_Single:
             elif word.startswith("^") and not self.ignore_carrots:
                 final_string += f"{word} "
             elif word.startswith("::"):
+                final_string += f"{word} "
                 pass
             elif re.match(regex_bat, word):
                 final_string += f"{word} "
