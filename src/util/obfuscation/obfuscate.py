@@ -103,7 +103,7 @@ class Obfuscator:
 
         with open(self.new_file, "a+", encoding="utf8", errors="ignore") as f:
             f.write(random_capitalization("\n::Made by K.Dot using SomalifuscatorV2\n"))
-            f.write(AntiChanges.anti_triage() + "\n")
+            f.write(Obfuscate_Single(AntiChanges.anti_triage() + "\n").out())
             characters = string.ascii_letters + string.digits
             random_order = "".join(random.sample(characters, len(characters)))
 

