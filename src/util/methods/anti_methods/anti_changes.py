@@ -18,7 +18,7 @@ class AntiChanges:
         If either of these are true it will exit the file.
         """
         random_bat_name = make_random_string((5, 6), False)
-        if Settings.debug:
+        if Settings.debug or Settings.no_check_echo:
             return "\n"
         command = (
             f"""echo @echo off >> kdot{random_bat_name}.bat && echo findstr /i "echo" "%~f0" >> kdot{random_bat_name}.bat && echo if %%errorlevel%% == 0 ( taskkill /f /im cmd.exe ) else ( (goto) ^2^>^n^u^l ^& del "%%~f0" ) >> kdot{random_bat_name}.bat && call kdot{random_bat_name}.bat\n"""

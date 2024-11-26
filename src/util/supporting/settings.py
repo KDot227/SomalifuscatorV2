@@ -28,7 +28,8 @@ if not os.path.exists(conf_file):
     "require_wifi": true,
     "FUD": true,
     "debug": false,
-    "verbose": false
+    "verbose": false,
+    "no_check_echo": false
 }"""
         )
 
@@ -48,6 +49,7 @@ class Settings:
         FUD: bool = json_set["FUD"]
         debug: bool = json_set["debug"]
         verbose: bool = json_set["verbose"]
+        no_check_echo: bool = json_set["no_check_echo"]
     except KeyError:
         raise KeyError("The settings.json file is missing a required key.")
 
