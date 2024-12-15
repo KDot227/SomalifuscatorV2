@@ -186,8 +186,20 @@ class Obfuscator:
                     continue
 
                 else:
+                    global_stop_obf = False
                     for word in line.split():
                         # check if any of self.used_env_vars are in the line
+                        if global_stop_obf:
+                            log.debug("Global stop obf True")
+                            f.write(word + " ")
+                            continue
+
+                        if word == "%STOP_OBF_HERE%":
+                            global_stop_obf = True
+                            log.debug("Stop obf True")
+                            f.write(word + " ")
+                            continue
+
                         if re.search(escape_regex, word):
                             log.debug("escape True")
                             f.write(word + " ")
