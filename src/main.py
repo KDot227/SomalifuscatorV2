@@ -177,6 +177,7 @@ class SomalifuscatorV2(App):
 if __name__ == "__main__":
     parse = ArgumentParser()
     parse.add_argument("-f", "--file", help="File to obfuscate", type=str)
+    parse.add_argument("-o", "--output", help="Output file location", type=str)
     parse.add_argument(
         "-nu", "--no-utf-16-bom", help="No UTF-16 BOM", action="store_true"
     )
@@ -191,6 +192,7 @@ if __name__ == "__main__":
             args.file,
             double_click_check=Settings.double_click_check,
             utf_16_bom=Settings.utf_16_bom,
+            output=args.output,
         )
         sys.exit(0)
     AutoUpdate(__version__)

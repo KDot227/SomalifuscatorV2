@@ -36,8 +36,12 @@ class Obfuscator:
         file: str,
         double_click_check: bool = True,
         utf_16_bom: bool = True,
+        output: str = None,
     ) -> None:
-        self.new_file = f"{file[:-4]}_obf.bat"
+        if output:
+            self.new_file = output
+        else:
+            self.new_file = f"{file[:-4]}_obf.bat"
         self.double_click = double_click_check
         self.utf_16_bom = utf_16_bom
 
